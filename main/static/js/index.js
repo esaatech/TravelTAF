@@ -17,23 +17,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const chatToggle = document.getElementById('chatToggle');
-    const chatPopup = document.getElementById('chatPopup');
-    const chatClose = document.getElementById('chatClose');
 
-    chatToggle.addEventListener('click', () => {
-        chatPopup.classList.add('active');
-    });
 
-    chatClose.addEventListener('click', () => {
-        chatPopup.classList.remove('active');
-    });
-
-    // Close chat when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!chatPopup.contains(e.target) && !chatToggle.contains(e.target)) {
-            chatPopup.classList.remove('active');
-        }
-    });
-});
