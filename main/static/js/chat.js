@@ -61,15 +61,61 @@ const ChatModule = {
         this.elements.typingIndicator = typingDiv;
     },
 
-    // Show typing indicator
+    // Updated scrollToBottom method
+    scrollToBottom() {
+        const chatMessages = this.elements.chatMessages;
+        const lastMessage = chatMessages.lastElementChild;
+        
+        if (lastMessage) {
+            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    },
+
+    // Updated addMessage method
+    addMessage(message, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `flex gap-4 max-w-2xl mb-4 ${isUser ? 'ml-auto' : ''}`;
+        
+        if (isUser) {
+            messageDiv.innerHTML = `
+                <div class="flex-1">
+                    <p class="bg-blue-600 text-white p-4 rounded-lg inline-block">${message}</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm56-88a56,56,0,1,1-56-56A56.06,56.06,0,0,1,184,128Z"></path>
+                    </svg>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1980e6" viewBox="0 0 256 256">
+                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="bg-gray-100 p-4 rounded-lg inline-block">${message}</p>
+                </div>
+            `;
+        }
+        
+        this.elements.chatMessages.appendChild(messageDiv);
+        
+        // Force scroll after message is added
+        setTimeout(() => {
+            this.scrollToBottom();
+        }, 0);
+    },
+
+    // Updated showTypingIndicator
     showTypingIndicator() {
-        // Create new typing indicator each time
         this.createTypingIndicator();
         this.elements.chatMessages.appendChild(this.elements.typingIndicator);
-        // Use setTimeout to ensure DOM update before removing hidden class
+        
         setTimeout(() => {
             this.elements.typingIndicator.classList.remove('hidden');
-            this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
+            this.scrollToBottom();
         }, 0);
     },
 
@@ -135,68 +181,100 @@ const ChatModule = {
         this.elements.chatInput.classList.add('disabled:bg-gray-100', 'disabled:cursor-not-allowed');
     },
 
-    // Add message to chat
-    addMessage(message, isUser = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `flex gap-4 max-w-2xl mb-4 ${isUser ? 'ml-auto' : ''}`;
-        
-        if (isUser) {
-            messageDiv.innerHTML = `
-                <div class="flex-1">
-                    <p class="bg-blue-600 text-white p-4 rounded-lg inline-block">${message}</p>
-                </div>
-                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
-                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm56-88a56,56,0,1,1-56-56A56.06,56.06,0,0,1,184,128Z"></path>
-                    </svg>
-                </div>
-            `;
-        } else {
-            messageDiv.innerHTML = `
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1980e6" viewBox="0 0 256 256">
-                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"></path>
-                    </svg>
-                </div>
-                <div class="flex-1">
-                    <p class="bg-gray-100 p-4 rounded-lg inline-block">${message}</p>
-                </div>
-            `;
-        }
-        
-        this.elements.chatMessages.appendChild(messageDiv);
-        this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
-    },
-
-    // Send message
-    sendMessage() {
+    // Update the sendMessage method
+    async sendMessage() {
         const message = this.elements.chatInput.value.trim();
         if (message) {
-            // Disable input while processing
-            this.elements.chatInput.disabled = true;
-            this.elements.sendButton.disabled = true;
-            
-            // Add user message
-            this.addMessage(message, true);
-            this.elements.chatInput.value = '';
-            
-            // Show typing indicator
-            this.showTypingIndicator();
-            
-            // Simulate bot response (replace with actual API call)
-            setTimeout(() => {
+            try {
+                // Disable input while processing
+                this.elements.chatInput.disabled = true;
+                this.elements.sendButton.disabled = true;
+                
+                // Add user message
+                this.addMessage(message, true);
+                this.elements.chatInput.value = '';
+                
+                // Show typing indicator
+                this.showTypingIndicator();
+                
+                // Send message to API
+                const response = await fetch('/api/agent/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': this.getCSRFToken(),
+                    },
+                    body: JSON.stringify({ message })
+                });
+                
+                const data = await response.json();
+                
                 // Hide typing indicator
                 this.hideTypingIndicator();
                 
-                // Add bot response
-                let response = "I'm processing your question. Please wait for our team to respond.";
-                this.addMessage(response);
+                if (response.ok) {
+                    // Add bot response from API
+                    this.addMessage(data.response);
+                } else {
+                    throw new Error(data.message || 'An error occurred');
+                }
                 
+            } catch (error) {
+                console.error('Error:', error);
+                this.hideTypingIndicator();
+                this.addMessage('Sorry, there was an error processing your message. Please try again later.');
+            } finally {
                 // Re-enable input
                 this.elements.chatInput.disabled = false;
                 this.elements.sendButton.disabled = false;
                 this.elements.chatInput.focus();
-            }, 2000);
+            }
+        }
+    },
+
+    // Add method to get CSRF token
+    getCSRFToken() {
+        const name = 'csrftoken';
+        let cookieValue = null;
+        
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    },
+
+    // Add method to load chat history (optional)
+    async loadChatHistory() {
+        try {
+            const response = await fetch('/api/agent/chat/history/', {
+                headers: {
+                    'X-CSRFToken': this.getCSRFToken(),
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                // Clear existing messages
+                this.elements.chatMessages.innerHTML = '';
+                // Add each message from history
+                data.forEach(item => {
+                    if (item.message) {
+                        this.addMessage(item.message, true);
+                    }
+                    if (item.response) {
+                        this.addMessage(item.response, false);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error loading chat history:', error);
         }
     }
 };

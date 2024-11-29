@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),  # This will handle all core app URLs, including home page
     path("__reload__/", include("django_browser_reload.urls")),
-
+    path('api/agent/', include('agent.urls')),
 ]

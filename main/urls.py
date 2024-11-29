@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'core'  # This enables namespacing for your URLs
+app_name = 'main'  # This enables namespacing for your URLs
 
 urlpatterns = [
     # Home page
