@@ -105,6 +105,7 @@ const ChatModule = {
         this.elements.chatMessages.appendChild(messageDiv);
         
         // Force scroll after message is added
+       
         setTimeout(() => {
             this.scrollToBottom();
         }, 0);
