@@ -40,12 +40,14 @@ RUN poetry install --no-interaction --no-ansi
 # Collect static files
 RUN poetry run python manage.py collectstatic --noinput
 
-# Copy start script and make it executable
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+
 
 # Expose port
 EXPOSE 8000
 
-# Run start script
-CMD ["/start.sh"] 
+# Run gunicorn
+CMD poetry run gunicorn travelTAF.wsgi:application \
+    --bind 0.0.0.0:$PORT \
+    --workers 2 \
+    --threads 2 \
+    --timeout 120 
