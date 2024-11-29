@@ -1,0 +1,161 @@
+/* Base styles */
+body {
+    font-family: "Noto Serif", "Noto Sans", sans-serif;
+}
+
+/* Custom scrollbar hiding */
+.custom-scrollbar {
+    -ms-scrollbar-style: none;
+    scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hero section background */
+.hero-section {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), 
+                      url("https://cdn.usegalileo.ai/stability/500f3828-7d13-4bf0-8ba6-df89ddbdae22.png");
+}
+
+/* News images */
+.news-image-1 {
+    background-image: url("https://cdn.usegalileo.ai/sdxl10/29fe1e26-542b-4850-9f54-719b84a0404e.png");
+}
+
+.news-image-2 {
+    background-image: url("https://cdn.usegalileo.ai/sdxl10/d8f5c020-f98d-48b5-a995-e2052b57644f.png");
+}
+
+/* Country images */
+.country-image-switzerland {
+    background-image: url("https://cdn.usegalileo.ai/stability/3cc59803-63ed-4e9b-bedc-8b2fc155e0cd.png");
+}
+
+.country-image-australia {
+    background-image: url("https://cdn.usegalileo.ai/sdxl10/5a451e30-44b4-4967-8485-15e3a9ccb830.png");
+}
+
+.country-image-singapore {
+    background-image: url("https://cdn.usegalileo.ai/stability/2108244a-daa6-4d5d-9340-da505eef0704.png");
+}
+
+.country-image-ireland {
+    background-image: url("https://cdn.usegalileo.ai/stability/7a5530b6-6eab-4e5e-8152-e1f1c2ecf3e8.png");
+}
+
+        /* Chat Widget Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+        }
+
+        .chat-popup {
+            position: fixed;
+            bottom: 5rem;
+            right: 2rem;
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 40;
+            display: none;
+        }
+
+        .chat-popup.active {
+            display: block;
+        }
+
+        @media (max-width: 640px) {
+            .chat-popup {
+                width: 100%;
+                height: 100%;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+            }
+        }
+
+/* Typing indicator animation */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 0.8s infinite;
+}
+
+/* Hide typing indicator */
+.hidden {
+    display: none;
+}
+
+/* Disabled state styles */
+.disabled\:opacity-50:disabled {
+    opacity: 0.5;
+}
+
+.disabled\:cursor-not-allowed:disabled {
+    cursor: not-allowed;
+}
+
+.disabled\:bg-gray-100:disabled {
+    background-color: #f3f4f6;
+}
+
+.typing-indicator {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.typing-indicator.hidden {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.chat-messages {
+    scroll-behavior: smooth;
+}
+
+#chatMessages {
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100% - 120px); /* Adjust based on your header/input heights */
+}
+
+.scroll-smooth {
+    scroll-behavior: smooth;
+}
+
+elevenlabs-convai {
+    position: fixed;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    max-width: 400px;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 640px) {
+    elevenlabs-convai {
+        position: fixed;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}

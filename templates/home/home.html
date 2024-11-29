@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900&display=swap" rel="stylesheet" />
     <link href="{% static 'css/index.css' %}" rel="stylesheet">
-
+   
 
 </head>
 <body class="bg-white min-h-screen flex flex-col">
@@ -175,15 +175,15 @@
     </footer>
 
 
-    {% include 'chat_widget.html' %}
+    {% include 'home/chat_widget.html' %}
 
 
     {% if debug %}
         {% load django_browser_reload %}
         {% django_browser_reload_script %}
     {% endif %}
-    <script src="{% static 'js/index.js' %}"></script>
-    <script src="{% static 'js/chat.js' %}"></script>
+    <script src="{% static 'js/home/index.js' %}"></script>
+    <script src="{% static 'js/home/chat.js' %}"></script>
 
 </body>
 </html>
