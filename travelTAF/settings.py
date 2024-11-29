@@ -29,7 +29,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '192.168.0.65',  # Your local IP
+    '0.0.0.0',
+    '*',  # Allow all hosts
 ]
 
 
@@ -174,3 +175,14 @@ STATICFILES_DIRS = [
 
 # Whitenoise settings
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# For security with HTTPS
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.run.app',  # All Cloud Run URLs
+]
+
+# Security settings for production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
