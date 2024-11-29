@@ -79,3 +79,49 @@ body {
                 border-radius: 0;
             }
         }
+
+/* Typing indicator animation */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 0.8s infinite;
+}
+
+/* Hide typing indicator */
+.hidden {
+    display: none;
+}
+
+/* Disabled state styles */
+.disabled\:opacity-50:disabled {
+    opacity: 0.5;
+}
+
+.disabled\:cursor-not-allowed:disabled {
+    cursor: not-allowed;
+}
+
+.disabled\:bg-gray-100:disabled {
+    background-color: #f3f4f6;
+}
+
+.typing-indicator {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.typing-indicator.hidden {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.chat-messages {
+    scroll-behavior: smooth;
+}
