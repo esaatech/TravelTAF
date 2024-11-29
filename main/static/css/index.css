@@ -1,0 +1,81 @@
+/* Base styles */
+body {
+    font-family: "Noto Serif", "Noto Sans", sans-serif;
+}
+
+/* Custom scrollbar hiding */
+.custom-scrollbar {
+    -ms-scrollbar-style: none;
+    scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hero section background */
+.hero-section {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), 
+                      url("https://cdn.usegalileo.ai/stability/500f3828-7d13-4bf0-8ba6-df89ddbdae22.png");
+}
+
+/* News images */
+.news-image-1 {
+    background-image: url("https://cdn.usegalileo.ai/sdxl10/29fe1e26-542b-4850-9f54-719b84a0404e.png");
+}
+
+.news-image-2 {
+    background-image: url("https://cdn.usegalileo.ai/sdxl10/d8f5c020-f98d-48b5-a995-e2052b57644f.png");
+}
+
+/* Country images */
+.country-image-switzerland {
+    background-image: url("https://cdn.usegalileo.ai/stability/3cc59803-63ed-4e9b-bedc-8b2fc155e0cd.png");
+}
+
+.country-image-australia {
+    background-image: url("https://cdn.usegalileo.ai/sdxl10/5a451e30-44b4-4967-8485-15e3a9ccb830.png");
+}
+
+.country-image-singapore {
+    background-image: url("https://cdn.usegalileo.ai/stability/2108244a-daa6-4d5d-9340-da505eef0704.png");
+}
+
+.country-image-ireland {
+    background-image: url("https://cdn.usegalileo.ai/stability/7a5530b6-6eab-4e5e-8152-e1f1c2ecf3e8.png");
+}
+
+        /* Chat Widget Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+        }
+
+        .chat-popup {
+            position: fixed;
+            bottom: 5rem;
+            right: 2rem;
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 40;
+            display: none;
+        }
+
+        .chat-popup.active {
+            display: block;
+        }
+
+        @media (max-width: 640px) {
+            .chat-popup {
+                width: 100%;
+                height: 100%;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+            }
+        }
