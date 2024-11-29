@@ -136,3 +136,26 @@ body {
 .scroll-smooth {
     scroll-behavior: smooth;
 }
+
+elevenlabs-convai {
+    position: fixed;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    max-width: 400px;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 640px) {
+    elevenlabs-convai {
+        position: fixed;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}
