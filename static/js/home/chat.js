@@ -5,20 +5,17 @@ const ChatModule = {
         chatToggle: null,
         chatPopup: null,
         chatClose: null,
-        callButton: null,
         chatInput: null,
         sendButton: null,
         chatMessages: null,
         commonQuestions: null,
-        typingIndicator: null,
-        elevenLabsWidget: null
+        typingIndicator: null
     },
 
     // Initialize the chat module
     init() {
         this.initializeElements();
         this.attachEventListeners();
-        this.initializeElevenLabs();
     },
 
     // Initialize DOM elements
@@ -27,7 +24,6 @@ const ChatModule = {
             chatToggle: document.getElementById('chatToggle'),
             chatPopup: document.getElementById('chatPopup'),
             chatClose: document.getElementById('chatClose'),
-            callButton: document.getElementById('callButton'),
             chatInput: document.getElementById('chatInput'),
             sendButton: document.getElementById('sendMessage'),
             chatMessages: document.getElementById('chatMessages'),
@@ -105,7 +101,6 @@ const ChatModule = {
         this.elements.chatMessages.appendChild(messageDiv);
         
         // Force scroll after message is added
-       
         setTimeout(() => {
             this.scrollToBottom();
         }, 0);
@@ -135,17 +130,14 @@ const ChatModule = {
         this.elements.chatToggle.addEventListener('click', () => {
             if (this.elements.chatPopup.classList.contains('active')) {
                 this.elements.chatPopup.classList.remove('active');
-                this.elements.chatToggle.style.display = 'block'; // Show button
             } else {
                 this.elements.chatPopup.classList.add('active');
-                this.elements.chatToggle.style.display = 'none';  // Hide button
             }
         });
 
         // Close chat
         this.elements.chatClose.addEventListener('click', () => {
             this.elements.chatPopup.classList.remove('active');
-            this.elements.chatToggle.style.display = 'block';  // Show button when closing
         });
 
         // Close on outside click
@@ -153,29 +145,6 @@ const ChatModule = {
             if (!this.elements.chatPopup.contains(e.target) && 
                 !this.elements.chatToggle.contains(e.target)) {
                 this.elements.chatPopup.classList.remove('active');
-                this.elements.chatToggle.style.display = 'block';  // Show button
-            }
-        });
-
-        // Call button
-        this.elements.callButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default tel: behavior
-            
-            // Toggle widget visibility
-            if (this.elements.elevenLabsWidget) {
-                const isVisible = this.elements.elevenLabsWidget.style.display !== 'none';
-                this.elements.elevenLabsWidget.style.display = isVisible ? 'none' : 'block';
-                
-                // Position the widget near the chat
-                if (!isVisible) {
-                    const chatPopup = this.elements.chatPopup;
-                    const rect = chatPopup.getBoundingClientRect();
-                    
-                    this.elements.elevenLabsWidget.style.position = 'fixed';
-                    this.elements.elevenLabsWidget.style.top = `${rect.top}px`;
-                    this.elements.elevenLabsWidget.style.right = `${window.innerWidth - rect.right}px`;
-                    this.elements.elevenLabsWidget.style.zIndex = '1000';
-                }
             }
         });
 
@@ -202,15 +171,6 @@ const ChatModule = {
         // Update send button styles
         this.elements.sendButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
         this.elements.chatInput.classList.add('disabled:bg-gray-100', 'disabled:cursor-not-allowed');
-
-        // Add click outside listener for widget
-        document.addEventListener('click', (e) => {
-            if (this.elements.elevenLabsWidget && 
-                !this.elements.elevenLabsWidget.contains(e.target) &&
-                !this.elements.callButton.contains(e.target)) {
-                this.elements.elevenLabsWidget.style.display = 'none';
-            }
-        });
     },
 
     // Update the sendMessage method
@@ -307,31 +267,6 @@ const ChatModule = {
             }
         } catch (error) {
             console.error('Error loading chat history:', error);
-        }
-    },
-
-    // Add method to initialize ElevenLabs
-    initializeElevenLabs() {
-        // Create widget element
-        const widget = document.createElement('elevenlabs-convai');
-        widget.setAttribute('agent-id', 'FyamG7HPN1mpqH5gAcjK');
-        widget.style.display = 'none'; // Hide initially
-        document.body.appendChild(widget);
-        
-        // Load ElevenLabs script
-        const script = document.createElement('script');
-        script.src = 'https://elevenlabs.io/convai-widget/index.js';
-        script.async = true;
-        script.type = 'text/javascript';
-        document.body.appendChild(script);
-
-        this.elements.elevenLabsWidget = widget;
-    },
-
-    // Add method to handle widget visibility
-    toggleCallWidget(show) {
-        if (this.elements.elevenLabsWidget) {
-            this.elements.elevenLabsWidget.style.display = show ? 'block' : 'none';
         }
     }
 };

@@ -152,27 +152,8 @@ const ChatModule = {
             }
         });
 
-        // Call button
-        this.elements.callButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default tel: behavior
-            
-            // Toggle widget visibility
-            if (this.elements.elevenLabsWidget) {
-                const isVisible = this.elements.elevenLabsWidget.style.display !== 'none';
-                this.elements.elevenLabsWidget.style.display = isVisible ? 'none' : 'block';
-                
-                // Position the widget near the chat
-                if (!isVisible) {
-                    const chatPopup = this.elements.chatPopup;
-                    const rect = chatPopup.getBoundingClientRect();
-                    
-                    this.elements.elevenLabsWidget.style.position = 'fixed';
-                    this.elements.elevenLabsWidget.style.top = `${rect.top}px`;
-                    this.elements.elevenLabsWidget.style.right = `${window.innerWidth - rect.right}px`;
-                    this.elements.elevenLabsWidget.style.zIndex = '1000';
-                }
-            }
-        });
+        
+        
 
         // Common questions
         this.elements.commonQuestions.forEach(question => {
