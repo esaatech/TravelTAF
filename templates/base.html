@@ -57,10 +57,6 @@
         <span>Speak with agent</span>
     </div>
 
-    {% if debug %}
-        {% load django_browser_reload %}
-        {% django_browser_reload_script %}
-    {% endif %}
     <script src="{% static 'js/home/index.js' %}"></script>
     <script src="{% static 'js/home/chat.js' %}"></script>
     <script src="{% static 'js/home/speak.js' %}"></script>

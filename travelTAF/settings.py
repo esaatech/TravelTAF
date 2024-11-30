@@ -54,7 +54,7 @@ INSTALLED_APPS = [
    #   # Updated: use this instead
     'rest_framework',
     'agent.apps.AgentConfig',
-    "django_browser_reload",
+   # "django_browser_reload",
 ]
 
 REST_FRAMEWORK = {
@@ -76,7 +76,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
+   # "django_browser_reload.middleware.BrowserReloadMiddleware",
 
 ]
 
@@ -193,3 +193,4 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
