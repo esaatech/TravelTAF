@@ -1,189 +1,32 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelTAF - Immigration & Travel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900&display=swap" rel="stylesheet" />
-    <link href="{% static 'css/index.css' %}" rel="stylesheet">
-   
+{% extends 'base.html' %}
 
-</head>
-<body class="bg-white min-h-screen flex flex-col">
-    <!-- Desktop Navigation -->
-    <nav class="hidden lg:flex items-center justify-between px-8 py-4 bg-white border-b">
-        <div class="flex items-center space-x-12">
-            <h1 class="text-2xl font-bold">TravelTAF</h1>
-            <div class="flex space-x-8">
-                <a href="#" class="text-gray-700 hover:text-blue-600">Countries</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Immigration</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">News</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Compare</a>
-            </div>
-        </div>
-        <div class="flex items-center space-x-4">
-            <button class="px-6 py-2 text-blue-600 border border-blue-600 rounded-full hover:bg-blue-50">Sign In</button>
-            <button class="px-6 py-2 bg-[#1980e6] text-white rounded-full hover:bg-blue-700">Get Started</button>
-        </div>
-    </nav>
-
-    <!-- Mobile Navigation -->
-    <div class="lg:hidden flex items-center bg-white p-4 justify-between border-b">
-        <h1 class="text-xl font-bold">TravelTAF</h1>
-        <button class="text-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-                <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path>
-            </svg>
-        </button>
-    </div>
-
+{% block content %}
     <!-- Hero Section -->
-    <section class="w-full lg:py-8 lg:px-8">
-        <div class="@container">
-            <div class="@[480px]:p-4">
-                <div class="flex min-h-[480px] lg:min-h-[600px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10"
-                    style='background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("https://cdn.usegalileo.ai/stability/500f3828-7d13-4bf0-8ba6-df89ddbdae22.png");'>
-                    <div class="flex flex-col gap-2 text-left max-w-2xl">
-                        <h1 class="text-white text-4xl lg:text-6xl font-black leading-tight tracking-[-0.033em]">
-                            The world is your oyster
-                        </h1>
-                        <h2 class="text-white text-lg lg:text-xl font-normal leading-normal">
-                            Discover the best countries to immigrate in 2024
-                        </h2>
-                    </div>
-                    <div class="w-full max-w-2xl">
-                        <label class="flex flex-col min-w-40 h-14 w-full @[480px]:h-16">
-                            <div class="flex w-full flex-1 items-stretch rounded-xl h-full">
-                                <div class="text-[#637588] flex border border-[#dce0e5] bg-white items-center justify-center pl-[15px] rounded-l-xl border-r-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
-                                        <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
-                                    </svg>
-                                </div>
-                                <input placeholder="Enter a country or region" class="form-input flex w-full min-w-0 flex-1 rounded-xl text-[#111418] border border-[#dce0e5] bg-white h-full px-4" />
-                                <div class="flex items-center justify-center rounded-r-xl border border-[#dce0e5] bg-white pr-[7px]">
-                                    <button class="bg-[#1980e6] text-white rounded-full px-8 py-3 font-bold hover:bg-blue-700">
-                                        Go
-                                    </button>
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {% include 'home/sections/hero.html' %}
 
-    <!-- News Section -->
-    <section class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
-        <h2 class="text-[#111418] text-2xl lg:text-3xl font-bold mb-8">Latest Immigration news</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="flex flex-col gap-4">
-                <div class="aspect-square rounded-xl bg-cover bg-center" 
-                     style='background-image: url("https://cdn.usegalileo.ai/sdxl10/29fe1e26-542b-4850-9f54-719b84a0404e.png");'></div>
-                <p class="text-[#111418] text-lg font-medium">New US immigration policy</p>
-            </div>
-            <div class="flex flex-col gap-4">
-                <div class="aspect-square rounded-xl bg-cover bg-center" 
-                     style='background-image: url("https://cdn.usegalileo.ai/sdxl10/d8f5c020-f98d-48b5-a995-e2052b57644f.png");'></div>
-                <p class="text-[#111418] text-lg font-medium">Canada's new visa program</p>
-            </div>
-            <div class="flex flex-col gap-4">
-                <div class="aspect-square rounded-xl bg-cover bg-center" style='background-image: url("#");'></div>
-                <p class="text-[#111418] text-lg font-medium">EU migration updates</p>
-            </div>
-            <div class="flex flex-col gap-4">
-                <div class="aspect-square rounded-xl bg-cover bg-center" style='background-image: url("#");'></div>
-                <p class="text-[#111418] text-lg font-medium">Australia skilled visas</p>
-            </div>
-        </div>
-    </section>
+    <!-- Immigration News Section -->
+    {% include 'home/sections/news.html' %}
 
-    <!-- Travel Destinations Section -->
-    <section class="max-w-7xl mx-auto px-4 lg:px-8 py-12 bg-gray-50">
-        <h2 class="text-[#111418] text-2xl lg:text-3xl font-bold mb-8">Popular Travel Destinations</h2>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="flex flex-col gap-4">
-                <div class="aspect-square rounded-xl bg-cover bg-center" 
-                     style='background-image: url("https://cdn.usegalileo.ai/stability/3cc59803-63ed-4e9b-bedc-8b2fc155e0cd.png");'></div>
-                <p class="text-[#111418] text-lg font-medium">Switzerland</p>
-            </div>
-            <div class="flex flex-col gap-4">
-                <div class="aspect-square rounded-xl bg-cover bg-center" 
-                     style='background-image: url("https://cdn.usegalileo.ai/sdxl10/5a451e30-44b4-4967-8485-15e3a9ccb830.png");'></div>
-                <p class="text-[#111418] text-lg font-medium">Australia</p>
-            </div>
-            <div class="flex flex-col gap-4">
-                <div class="aspect-square rounded-xl bg-cover bg-center" 
-                     style='background-image: url("https://cdn.usegalileo.ai/stability/2108244a-daa6-4d5d-9340-da505eef0704.png");'></div>
-                <p class="text-[#111418] text-lg font-medium">Singapore</p>
-            </div>
-            <div class="flex flex-col gap-4">
-                <div class="aspect-square rounded-xl bg-cover bg-center" 
-                     style='background-image: url("https://cdn.usegalileo.ai/stability/7a5530b6-6eab-4e5e-8152-e1f1c2ecf3e8.png");'></div>
-                <p class="text-[#111418] text-lg font-medium">Ireland</p>
-            </div>
-        </div>
-        <div class="flex justify-center mt-8">
-            <button class="bg-[#1980e6] text-white rounded-full px-8 py-4 font-bold hover:bg-blue-700 min-w-[200px]">
-                Start comparison
-            </button>
-        </div>
-    </section>
+    <!-- Services Grid -->
+    {% include 'home/sections/services.html' %}
+
+    <!-- Country Information -->
+    {% include 'home/sections/countries.html' %}
+
+    <!-- Tools Section -->
+    {% include 'home/sections/tools.html' %}
+
+    <!-- Testimonials -->
+    {% include 'home/sections/testimonials.html' %}
+
+    <!-- FAQ Section -->
+    {% include 'home/sections/faq.html' %}
+
+    <!-- Newsletter + Contact -->
+    {% include 'home/sections/newsletter.html' %}
 
     <!-- Desktop Footer -->
-    <footer class="bg-gray-900 text-white py-16 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                <div>
-                    <h3 class="text-2xl font-bold mb-6">TravelTAF</h3>
-                    <p class="text-gray-400">Your trusted partner for immigration and travel solutions worldwide.</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Services</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Immigration Consulting</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Visa Applications</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Country Comparison</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Travel Planning</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Company</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Legal</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-                <p>© 2024 TravelTAF. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
+    {% include 'home/sections/footer.html' %}
 
     {% include 'home/chat_widget.html' %}
-
-
-    {% if debug %}
-        {% load django_browser_reload %}
-        {% django_browser_reload_script %}
-    {% endif %}
-    <script src="{% static 'js/home/index.js' %}"></script>
-    <script src="{% static 'js/home/chat.js' %}"></script>
-
-</body>
-</html>
+{% endblock %}
