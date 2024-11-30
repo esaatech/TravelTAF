@@ -2,13 +2,15 @@
 FROM python:3.11.10-slim
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 ENV POETRY_VERSION=1.7.1
 ENV POETRY_HOME=/opt/poetry
 ENV POETRY_VENV=/opt/poetry-venv
 ENV POETRY_CACHE_DIR=/opt/.cache
 ENV PATH="/opt/poetry/bin:$PATH"
+ENV DEBUG=False
+ENV PORT=8080
 
 # Install system dependencies
 RUN apt-get update \
@@ -40,14 +42,8 @@ RUN poetry install --no-interaction --no-ansi
 # Collect static files
 RUN poetry run python manage.py collectstatic --noinput
 
-
-
 # Expose port
-EXPOSE 8000
+EXPOSE 8080
 
-# Run gunicorn
-CMD poetry run gunicorn travelTAF.wsgi:application \
-    --bind 0.0.0.0:$PORT \
-    --workers 2 \
-    --threads 2 \
-    --timeout 120 
+# Run gunicorn (using JSON array format)
+CMD ["poetry", "run", "gunicorn", "travelTAF.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "2", "--threads", "2", "--timeout", "120"]

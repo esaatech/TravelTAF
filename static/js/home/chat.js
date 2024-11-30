@@ -135,14 +135,17 @@ const ChatModule = {
         this.elements.chatToggle.addEventListener('click', () => {
             if (this.elements.chatPopup.classList.contains('active')) {
                 this.elements.chatPopup.classList.remove('active');
+                this.elements.chatToggle.style.display = 'block'; // Show button
             } else {
                 this.elements.chatPopup.classList.add('active');
+                this.elements.chatToggle.style.display = 'none';  // Hide button
             }
         });
 
         // Close chat
         this.elements.chatClose.addEventListener('click', () => {
             this.elements.chatPopup.classList.remove('active');
+            this.elements.chatToggle.style.display = 'block';  // Show button when closing
         });
 
         // Close on outside click
@@ -150,6 +153,7 @@ const ChatModule = {
             if (!this.elements.chatPopup.contains(e.target) && 
                 !this.elements.chatToggle.contains(e.target)) {
                 this.elements.chatPopup.classList.remove('active');
+                this.elements.chatToggle.style.display = 'block';  // Show button
             }
         });
 
