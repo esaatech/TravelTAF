@@ -24,12 +24,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+hl-say_pic)ycn+(n_1ouysg%+li1do49k_kev6%c3u5%3bpt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '192.168.0.65',  # Your local IP
+    'traveltaf-578103433472.us-central1.run.app',  # Your Cloud Run URL
+    '.run.app',  # All Cloud Run URLs
+]
+
+# For CSRF protection in Cloud Run
+CSRF_TRUSTED_ORIGINS = [
+    'https://traveltaf-578103433472.us-central1.run.app',
+    'https://*.run.app',
 ]
 
 
