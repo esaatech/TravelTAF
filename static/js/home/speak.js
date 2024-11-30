@@ -5,77 +5,106 @@ const SpeakModule = {
         callButton: null
     },
 
-    // Initialize the speak module
     init() {
+        console.log('1. SpeakModule.init() called');
         this.initializeElements();
         this.attachEventListeners();
         this.initializeElevenLabs();
+        console.log('4. SpeakModule initialization complete');
     },
 
-    // Initialize DOM elements
     initializeElements() {
+        console.log('2. Initializing elements');
         this.elements.callButton = document.getElementById('callButton');
+        console.log('Found call button:', this.elements.callButton);
     },
 
-    // Initialize ElevenLabs
     initializeElevenLabs() {
-        // Create widget element
+        console.log('3. Initializing ElevenLabs');
         const widget = document.createElement('elevenlabs-convai');
         widget.setAttribute('agent-id', 'FyamG7HPN1mpqH5gAcjK');
-        widget.style.display = 'none'; // Hide initially
+        widget.style.display = 'none';
+        widget.style.width = '300px';
+        widget.style.height = '400px';
+        widget.style.backgroundColor = 'white';
+        widget.style.border = '1px solid #ccc';
+        widget.style.borderRadius = '8px';
+        widget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
         document.body.appendChild(widget);
-
-        // Load ElevenLabs script
+        
+        widget.innerHTML = '<div style="padding: 20px;">Loading ElevenLabs widget...</div>';
+        
         const script = document.createElement('script');
         script.src = 'https://elevenlabs.io/convai-widget/index.js';
         script.async = true;
         script.type = 'text/javascript';
+        
+        script.onerror = () => {
+            console.error('Failed to load ElevenLabs script');
+            widget.innerHTML = '<div style="padding: 20px; color: red;">Failed to load ElevenLabs widget</div>';
+        };
+        
         document.body.appendChild(script);
+        console.log('ElevenLabs script added');
 
         this.elements.elevenLabsWidget = widget;
     },
 
-    // Attach event listeners
     attachEventListeners() {
-        // Call button
-        this.elements.callButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default tel: behavior
+        console.log('2.5. Attaching event listeners');
+        
+        if (!this.elements.callButton) {
+            console.error('Call button not found during event attachment!');
+            return;
+        }
 
-            // Toggle widget visibility
+        this.elements.callButton.addEventListener('click', (e) => {
+            console.log('Button clicked!');
+            e.preventDefault();
+            console.log('Calling toggleCallWidget');
             this.toggleCallWidget();
         });
 
-        // Add click outside listener for widget
         document.addEventListener('click', (e) => {
+            console.log('Document clicked, checking if should hide widget');
             if (this.elements.elevenLabsWidget &&
                 !this.elements.elevenLabsWidget.contains(e.target) &&
                 !this.elements.callButton.contains(e.target)) {
+                console.log('Hiding widget');
                 this.elements.elevenLabsWidget.style.display = 'none';
             }
         });
     },
 
-    // Toggle widget visibility
     toggleCallWidget() {
+        console.log('Inside toggleCallWidget');
+        console.log('Widget element:', this.elements.elevenLabsWidget);
+
         if (this.elements.elevenLabsWidget) {
             const isVisible = this.elements.elevenLabsWidget.style.display !== 'none';
-            this.elements.elevenLabsWidget.style.display = isVisible ? 'none' : 'block';
-
-            // Position the widget near the chat
-            if (!isVisible) {
-                const chatPopup = document.getElementById('chatPopup');
-                const rect = chatPopup.getBoundingClientRect();
-
+            console.log('Current visibility:', !isVisible);
+            
+            if (isVisible) {
+                this.elements.elevenLabsWidget.style.display = 'none';
+            } else {
+                // Position the widget relative to the call button
+                const buttonRect = this.elements.callButton.getBoundingClientRect();
+                
+                this.elements.elevenLabsWidget.style.display = 'block';
                 this.elements.elevenLabsWidget.style.position = 'fixed';
-                this.elements.elevenLabsWidget.style.top = `${rect.top}px`;
-                this.elements.elevenLabsWidget.style.right = `${window.innerWidth - rect.right}px`;
+                this.elements.elevenLabsWidget.style.bottom = '150px'; // Position above the call button
+                this.elements.elevenLabsWidget.style.right = '20px';   // Align with the call button
                 this.elements.elevenLabsWidget.style.zIndex = '1000';
             }
+        } else {
+            console.error('ElevenLabs widget not initialized!');
         }
     }
 };
 
 // Initialize when DOM is loaded
+console.log('Setting up DOMContentLoaded listener');
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded');
     SpeakModule.init();
 });
