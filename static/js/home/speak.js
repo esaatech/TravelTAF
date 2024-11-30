@@ -24,8 +24,8 @@ const SpeakModule = {
         const widget = document.createElement('elevenlabs-convai');
         widget.setAttribute('agent-id', 'FyamG7HPN1mpqH5gAcjK');
         widget.style.display = 'none';
-        widget.style.width = '300px';
-        widget.style.height = '400px';
+        widget.style.width = '100px';
+        widget.style.height = '100px';
         widget.style.backgroundColor = 'white';
         widget.style.border = '1px solid #ccc';
         widget.style.borderRadius = '8px';
