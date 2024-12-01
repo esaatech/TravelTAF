@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     '192.168.0.65',  # Your local IP
     'traveltaf-578103433472.us-central1.run.app',  # Your Cloud Run URL
     '.run.app',  # All Cloud Run URLs
+    '*',
 ]
 
 # For CSRF protection in Cloud Run
