@@ -45,5 +45,14 @@ RUN poetry run python manage.py collectstatic --noinput
 # Expose port
 EXPOSE 8080
 
-# Run gunicorn (using JSON array format)
-CMD ["poetry", "run", "gunicorn", "travelTAF.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "2", "--threads", "2", "--timeout", "120"]
+# Run gunicorn with enhanced logging and configuration
+CMD ["poetry", "run", "gunicorn", \
+    "travelTAF.wsgi:application", \
+    "--bind", "0.0.0.0:8080", \
+    "--workers", "2", \
+    "--threads", "2", \
+    "--timeout", "120", \
+    "--log-level", "debug", \
+    "--access-logfile", "-", \
+    "--error-logfile", "-", \
+    "--capture-output"]
