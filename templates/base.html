@@ -34,6 +34,61 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
+            z-index: 50;
+        }
+
+        .chat-popup {
+            display: none;
+            position: fixed;
+            right: 20px;
+            bottom: 100px;
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 50;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .chat-popup {
+                position: fixed;
+                top: 80px;  /* Height of nav */
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: calc(100vh - 80px);
+                margin: 0;
+                border-radius: 0;
+                z-index: 40;
+            }
+
+            .chat-widget {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 50;
+            }
+
+            /* Ensure the send button stays at bottom */
+            .chat-popup .flex-col {
+                height: 100%;
+            }
+
+            /* Ensure messages area takes available space */
+            #chatMessages {
+                flex: 1;
+                overflow-y: auto;
+            }
+
+            /* Fix input area to bottom */
+            .chat-popup .border-t {
+                position: sticky;
+                bottom: 0;
+                background: white;
+            }
         }
     </style>
 </head>
