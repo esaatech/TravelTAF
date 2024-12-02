@@ -22,9 +22,62 @@
             {% endfor %}
         </div>
     </div>
-    <div class="text-center mt-12 space-x-4">
-        <button class="px-8 py-4 border-2 border-[#1980e6] text-[#1980e6] rounded-full hover:bg-blue-50 transition-colors">
-            Subscribe to Updates
-        </button>
+    <div class="text-center mt-12">
+        <form id="subscribeForm" class="inline-flex items-center">
+            {% csrf_token %}
+            <input type="email" 
+                   name="email" 
+                   placeholder="Enter your email" 
+                   class="px-4 py-2 border border-gray-300 rounded-l-full focus:outline-none focus:border-[#1980e6] w-64"
+                   required>
+            <button type="submit" 
+                    class="px-8 py-2 bg-[#1980e6] text-white rounded-r-full hover:bg-blue-700 transition-colors">
+                Subscribe
+            </button>
+        </form>
+        <div id="subscribeMessage" class="mt-4 text-sm"></div>
     </div>
-</section> 
+</section>
+
+<script>
+document.getElementById('subscribeForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    const messageDiv = document.getElementById('subscribeMessage');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    
+    // Disable the submit button and show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Subscribing...';
+    
+    fetch('/subscribers/subscribe/', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        messageDiv.textContent = data.message;
+        messageDiv.className = data.status === 'success' 
+            ? 'mt-4 text-sm text-green-600' 
+            : 'mt-4 text-sm text-red-600';
+            
+        if (data.status === 'success') {
+            form.reset();
+        }
+    })
+    .catch(error => {
+        messageDiv.textContent = 'An error occurred. Please try again.';
+        messageDiv.className = 'mt-4 text-sm text-red-600';
+    })
+    .finally(() => {
+        // Re-enable the submit button and restore original text
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+    });
+});
+</script> 

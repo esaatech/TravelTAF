@@ -25,6 +25,7 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('api/agent/', include('agent.urls')),
     path('news/', include('news.urls', namespace='news')),
+    path('subscribers/', include('subscribers.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

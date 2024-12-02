@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'agent.apps.AgentConfig',
    # "django_browser_reload",
     'news.apps.NewsConfig',
+    'subscribers',
 ]
 
 REST_FRAMEWORK = {
