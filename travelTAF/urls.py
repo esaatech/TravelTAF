@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('main.urls')),  # This will handle all core app URLs, including home page
     path("__reload__/", include("django_browser_reload.urls")),
     path('api/agent/', include('agent.urls')),
+    path('news/', include('news.urls', namespace='news')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
