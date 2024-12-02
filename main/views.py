@@ -37,3 +37,7 @@ def about(request):
 
 def contact(request):
     pass
+
+
+def services(request):
+    return render(request, 'home/all-services.html')
