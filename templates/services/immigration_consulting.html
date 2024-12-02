@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Hero Section with Service-Specific Background -->
+<section class="relative bg-gradient-to-r from-blue-50 to-white py-20">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center">
+            <!-- Left Content -->
+            <div class="md:w-1/2 mb-8 md:mb-0">
+                <h1 class="text-4xl font-bold mb-4">Immigration Consulting</h1>
+                <p class="text-gray-600 text-lg mb-6">
+                    Expert guidance through your immigration journey with personalized solutions and support.
+                </p>
+                <div class="flex space-x-4">
+                    <button class="px-6 py-3 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors">
+                        Book Consultation
+                    </button>
+                    <button class="px-6 py-3 border-2 border-[#1980e6] text-[#1980e6] rounded-full hover:bg-blue-50 transition-colors">
+                        Download Guide
+                    </button>
+                </div>
+            </div>
+            <!-- Right Image/Illustration -->
+            <div class="md:w-1/2">
+                <img src="{% static 'images/services/immigration-consulting.svg' %}" alt="Immigration Consulting" class="w-full">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Key Features Section -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">What We Offer</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature Card -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                    <svg><!-- Feature icon --></svg>
+                </div>
+                <h3 class="font-bold mb-2">Visa Assessment</h3>
+                <p class="text-gray-600">Comprehensive evaluation of your eligibility for various visa types.</p>
+            </div>
+            <!-- More feature cards -->
+        </div>
+    </div>
+</section>
+
+<!-- Process Timeline -->
+<section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Our Process</h2>
+        <div class="relative">
+            <!-- Timeline steps -->
+            <div class="flex flex-col space-y-8">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-[#1980e6] rounded-full flex items-center justify-center text-white">1</div>
+                    <div>
+                        <h3 class="font-bold">Initial Consultation</h3>
+                        <p class="text-gray-600">Free assessment of your immigration options</p>
+                    </div>
+                </div>
+                <!-- More timeline steps -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Plans -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Service Packages</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Basic Package -->
+            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border">
+                <div class="text-center">
+                    <h3 class="text-xl font-bold mb-2">Basic Package</h3>
+                    <div class="text-[#1980e6] text-2xl font-bold mb-4">$XXX</div>
+                    <ul class="text-left space-y-3 mb-6">
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-2"><!-- Checkmark icon --></svg>
+                            Initial Consultation
+                        </li>
+                        <!-- More features -->
+                    </ul>
+                    <button class="w-full px-6 py-3 bg-[#1980e6] text-white rounded-full">
+                        Select Package
+                    </button>
+                </div>
+            </div>
+            <!-- More packages -->
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+        <div class="max-w-3xl mx-auto space-y-4">
+            <!-- FAQ Item -->
+            <div class="bg-white rounded-lg p-4">
+                <button class="flex justify-between items-center w-full">
+                    <span class="font-medium">What documents do I need?</span>
+                    <svg><!-- Expand icon --></svg>
+                </button>
+                <div class="mt-4 text-gray-600 hidden">
+                    Answer content here...
+                </div>
+            </div>
+            <!-- More FAQ items -->
+        </div>
+    </div>
+</section>
+
+<!-- Success Stories -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Success Stories</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Testimonial Card -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <div class="flex items-center mb-4">
+                    <img src="" alt="" class="w-12 h-12 rounded-full">
+                    <div class="ml-4">
+                        <h4 class="font-bold">Client Name</h4>
+                        <p class="text-gray-600">Successful Immigration to Canada</p>
+                    </div>
+                </div>
+                <p class="text-gray-600">"Testimonial content..."</p>
+            </div>
+            <!-- More testimonials -->
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-[#1980e6] text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-4">Ready to Start Your Immigration Journey?</h2>
+        <p class="mb-8">Schedule your free consultation today</p>
+        <button class="px-8 py-4 bg-white text-[#1980e6] rounded-full hover:bg-gray-100 transition-colors">
+            Book Your Consultation
+        </button>
+    </div>
+</section>
+{% endblock %}

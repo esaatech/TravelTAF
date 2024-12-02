@@ -1,0 +1,26 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Elements -->
+    <circle cx="400" cy="300" r="250" fill="#F0F7FF" opacity="0.5"/>
+    <circle cx="400" cy="300" r="200" fill="#E6F0FF" opacity="0.3"/>
+    
+    <!-- Airplane Icon -->
+    <path d="M400 200L450 250L400 300L350 250L400 200Z" fill="#1980E6"/>
+    <path d="M400 300L400 400" stroke="#1980E6" stroke-width="10"/>
+    <path d="M380 400L420 400" stroke="#1980E6" stroke-width="10"/>
+    
+    <!-- Map Icon -->
+    <rect x="550" y="200" width="160" height="120" rx="10" fill="white" stroke="#1980E6" stroke-width="2"/>
+    <path d="M570 230L690 230" stroke="#E6E6E6" stroke-width="2"/>
+    <path d="M570 250L690 250" stroke="#E6E6E6" stroke-width="2"/>
+    <path d="M570 270L690 270" stroke="#E6E6E6" stroke-width="2"/>
+    
+    <!-- Compass Icon -->
+    <circle cx="200" cy="400" r="40" fill="white" stroke="#1980E6" stroke-width="2"/>
+    <path d="M200 380L220 400L200 420L180 400L200 380Z" fill="#1980E6"/>
+    
+    <!-- Decorative Elements -->
+    <circle cx="180" cy="400" r="10" fill="#1980E6" opacity="0.2"/>
+    <circle cx="620" cy="420" r="15" fill="#1980E6" opacity="0.2"/>
+    <circle cx="150" cy="450" r="8" fill="#1980E6" opacity="0.2"/>
+    <circle cx="650" cy="380" r="12" fill="#1980E6" opacity="0.2"/>
+</svg>

@@ -1,0 +1,49 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Elements -->
+    <circle cx="400" cy="300" r="250" fill="#F0F7FF" opacity="0.5"/>
+    <circle cx="400" cy="300" r="200" fill="#E6F0FF" opacity="0.3"/>
+    
+    <!-- Passport -->
+    <rect x="250" y="200" width="300" height="400" rx="20" fill="#1980E6"/>
+    <rect x="270" y="220" width="260" height="360" rx="15" fill="white"/>
+    
+    <!-- Passport Photo Area -->
+    <rect x="290" y="250" width="120" height="150" rx="10" fill="#F0F7FF"/>
+    
+    <!-- Passport Lines -->
+    <rect x="430" y="270" width="80" height="8" rx="4" fill="#E6E6E6"/>
+    <rect x="430" y="290" width="60" height="8" rx="4" fill="#E6E6E6"/>
+    <rect x="430" y="310" width="70" height="8" rx="4" fill="#E6E6E6"/>
+    
+    <!-- Document Lines -->
+    <rect x="290" y="420" width="220" height="2" fill="#E6E6E6"/>
+    <rect x="290" y="440" width="220" height="2" fill="#E6E6E6"/>
+    <rect x="290" y="460" width="220" height="2" fill="#E6E6E6"/>
+    <rect x="290" y="480" width="220" height="2" fill="#E6E6E6"/>
+    
+    <!-- Visa Stamp -->
+    <circle cx="400" cy="540" r="30" stroke="#1980E6" stroke-width="3" fill="none"/>
+    <path d="M385 540l10 10 20-20" stroke="#1980E6" stroke-width="3" fill="none"/>
+    
+    <!-- Floating Elements -->
+    <!-- Document 1 -->
+    <rect x="150" y="150" width="120" height="160" rx="10" fill="white" stroke="#1980E6" stroke-width="2"/>
+    <rect x="170" y="170" width="80" height="8" rx="4" fill="#E6E6E6"/>
+    <rect x="170" y="190" width="60" height="8" rx="4" fill="#E6E6E6"/>
+    
+    <!-- Document 2 -->
+    <rect x="530" y="150" width="120" height="160" rx="10" fill="white" stroke="#1980E6" stroke-width="2"/>
+    <rect x="550" y="170" width="80" height="8" rx="4" fill="#E6E6E6"/>
+    <rect x="550" y="190" width="60" height="8" rx="4" fill="#E6E6E6"/>
+    
+    <!-- Decorative Elements -->
+    <circle cx="180" cy="400" r="10" fill="#1980E6" opacity="0.2"/>
+    <circle cx="620" cy="420" r="15" fill="#1980E6" opacity="0.2"/>
+    <circle cx="150" cy="350" r="8" fill="#1980E6" opacity="0.2"/>
+    <circle cx="650" cy="380" r="12" fill="#1980E6" opacity="0.2"/>
+    
+    <!-- Globe Elements -->
+    <circle cx="400" cy="100" r="40" fill="#1980E6" opacity="0.1"/>
+    <path d="M370 100 Q 400 80 430 100 Q 400 120 370 100" stroke="#1980E6" stroke-width="2" fill="none"/>
+    <path d="M400 60 Q 420 100 400 140" stroke="#1980E6" stroke-width="2" fill="none"/>
+</svg>

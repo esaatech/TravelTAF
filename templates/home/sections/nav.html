@@ -28,7 +28,7 @@
                     <div class="absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                         <div class="p-4 space-y-3">
                             <!-- Immigration Consulting -->
-                            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition-colors">
+                            <a href="{% url 'main:immigration_consulting' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition-colors">
                                 <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path d="M12 4.354a4 4 0 110 5.292V15M15 21h3a2 2 0 002-2v-6a2 2 0 00-2-2h-3M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a2 2 0 012-2h0a2 2 0 012 2v5m-4 0h4" />
@@ -41,7 +41,7 @@
                             </a>
 
                             <!-- Study Abroad -->
-                            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition-colors">
+                            <a href="{% url 'main:study_abroad' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition-colors">
                                 <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path d="M12 14l9-5-9-5-9 5 9 5z" />
@@ -190,13 +190,13 @@
                     </svg>
                 </button>
                 <div class="pl-4 mt-2 space-y-1">
-                    <a href="#" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
+                    <a href="{% url 'main:immigration_consulting' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M12 4.354a4 4 0 110 5.292V15M15 21h3a2 2 0 002-2v-6a2 2 0 00-2-2h-3M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a2 2 0 012-2h0a2 2 0 012 2v5m-4 0h4" />
                         </svg>
                         <span>Immigration Consulting</span>
                     </a>
-                    <a href="#" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
+                    <a href="{% url 'main:study_abroad' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M12 14l9-5-9-5-9 5 9 5z" />
                             <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
