@@ -9,7 +9,8 @@ const ChatModule = {
         sendButton: null,
         chatMessages: null,
         commonQuestions: null,
-        typingIndicator: null
+        typingIndicator: null,
+        chatWidget: null
     },
 
     // Initialize the chat module
@@ -27,7 +28,8 @@ const ChatModule = {
             chatInput: document.getElementById('chatInput'),
             sendButton: document.getElementById('sendMessage'),
             chatMessages: document.getElementById('chatMessages'),
-            commonQuestions: document.querySelectorAll('.common-question')
+            commonQuestions: document.querySelectorAll('.common-question'),
+            chatWidget: document.querySelector('.chat-widget')
         };
         this.createTypingIndicator();
     },
@@ -128,16 +130,14 @@ const ChatModule = {
     attachEventListeners() {
         // Toggle chat
         this.elements.chatToggle.addEventListener('click', () => {
-            if (this.elements.chatPopup.classList.contains('active')) {
-                this.elements.chatPopup.classList.remove('active');
-            } else {
-                this.elements.chatPopup.classList.add('active');
-            }
+            this.elements.chatPopup.classList.add('active');
+            this.elements.chatWidget.style.display = 'none';
         });
 
         // Close chat
         this.elements.chatClose.addEventListener('click', () => {
             this.elements.chatPopup.classList.remove('active');
+            this.elements.chatWidget.style.display = 'block';
         });
 
         // Close on outside click
@@ -145,6 +145,7 @@ const ChatModule = {
             if (!this.elements.chatPopup.contains(e.target) && 
                 !this.elements.chatToggle.contains(e.target)) {
                 this.elements.chatPopup.classList.remove('active');
+                this.elements.chatWidget.style.display = 'block';
             }
         });
 
