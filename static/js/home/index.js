@@ -15,6 +15,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add your comparison logic here
         console.log('Starting comparison');
     });
+
+    
+
+
+
+
+
+
 });
 
 

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelTAF Chat Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <style>
+        body { font-family: "Noto Sans", sans-serif; }
+        .chat-container { height: calc(100vh - 160px); }
+        
+        /* Add these new styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+        }
+        
+        .chat-popup {
+            position: fixed;
+            bottom: 5rem;
+            right: 2rem;
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 40;
+            display: none; /* Hidden by default */
+        }
+        
+        .chat-popup.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Add the floating button -->
+    <div class="chat-widget">
+        <button id="chatToggle" 
+                class="bg-[#1980e6] text-white px-6 py-3 rounded-full hover:bg-blue-700 flex items-center gap-2 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"></path>
+            </svg>
+            <span>Chat with Agent</span>
+        </button>
+    </div>
+
+    <!-- Wrap the existing chat interface in a popup container -->
+    <div id="chatPopup" class="chat-popup">
+        <div class="w-full h-full flex flex-col rounded-lg overflow-hidden">
+            <!-- Chat Header -->
+            <div class="bg-white border-b px-4 py-3 flex justify-between items-center">
+                <h1 class="text-lg font-bold">TravelTAF Assistant</h1>
+                <button id="chatClose" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Chat Content -->
+            <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                <!-- Your existing chat messages here -->
+                <!-- Bot Message -->
+                <div class="flex gap-4 max-w-2xl mb-4">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1980e6" viewBox="0 0 256 256">
+                            <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="bg-gray-100 p-4 rounded-lg inline-block">Hello! I'm your immigration assistant. How can I help you today?</p>
+                    </div>
+                </div>
+                <!-- User Message -->
+                <div class="flex gap-4 max-w-2xl ml-auto">
+                    <div class="flex-1">
+                        <p class="bg-blue-600 text-white p-4 rounded-lg inline-block">Hi! I'm interested in moving to Canada. Can you help me understand the process?</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                            <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm56-88a56,56,0,1,1-56-56A56.06,56.06,0,0,1,184,128Z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="border-t bg-white p-4">
+                <div class="flex gap-2">
+                    <input type="text" 
+                           placeholder="Type your message..." 
+                           class="flex-1 px-4 py-2 border rounded-l-lg focus:outline-none focus:border-blue-500">
+                    <button class="bg-[#1980e6] text-white px-4 py-2 rounded-r-lg hover:bg-blue-700">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add JavaScript for toggle functionality -->
+    <script>
+        const chatToggle = document.getElementById('chatToggle');
+        const chatPopup = document.getElementById('chatPopup');
+        const chatClose = document.getElementById('chatClose');
+
+        chatToggle.addEventListener('click', () => {
+            chatPopup.classList.add('active');
+        });
+
+        chatClose.addEventListener('click', () => {
+            chatPopup.classList.remove('active');
+        });
+
+        // Close chat when clicking outside (optional)
+        document.addEventListener('click', (e) => {
+            if (!chatPopup.contains(e.target) && !chatToggle.contains(e.target)) {
+                chatPopup.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
