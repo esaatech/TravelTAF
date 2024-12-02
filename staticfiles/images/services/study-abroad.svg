@@ -1,0 +1,36 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Elements -->
+    <circle cx="400" cy="300" r="250" fill="#F0F7FF" opacity="0.5"/>
+    <circle cx="400" cy="300" r="200" fill="#E6F0FF" opacity="0.3"/>
+    
+    <!-- Graduation Cap -->
+    <path d="M400 100L200 200L400 300L600 200L400 100Z" fill="#1980E6"/>
+    <path d="M300 250V350L400 400L500 350V250" fill="#1980E6" opacity="0.8"/>
+    <circle cx="400" cy="100" r="15" fill="#1980E6"/>
+    
+    <!-- Books Stack -->
+    <rect x="250" y="320" width="300" height="40" rx="5" fill="#1980E6"/>
+    <rect x="270" y="310" width="260" height="40" rx="5" fill="#2990FF"/>
+    <rect x="290" y="300" width="220" height="40" rx="5" fill="#1980E6"/>
+    
+    <!-- Globe Elements -->
+    <circle cx="150" cy="250" r="60" fill="white" stroke="#1980E6" stroke-width="2"/>
+    <path d="M120 250 Q 150 220 180 250 Q 150 280 120 250" stroke="#1980E6" stroke-width="2" fill="none"/>
+    <path d="M150 190 Q 180 250 150 310" stroke="#1980E6" stroke-width="2" fill="none"/>
+    
+    <!-- Certificate -->
+    <rect x="550" y="200" width="160" height="120" rx="10" fill="white" stroke="#1980E6" stroke-width="2"/>
+    <line x1="570" y1="230" x2="690" y2="230" stroke="#E6E6E6" stroke-width="2"/>
+    <line x1="570" y1="250" x2="690" y2="250" stroke="#E6E6E6" stroke-width="2"/>
+    <line x1="570" y1="270" x2="690" y2="270" stroke="#E6E6E6" stroke-width="2"/>
+    
+    <!-- Decorative Elements -->
+    <circle cx="180" cy="400" r="10" fill="#1980E6" opacity="0.2"/>
+    <circle cx="620" cy="420" r="15" fill="#1980E6" opacity="0.2"/>
+    <circle cx="150" cy="450" r="8" fill="#1980E6" opacity="0.2"/>
+    <circle cx="650" cy="380" r="12" fill="#1980E6" opacity="0.2"/>
+    
+    <!-- Stars -->
+    <path d="M700 150L710 170L730 170L715 185L720 205L700 195L680 205L685 185L670 170L690 170L700 150Z" fill="#1980E6" opacity="0.2"/>
+    <path d="M100 200L110 220L130 220L115 235L120 255L100 245L80 255L85 235L70 220L90 220L100 200Z" fill="#1980E6" opacity="0.2"/>
+</svg>

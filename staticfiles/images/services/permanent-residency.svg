@@ -1,0 +1,26 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Elements -->
+    <circle cx="400" cy="300" r="250" fill="#F0F7FF" opacity="0.5"/>
+    <circle cx="400" cy="300" r="200" fill="#E6F0FF" opacity="0.3"/>
+    
+    <!-- House Icon -->
+    <path d="M300 350L400 250L500 350V450H300V350Z" fill="#1980E6"/>
+    <rect x="350" y="400" width="100" height="50" fill="white"/>
+    <rect x="370" y="420" width="20" height="30" fill="#1980E6"/>
+    
+    <!-- Key Icon -->
+    <circle cx="600" cy="200" r="40" fill="white" stroke="#1980E6" stroke-width="2"/>
+    <path d="M600 180L620 200L600 220L580 200L600 180Z" fill="#1980E6"/>
+    <rect x="590" y="190" width="20" height="20" fill="white"/>
+    
+    <!-- Document -->
+    <rect x="150" y="200" width="120" height="160" rx="10" fill="white" stroke="#1980E6" stroke-width="2"/>
+    <rect x="170" y="220" width="80" height="8" rx="4" fill="#E6E6E6"/>
+    <rect x="170" y="240" width="60" height="8" rx="4" fill="#E6E6E6"/>
+    
+    <!-- Decorative Elements -->
+    <circle cx="180" cy="400" r="10" fill="#1980E6" opacity="0.2"/>
+    <circle cx="620" cy="420" r="15" fill="#1980E6" opacity="0.2"/>
+    <circle cx="150" cy="450" r="8" fill="#1980E6" opacity="0.2"/>
+    <circle cx="650" cy="380" r="12" fill="#1980E6" opacity="0.2"/>
+</svg>
