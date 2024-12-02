@@ -3,15 +3,17 @@
         <div class="flex items-center justify-between h-20 px-4">
             <!-- Logo -->
             <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1980e6]" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-                <span class="text-2xl font-bold">TravelTAF</span>
+                <a href="{% url 'main:home' %}" class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1980e6]" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span class="text-2xl font-bold">TravelTAF</span>
+                </a>
             </div>
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#" class="text-gray-700 hover:text-[#1980e6] transition-colors">Home</a>
+                <a href="{% url 'main:home' %}" class="text-gray-700 hover:text-[#1980e6] transition-colors">Home</a>
                 
                 <!-- Services Dropdown -->
                 <div class="relative group">
@@ -174,7 +176,7 @@
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="md:hidden hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
-            <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-blue-50 rounded-lg">
+            <a href="{% url 'main:home' %}" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-blue-50 rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h18M3 18h18" />
                 </svg>
