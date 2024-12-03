@@ -95,22 +95,26 @@
 </style>
 
 <script>
-    // Typed.js initialization
+    // Typed.js initialization with onStringTyped callback
     let typed = new Typed('#typed-text', {
         strings: ['Study Abroad', 'Family Reunion', 'Dream Vacation'],
         typeSpeed: 50,
         backSpeed: 30,
         backDelay: 2000,
-        loop: true
+        loop: true,
+        onStringTyped: (arrayPos) => {
+            // Trigger scene transition when text changes
+            transitionToScene(arrayPos);
+        }
     });
 
     // Scene transitions with animations
     const scenes = document.querySelectorAll('.scene');
     let currentScene = 0;
 
-    function transitionScenes() {
+    function transitionToScene(sceneIndex) {
         scenes.forEach((scene, index) => {
-            if (index === currentScene) {
+            if (index === sceneIndex) {
                 scene.classList.remove('inactive');
                 scene.classList.add('active');
                 scene.style.opacity = '1';
@@ -122,15 +126,13 @@
                 scene.style.transform = 'translateX(100%)';
             }
         });
-        
-        currentScene = (currentScene + 1) % scenes.length;
     }
 
     // Initial state
     scenes[0].classList.add('active');
-    
-    // Start transitions after initial delay
-    setTimeout(() => {
-        setInterval(transitionScenes, 4000);
-    }, 4000);
+
+    // Remove the automatic interval transition
+    // setTimeout(() => {
+    //     setInterval(transitionScenes, 4000);
+    // }, 4000);
 </script>
