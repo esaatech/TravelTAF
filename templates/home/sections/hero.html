@@ -18,12 +18,14 @@
                     <span class="text-blue-700 font-semibold">traveling</span>
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <button class="px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105">
+                    <a href="{% url 'main:get_started' %}" 
+                       class="inline-block w-full sm:w-auto px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 text-center">
                         Get Started
-                    </button>
-                    <button class="px-8 py-4 border-2 border-[#1980e6] text-[#1980e6] rounded-full hover:bg-blue-50 transition-all">
+                    </a>
+                    <a href="{% url 'main:about' %}" 
+                       class="inline-block w-full sm:w-auto px-8 py-4 border-2 border-[#1980e6] text-[#1980e6] rounded-full hover:bg-blue-50 transition-all text-center">
                         Learn More
-                    </button>
+                    </a>
                 </div>
             </div>
 

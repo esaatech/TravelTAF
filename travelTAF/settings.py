@@ -58,6 +58,7 @@ INSTALLED_APPS = [
    # "django_browser_reload",
     'news.apps.NewsConfig',
     'subscribers',
+    'tools',
 ]
 
 REST_FRAMEWORK = {

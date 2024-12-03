@@ -460,3 +460,11 @@ def family_sponsorship(request):
 
 def travel_planning(request):
     return render(request, 'services/travel_planning.html')
+
+
+def get_started(request):
+    return render(request, 'home/get_started.html')
+
+
+def learn_more(request):
+    return render(request, 'learn_more.html')

@@ -23,4 +23,6 @@ urlpatterns = [
     path('services/permanent-residency/', views.permanent_residency, name='permanent_residency'),
     path('services/family-sponsorship/', views.family_sponsorship, name='family_sponsorship'),
     path('services/travel-planning/', views.travel_planning, name='travel_planning'),
+    path('get-started/', views.get_started, name='get_started'),
+    path('learn-more/', views.learn_more, name='learn_more'),
 ]

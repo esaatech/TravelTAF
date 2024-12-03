@@ -26,6 +26,7 @@ urlpatterns = [
     path('api/agent/', include('agent.urls')),
     path('news/', include('news.urls', namespace='news')),
     path('subscribers/', include('subscribers.urls')),
+    path('tools/', include('tools.urls')),  # Include tools app URLs
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
