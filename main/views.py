@@ -448,3 +448,15 @@ def work_visas(request):
     }
     
     return render(request, 'services/work_visa.html', context)
+
+
+def permanent_residency(request):
+    return render(request, 'services/permanent_residency.html')
+
+
+def family_sponsorship(request):
+    return render(request, 'services/family_sponsorship.html')
+
+
+def travel_planning(request):
+    return render(request, 'services/travel_planning.html')

@@ -19,4 +19,8 @@ urlpatterns = [
    path('services/study-abroad/', views.study_abroad, name='study_abroad'),
    path('services/work-visas/', views.work_visas, name='work_visas'),
     
+    # New paths for remaining services
+    path('services/permanent-residency/', views.permanent_residency, name='permanent_residency'),
+    path('services/family-sponsorship/', views.family_sponsorship, name='family_sponsorship'),
+    path('services/travel-planning/', views.travel_planning, name='travel_planning'),
 ]
