@@ -2,13 +2,13 @@
 <section class="min-h-[500px] bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex justify-between items-center mb-12">
-            <h2 class="text-3xl font-bold">Latest Immigration News</h2>
+            <h2 class="text-3xl font-bold">Latest Travel News</h2>
             <a href="{% url 'news:list' %}" class="text-[#1980e6] hover:text-blue-700">View All News →</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for news in latest_news %}
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <img src="{% static 'images/svg/news_icons/'|add:news.category.slug|add:'.svg' %}" alt="{{ news.category.name }} Immigration News" class="w-full h-48 object-cover">
+                <!-- <img src="{% static 'images/svg/news_icons/'|add:news.category.slug|add:'.svg' %}" alt="{{ news.category.name }} Immigration News" class="w-full h-48 object-cover"> -->
                 <div class="p-6">
                     <span class="text-sm text-[#1980e6] font-semibold">{{ news.category.name }}</span>
                     <h3 class="text-xl font-semibold mt-2 mb-3">{{ news.title }}</h3>
