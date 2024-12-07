@@ -111,11 +111,21 @@
         <span>Speak with agent</span>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    // Configure marked globally
+    marked.setOptions({
+        breaks: true,
+        gfm: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: true
+    });
+</script>
     <script src="{% static 'js/home/index.js' %}"></script>
     <script src="{% static 'js/home/chat.js' %}"></script>
     <script src="{% static 'js/home/speak.js' %}"></script>
     <script src="{% static 'js/home/nav.js' %}"></script>
-
    
 </body>
 </html>

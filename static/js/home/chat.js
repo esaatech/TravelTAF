@@ -1,5 +1,21 @@
 // Chat Module
+console.log("Chat Module loaded");
+
+
+
+
 const ChatModule = {
+    // Add marked configuration
+    markedConfig: {
+        async: false,
+        breaks: true,
+        gfm: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: true
+    },
+
     // DOM Elements
     elements: {
         chatToggle: null,
@@ -17,6 +33,7 @@ const ChatModule = {
     init() {
         this.initializeElements();
         this.attachEventListeners();
+        this.setupMarked();
     },
 
     // Initialize DOM elements
@@ -71,13 +88,22 @@ const ChatModule = {
         }
     },
 
-    // Updated addMessage method to handle Markdown
+    // Updated addMessage method with debugging
     addMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `flex gap-4 max-w-2xl mb-4 ${isUser ? 'ml-auto' : ''}`;
         
-        // Process message content
-        const processedMessage = isUser ? message : marked.parse(message);
+        let processedMessage = message;
+        if (!isUser) {
+            console.log('Original message:', message);
+            try {
+                processedMessage = marked.parse(message);
+                console.log('Processed markdown:', processedMessage);
+            } catch (error) {
+                console.error('Markdown parsing error:', error);
+                processedMessage = message;
+            }
+        }
         
         if (isUser) {
             messageDiv.innerHTML = `
@@ -105,13 +131,12 @@ const ChatModule = {
         
         this.elements.chatMessages.appendChild(messageDiv);
         
-        // Add styles for markdown content
+        // Apply styles to markdown content
         if (!isUser) {
             const markdownContent = messageDiv.querySelector('.markdown-content');
             this.applyMarkdownStyles(markdownContent);
         }
         
-        // Force scroll after message is added
         setTimeout(() => {
             this.scrollToBottom();
         }, 0);
@@ -231,24 +256,18 @@ const ChatModule = {
         this.elements.chatInput.classList.add('disabled:bg-gray-100', 'disabled:cursor-not-allowed');
     },
 
-    // Update the sendMessage method
+    // Updated sendMessage method with response logging
     async sendMessage() {
-        console.log("Sending message");
         const message = this.elements.chatInput.value.trim();
         if (message) {
             try {
-                // Disable input while processing
                 this.elements.chatInput.disabled = true;
                 this.elements.sendButton.disabled = true;
                 
-                // Add user message
                 this.addMessage(message, true);
                 this.elements.chatInput.value = '';
-                
-                // Show typing indicator
                 this.showTypingIndicator();
                 
-                // Send message to API
                 const response = await fetch('/api/agent/chat/', {
                     method: 'POST',
                     headers: {
@@ -259,14 +278,18 @@ const ChatModule = {
                 });
                 
                 const data = await response.json();
+                console.log('API Response:', data);
                 
-                // Hide typing indicator
                 this.hideTypingIndicator();
                 
                 if (response.ok) {
-                    // Add bot response from API
-                    console.log(data.response)
-                    this.addMessage(data.response);
+                    // Ensure response is properly escaped
+                    const sanitizedResponse = data.response
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+                    console.log('Sanitized Response:', sanitizedResponse);
+                    this.addMessage(sanitizedResponse);
                 } else {
                     throw new Error(data.message || 'An error occurred');
                 }
@@ -276,7 +299,6 @@ const ChatModule = {
                 this.hideTypingIndicator();
                 this.addMessage('Sorry, there was an error processing your message. Please try again later.');
             } finally {
-                // Re-enable input
                 this.elements.chatInput.disabled = false;
                 this.elements.sendButton.disabled = false;
                 this.elements.chatInput.focus();
@@ -328,6 +350,11 @@ const ChatModule = {
         } catch (error) {
             console.error('Error loading chat history:', error);
         }
+    },
+
+    // Setup marked configuration
+    setupMarked() {
+        marked.setOptions(this.markedConfig);
     }
 };
 
