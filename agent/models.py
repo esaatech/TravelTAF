@@ -163,3 +163,17 @@ class Interaction(models.Model):
         Returns: QuerySet of user's interactions
         """
         return cls.objects.filter(user=user)
+
+
+
+class DocumentManagement(models.Model):
+    """Dummy model for document management interface."""
+    name = models.CharField(max_length=255, default="Document Management")
+    
+    class Meta:
+        managed = True
+        verbose_name = "Document Management"
+        verbose_name_plural = "Document Management"
+
+    def __str__(self):
+        return self.name

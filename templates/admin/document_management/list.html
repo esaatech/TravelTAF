@@ -1,0 +1,30 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+    <div>
+        <a href="{% url 'admin:document-upload' %}" class="button">Upload New Document</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th>Key</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in documents %}
+            <tr>
+                <td>{{ doc.filename }}</td>
+                <td>{{ doc.key }}</td>
+                <td>
+                    <a href="{% url 'admin:document-update' doc.key %}">Update</a>
+                    <form method="post" action="{% url 'admin:document-delete' doc.key %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
