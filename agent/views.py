@@ -3,6 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Interaction
 from .serializers import MessageSerializer, ChatHistorySerializer
+from .services.document_service import DocumentService
+from .services.key_manager import KeyManager
 
 class ChatViewSet(viewsets.ModelViewSet):
     queryset = Interaction.objects.filter(type='chat')
@@ -33,11 +35,65 @@ class ChatViewSet(viewsets.ModelViewSet):
 
     def process_message(self, message):
         """
-        Process the incoming message and generate a response.
-        This is where you'd add your chatbot logic.
+        Process the incoming message by querying the uploaded documents.
         """
-        # For now, return a simple response
-        return f"Thank you for your message: '{message}'. Our team will respond shortly."
+        try:
+            # Get all document keys
+            documents = KeyManager.list_all()
+            
+            if not documents:
+                return "No documents are available to process your query. Please upload documents first."
+            
+            # Prepare the responses from all documents
+            responses = []
+            
+            for filename, data in documents.items():
+                try:
+                    # Query each document using its key
+                    doc_response = DocumentService.query_document(
+                        key=data['key'],
+                        query=message,
+                        config=data.get('prompt_config', {})
+                    )
+                    
+                    if doc_response and doc_response.get('response'):
+                        if doc_response['response'] != "No relevant information found for your query.":
+                            responses.append({
+                                'filename': filename,
+                                'response': doc_response['response'],
+                                'confidence': doc_response.get('confidence', 1.0)
+                            })
+                except Exception as e:
+                    print(f"Error querying document {filename}: {str(e)}")
+                    continue
+            
+            if not responses:
+                return "I couldn't find relevant information in the available documents. Please try rephrasing your question."
+            
+            # Sort responses by confidence if available
+            responses.sort(key=lambda x: x.get('confidence', 0), reverse=True)
+            
+            # Format the response
+            return self._format_responses(responses)
+            
+        except Exception as e:
+            print(f"Error processing message: {str(e)}")
+            return "I apologize, but I encountered an error processing your request. Please try again later."
+
+    def _format_responses(self, responses):
+        """
+        Format multiple document responses into a coherent response.
+        """
+        if len(responses) == 1:
+            # Single document response
+            return responses[0]['response']
+        
+        # Multiple document responses
+        formatted = "I found relevant information in multiple documents:\n\n"
+        for resp in responses:
+            formatted += f"From {resp['filename']} (confidence: {resp['confidence']:.2f}):\n{resp['response']}\n\n"
+        
+        return formatted.strip()
 
     @action(detail=False, methods=['get'])
     def history(self, request):

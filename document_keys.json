@@ -4,14 +4,5 @@
     "prompt_config": {
       "company_name": "TravelTaf"
     }
-  },
-  "Travel_Immigration_Knowledge_Base.txt": {
-    "key": "6c10dbf1-5f11-474f-a86e-11c53f9b1d13",
-    "prompt_config": {
-      "company_name": "TravelTaf",
-      "agent_role": "Support",
-      "response_style": "Calm",
-      "tone": "Professional"
-    }
   }
 }

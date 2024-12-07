@@ -2,6 +2,7 @@ import requests
 import json
 from typing import Optional, Dict, Any
 from django.conf import settings
+from ..config.settings import BASE_URL, ENDPOINTS
 
 class DocumentService:
     """Service for handling document operations with the RAG Chatbot API."""
@@ -52,3 +53,59 @@ class DocumentService:
         response = requests.delete(endpoint)
         response.raise_for_status()
         return True
+
+    @classmethod
+    def query_document(cls, key: str, query: str, config: dict = None) -> dict:
+        """
+        Query a document using its key.
+        
+        Args:
+            key: The document's API key
+            query: The user's question
+            config: Optional configuration for response formatting
+            
+        Returns:
+            dict containing the response and any additional metadata
+        """
+        try:
+            # Construct the endpoint URL
+            endpoint = BASE_URL + ENDPOINTS['query'].format(key=key)
+            
+            # Prepare the payload
+            payload = {
+                "query": query
+            }
+            
+            # Add configuration if provided
+            if config:
+                payload.update(config)
+            
+            # Make the API request
+            response = requests.post(
+                endpoint,
+                json=payload
+            )
+            
+            # Check for successful response
+            response.raise_for_status()
+            
+            # Parse and return the response
+            data = response.json()
+            
+            if 'response' in data:
+                return {
+                    "response": data['response'],
+                    "confidence": data.get('confidence', 1.0)
+                }
+            
+            return {
+                "response": "No relevant information found for your query.",
+                "confidence": 0
+            }
+            
+        except requests.exceptions.RequestException as e:
+            print(f"API request error: {str(e)}")
+            raise Exception(f"Error querying document: {str(e)}")
+        except Exception as e:
+            print(f"General error: {str(e)}")
+            raise Exception(f"Error processing query: {str(e)}")
