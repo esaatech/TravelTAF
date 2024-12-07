@@ -12,7 +12,11 @@
     {% csrf_token %}
     <fieldset class="module aligned">
       <div class="form-row">
-        <label>Current Document Key:</label>
+        <label>Current Document:</label>
+        <div class="readonly">{{ current_filename }}</div>
+      </div>
+      <div class="form-row">
+        <label>Current Key:</label>
         <div class="readonly">{{ key }}</div>
       </div>
       {% for field in form %}

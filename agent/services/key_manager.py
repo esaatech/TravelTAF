@@ -81,14 +81,15 @@ class KeyManager:
         return None
 
     @classmethod
-    def update_key(cls, old_key: str, new_key: str, prompt_config: Optional[Dict] = None) -> bool:
+    def update_key(cls, old_key: str, new_key: str, prompt_config: dict, new_filename: str = None) -> bool:
         """
         Update a document's key and configuration.
         
         Args:
             old_key: Current API key
-            new_key: New API key
-            prompt_config: Optional new configuration
+            new_key: New API key (can be same as old_key if only updating config)
+            prompt_config: New configuration
+            new_filename: Optional new filename
             
         Returns:
             bool indicating success
@@ -96,10 +97,20 @@ class KeyManager:
         data = cls._read_keys()
         for filename, file_data in data.items():
             if file_data.get('key') == old_key:
-                data[filename] = {
-                    'key': new_key,
-                    'prompt_config': prompt_config or file_data.get('prompt_config', {})
-                }
+                if new_filename and new_filename != filename:
+                    # Create new entry with new filename
+                    data[new_filename] = {
+                        'key': new_key,
+                        'prompt_config': prompt_config
+                    }
+                    # Delete old entry
+                    del data[filename]
+                else:
+                    # Update existing entry
+                    data[filename] = {
+                        'key': new_key,
+                        'prompt_config': prompt_config
+                    }
                 cls._write_keys(data)
                 return True
         return False

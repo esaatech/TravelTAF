@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
-from django.urls import path
+from django.urls import path, reverse
 from django.shortcuts import render
 from django.contrib import messages
 from .models import Interaction, DocumentManagement
@@ -56,9 +56,21 @@ class DocumentManagementAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('upload/', self.upload_document, name='document-upload'),
-            path('update/<str:key>/', self.update_document, name='document-update'),
-            path('delete/<str:key>/', self.delete_document, name='document-delete'),
+            path(
+                'upload/',
+                self.admin_site.admin_view(self.upload_document),
+                name='document-upload'
+            ),
+            path(
+                'update/<str:key>/',
+                self.admin_site.admin_view(self.update_document),
+                name='document-update'
+            ),
+            path(
+                'delete/<str:key>/',
+                self.admin_site.admin_view(self.delete_document),
+                name='document-delete'
+            ),
         ]
         return custom_urls + urls
 
@@ -104,30 +116,64 @@ class DocumentManagementAdmin(admin.ModelAdmin):
         document_data = KeyManager.get_key_by_value(key)
         if not document_data:
             messages.error(request, "Document not found")
-            return HttpResponseRedirect('../')
+            return HttpResponseRedirect(
+                reverse('admin:agent_documentmanagement_changelist')
+            )
             
         if request.method == 'POST':
             form = DocumentForm(request.POST, request.FILES)
             if form.is_valid():
                 try:
                     file = form.cleaned_data.get('file')
-                    config = {k: v for k, v in form.cleaned_data.items() if v and k != 'file'}
+                    config = {
+                        'company_name': form.cleaned_data.get('company_name'),
+                        'agent_role': form.cleaned_data.get('agent_role'),
+                        'response_style': form.cleaned_data.get('response_style'),
+                        'tone': form.cleaned_data.get('tone')
+                    }
+                    # Remove empty values
+                    config = {k: v for k, v in config.items() if v}
                     
-                    response = DocumentService.update_document(key=key, file=file, prompt_config=config)
+                    # Get current filename from document_data
+                    current_filename = document_data.get('filename')
+                    
+                    response = DocumentService.update_document(
+                        key=key,
+                        file=file,
+                        prompt_config=config
+                    )
+                    
+                    # Update the key manager with new file name if provided
+                    if file:
+                        new_filename = file.name
+                    else:
+                        new_filename = current_filename
+                        
                     if response.get('new_key'):
-                        KeyManager.update_key(key, response['new_key'], config)
+                        # Delete old key entry
+                        KeyManager.delete_key_by_value(key)
+                        # Save new key with updated filename and config
+                        KeyManager.save_key(new_filename, response['new_key'], config)
+                    else:
+                        # Update existing key entry with new config
+                        KeyManager.update_key(key, key, config, new_filename)
                         
                     messages.success(request, "Document updated successfully")
-                    return HttpResponseRedirect('../')
+                    return HttpResponseRedirect(
+                        reverse('admin:agent_documentmanagement_changelist')
+                    )
                 except Exception as e:
                     messages.error(request, f"Error updating document: {str(e)}")
         else:
-            form = DocumentForm(initial=document_data.get('prompt_config', {}))
+            # Pre-fill form with existing config
+            initial_data = document_data.get('prompt_config', {})
+            form = DocumentForm(initial=initial_data)
             
         context = {
             'form': form,
             'title': 'Update Document',
             'key': key,
+            'current_filename': document_data.get('filename'),
             **self.admin_site.each_context(request),
         }
         return render(request, 'admin/document_management/update_form.html', context)
