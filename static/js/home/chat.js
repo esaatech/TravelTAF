@@ -71,10 +71,13 @@ const ChatModule = {
         }
     },
 
-    // Updated addMessage method
+    // Updated addMessage method to handle Markdown
     addMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `flex gap-4 max-w-2xl mb-4 ${isUser ? 'ml-auto' : ''}`;
+        
+        // Process message content
+        const processedMessage = isUser ? message : marked.parse(message);
         
         if (isUser) {
             messageDiv.innerHTML = `
@@ -95,17 +98,71 @@ const ChatModule = {
                     </svg>
                 </div>
                 <div class="flex-1">
-                    <p class="bg-gray-100 p-4 rounded-lg inline-block">${message}</p>
+                    <div class="bg-gray-100 p-4 rounded-lg markdown-content">${processedMessage}</div>
                 </div>
             `;
         }
         
         this.elements.chatMessages.appendChild(messageDiv);
         
+        // Add styles for markdown content
+        if (!isUser) {
+            const markdownContent = messageDiv.querySelector('.markdown-content');
+            this.applyMarkdownStyles(markdownContent);
+        }
+        
         // Force scroll after message is added
         setTimeout(() => {
             this.scrollToBottom();
         }, 0);
+    },
+
+    // Add method to apply Markdown styles
+    applyMarkdownStyles(element) {
+        // Add Tailwind classes for Markdown elements
+        element.querySelectorAll('h1').forEach(el => {
+            el.className = 'text-2xl font-bold mb-4 mt-2';
+        });
+        
+        element.querySelectorAll('h2').forEach(el => {
+            el.className = 'text-xl font-bold mb-3 mt-2';
+        });
+        
+        element.querySelectorAll('h3').forEach(el => {
+            el.className = 'text-lg font-bold mb-2 mt-2';
+        });
+        
+        element.querySelectorAll('ul').forEach(el => {
+            el.className = 'list-disc pl-6 mb-4';
+        });
+        
+        element.querySelectorAll('ol').forEach(el => {
+            el.className = 'list-decimal pl-6 mb-4';
+        });
+        
+        element.querySelectorAll('li').forEach(el => {
+            el.className = 'mb-1';
+        });
+        
+        element.querySelectorAll('p').forEach(el => {
+            el.className = 'mb-4';
+        });
+        
+        element.querySelectorAll('strong').forEach(el => {
+            el.className = 'font-bold';
+        });
+        
+        element.querySelectorAll('em').forEach(el => {
+            el.className = 'italic';
+        });
+        
+        element.querySelectorAll('code').forEach(el => {
+            el.className = 'bg-gray-200 px-1 rounded';
+        });
+        
+        element.querySelectorAll('pre').forEach(el => {
+            el.className = 'bg-gray-800 text-white p-4 rounded mb-4 overflow-x-auto';
+        });
     },
 
     // Updated showTypingIndicator
@@ -176,6 +233,7 @@ const ChatModule = {
 
     // Update the sendMessage method
     async sendMessage() {
+        console.log("Sending message");
         const message = this.elements.chatInput.value.trim();
         if (message) {
             try {
@@ -207,6 +265,7 @@ const ChatModule = {
                 
                 if (response.ok) {
                     // Add bot response from API
+                    console.log(data.response)
                     this.addMessage(data.response);
                 } else {
                     throw new Error(data.message || 'An error occurred');
