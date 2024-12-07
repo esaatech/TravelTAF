@@ -191,3 +191,12 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.run.app',  # All Cloud Run URLs
 ]
 
+
+
+import google.cloud.logging
+import logging
+
+# Setup Google Cloud Logging
+if not DEBUG:
+    client = google.cloud.logging.Client()
+    client.setup_
