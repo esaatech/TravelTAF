@@ -1,6 +1,6 @@
 {% load static %}
 
-<section class="bg-gradient-to-r from-blue-50 to-white py-16">
+<section class="bg-gradient-to-r from-blue-50 to-white py-16 relative z-0 isolate">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
             <!-- Left Content -->
@@ -30,32 +30,35 @@
             </div>
 
             <!-- Right Illustrations -->
-            <div class="w-full lg:w-1/2 relative h-[350px] lg:h-[600px]">
-                <!-- Scene 1: Study Abroad -->
-                <div class="scene absolute inset-0 transition-all duration-1000 transform" id="scene1">
-                    <img 
-                        src="{% static 'images/home/Study-abroad.svg' %}" 
-                        alt="Study Abroad" 
-                        class="w-full h-full object-contain animate-float md:scale-110 lg:scale-125"
-                    >
-                </div>
+            <div class="w-full lg:w-1/2 relative h-[350px] lg:h-[600px] contain-layout contain-paint">
+                <!-- Scene container -->
+                <div class="absolute inset-0 z-0">
+                    <!-- Scene 1: Study Abroad -->
+                    <div class="scene absolute inset-0 transition-transform duration-1000" id="scene1">
+                        <img 
+                            src="{% static 'images/home/Study-abroad.svg' %}" 
+                            alt="Study Abroad" 
+                            class="w-full h-full object-contain animate-float md:scale-110 lg:scale-125"
+                        >
+                    </div>
 
-                <!-- Scene 2: Family Reunion -->
-                <div class="scene absolute inset-0 opacity-0 transition-all duration-1000 transform translate-x-full" id="scene2">
-                    <img 
-                        src="{% static 'images/home/family-reunion.svg' %}" 
-                        alt="Family Reunion" 
-                        class="w-full h-full object-contain animate-float"
-                    >
-                </div>
+                    <!-- Scene 2: Family Reunion -->
+                    <div class="scene absolute inset-0 opacity-0 transition-transform duration-1000 translate-x-full" id="scene2">
+                        <img 
+                            src="{% static 'images/home/family-reunion.svg' %}" 
+                            alt="Family Reunion" 
+                            class="w-full h-full object-contain animate-float"
+                        >
+                    </div>
 
-                <!-- Scene 3: Vacation -->
-                <div class="scene absolute inset-0 opacity-0 transition-all duration-1000 transform translate-x-full" id="scene3">
-                    <img 
-                        src="{% static 'images/home/vacation.svg' %}" 
-                        alt="Vacation" 
-                        class="w-full h-full object-contain animate-float"
-                    >
+                    <!-- Scene 3: Vacation -->
+                    <div class="scene absolute inset-0 opacity-0 transition-transform duration-1000 translate-x-full" id="scene3">
+                        <img 
+                            src="{% static 'images/home/vacation.svg' %}" 
+                            alt="Vacation" 
+                            class="w-full h-full object-contain animate-float"
+                        >
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,9 +71,9 @@
 <style>
     /* Custom Animations */
     @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-        100% { transform: translateY(0px); }
+        0% { transform: translate3d(0, 0, 0); }
+        50% { transform: translate3d(0, -20px, 0); }
+        100% { transform: translate3d(0, 0, 0); }
     }
 
     @keyframes slideIn {
@@ -85,6 +88,7 @@
 
     .animate-float {
         animation: float 6s ease-in-out infinite;
+        will-change: transform;
     }
 
     .scene.active {
@@ -93,6 +97,13 @@
 
     .scene.inactive {
         animation: slideOut 1s forwards;
+    }
+
+    /* Ensure scenes don't create new stacking contexts unnecessarily */
+    .scene {
+        backface-visibility: hidden;
+        transform-style: preserve-3d;
+        will-change: transform, opacity;
     }
 </style>
 
