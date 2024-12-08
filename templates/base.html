@@ -54,40 +54,43 @@
         @media (max-width: 768px) {
             .chat-popup {
                 position: fixed;
-                top: 80px;  /* Height of nav */
+                top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
                 width: 100%;
-                height: calc(100vh - 80px);
+                height: 100vh;
                 margin: 0;
                 border-radius: 0;
-                z-index: 40;
+                z-index: 999;
+                background-color: white;
             }
 
-            .chat-widget {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                z-index: 50;
+            /* Add this for when chat is open */
+            .chat-popup[style*="display: flex"] {
+                display: flex !important;
+                flex-direction: column;
             }
 
-            /* Ensure the send button stays at bottom */
-            .chat-popup .flex-col {
-                height: 100%;
+            /* Ensure header stays at top */
+            .chat-popup .bg-white {
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                background-color: white;
+                border-bottom: 1px solid #e5e7eb;
             }
 
-            /* Ensure messages area takes available space */
+            /* Chat messages container */
             #chatMessages {
                 flex: 1;
                 overflow-y: auto;
+                padding-top: env(safe-area-inset-top);
             }
 
-            /* Fix input area to bottom */
-            .chat-popup .border-t {
-                position: sticky;
-                bottom: 0;
-                background: white;
+            /* Keep chat widget button above everything */
+            .chat-widget {
+                z-index: 1001;
             }
         }
     </style>
