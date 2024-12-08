@@ -56,3 +56,4 @@ CMD ["poetry", "run", "gunicorn", \
     "--access-logfile", "-", \
     "--error-logfile", "-", \
     "--capture-output"]
+    
