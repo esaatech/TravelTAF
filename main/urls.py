@@ -25,4 +25,6 @@ urlpatterns = [
     path('services/travel-planning/', views.travel_planning, name='travel_planning'),
     path('get-started/', views.get_started, name='get_started'),
     path('learn-more/', views.learn_more, name='learn_more'),
+    # About page
+    path('about/', views.about, name='about'),
 ]

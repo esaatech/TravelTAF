@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Left Content -->
+            <div>
+                <h2 class="text-3xl lg:text-4xl font-bold mb-6">About TravelTAF</h2>
+                <div class="space-y-6">
+                    <p class="text-gray-700">
+                        TravelTAF is your comprehensive travel and immigration information platform. We bridge the gap between travelers, students, and immigrants by providing cutting-edge tools, real-time information, and connections to certified immigration partners.
+                    </p>
+                    
+                    <p class="text-gray-700">
+                        While we don't directly handle immigration processes, we empower you with accurate information, trusted partner connections, and innovative tools to make informed decisions about your international journey. Our platform serves as your central hub for all travel and immigration-related research and updates.
+                    </p>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 py-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#1980e6] mb-2">100+</div>
+                            <div class="text-sm text-gray-600">Partner Schools</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#1980e6] mb-2">50+</div>
+                            <div class="text-sm text-gray-600">Countries Covered</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#1980e6] mb-2">24/7</div>
+                            <div class="text-sm text-gray-600">Updated Info</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#1980e6] mb-2">20+</div>
+                            <div class="text-sm text-gray-600">Immigration Partners</div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold mb-4">Our Mission</h3>
+                    <p class="text-gray-700">
+                        To democratize access to international travel and immigration information, providing users with reliable tools and connections to make their global mobility dreams a reality. We believe in empowering individuals with knowledge and resources while connecting them with trusted immigration professionals when needed.
+                    </p>
+
+                    <h3 class="text-xl font-bold mb-4">Why Choose TravelTAF?</h3>
+                    <ul class="list-disc pl-6 space-y-3 text-gray-700">
+                        <li>Real-time country information and travel updates</li>
+                        <li>Comprehensive school and university database</li>
+                        <li>Connections to certified immigration partners</li>
+                        <li>Up-to-date immigration news and policy changes</li>
+                        <li>Advanced search and comparison tools</li>
+                        <li>Reliable travel and visa requirement information</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Content -->
+            <div class="space-y-8">
+                <div class="bg-gray-50 p-8 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4">Our Services</h3>
+                    <div class="grid gap-4">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[#1980e6]" viewBox="0 0 256 256">
+                                    <path d="M224,128a95.76,95.76,0,0,1-31.8,71.37A72,72,0,0,0,128,160a40,40,0,1,0-40-40,40,40,0,0,0,40,40,72,72,0,0,0-64.2,39.37A96,96,0,1,1,224,128Z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Information Hub</h4>
+                                <p class="text-gray-600">Comprehensive database of travel requirements, visa policies, and country information</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[#1980e6]" viewBox="0 0 256 256">
+                                    <path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,92.26,224,128,224s78.84-32.47,91.94-47.06a15.91,15.91,0,0,0,4.06-10.65V117.87l27.76-14.81a8,8,0,0,0,0-14.12Z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Education Search</h4>
+                                <p class="text-gray-600">Advanced tools to find and compare international educational institutions</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[#1980e6]" viewBox="0 0 256 256">
+                                    <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm49.5,85.75-58.5,56a8,8,0,0,1-11.54-.32l-29.64-32a8,8,0,1,1,11.72-10.86L115.1,149.8l53.11-50.71a8,8,0,1,1,11,11.66Z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Partner Network</h4>
+                                <p class="text-gray-600">Connections to verified immigration consultants and educational institutions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-8 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4">Our Tools</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold">Visa Requirement Checker</h4>
+                            <p class="text-gray-600">Instantly check visa requirements for any destination</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">School Finder</h4>
+                            <p class="text-gray-600">Search and compare international educational institutions</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Immigration Updates</h4>
+                            <p class="text-gray-600">Real-time news and policy changes affecting international travel</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

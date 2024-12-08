@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Left Content -->
+            <div>
+                <h2 class="text-3xl lg:text-4xl font-bold mb-6">About TravelTAF</h2>
+                <div class="space-y-6">
+                    <p class="text-gray-700">
+                        Founded with a vision to simplify global mobility, TravelTAF has emerged as a trusted leader in immigration and travel solutions. With over 10 years of experience and a remarkable 98% success rate, we've helped more than 5,000 individuals across 50+ countries achieve their international dreams.
+                    </p>
+                    
+                    <p class="text-gray-700">
+                        Our comprehensive suite of services spans immigration consulting, study abroad assistance, work visa processing, and permanent residency applications. What sets us apart is our commitment to providing personalized guidance through every step of your journey, backed by certified immigration consultants and cutting-edge digital tools.
+                    </p>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 py-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#1980e6] mb-2">98%</div>
+                            <div class="text-sm text-gray-600">Success Rate</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#1980e6] mb-2">5000+</div>
+                            <div class="text-sm text-gray-600">Happy Clients</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#1980e6] mb-2">50+</div>
+                            <div class="text-sm text-gray-600">Countries Served</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#1980e6] mb-2">10+</div>
+                            <div class="text-sm text-gray-600">Years Experience</div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold mb-4">Our Mission</h3>
+                    <p class="text-gray-700">
+                        To empower individuals and families with seamless immigration solutions, making international transitions accessible, transparent, and successful. Whether you're pursuing education, career opportunities, or family reunification, we're committed to turning your global aspirations into reality.
+                    </p>
+
+                    <h3 class="text-xl font-bold mb-4">Why Choose TravelTAF?</h3>
+                    <ul class="list-disc pl-6 space-y-3 text-gray-700">
+                        <li>Expert guidance from certified immigration consultants</li>
+                        <li>Comprehensive digital tools and resources</li>
+                        <li>Real-time application tracking and updates</li>
+                        <li>Personalized support throughout your journey</li>
+                        <li>Proven track record of successful applications</li>
+                        <li>Up-to-date knowledge of immigration policies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Content -->
+            <div class="space-y-8">
+                <div class="bg-gray-50 p-8 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4">Our Expertise</h3>
+                    <div class="grid gap-4">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[#1980e6]" viewBox="0 0 256 256">
+                                    <path d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48.11-.11a16,16,0,0,1,21.53,0,1.14,1.14,0,0,0,.11.11l80,75.48A16,16,0,0,1,224,115.55Z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Immigration Consulting</h4>
+                                <p class="text-gray-600">Expert guidance through visa applications and immigration processes</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[#1980e6]" viewBox="0 0 256 256">
+                                    <path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,92.26,224,128,224s78.84-32.47,91.94-47.06a15.91,15.91,0,0,0,4.06-10.65V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM208,166.29c-9.49,10.57-46.47,41.71-80,41.71s-70.51-31.14-80-41.71V125.35L124.24,153a8,8,0,0,0,7.52,0L208,125.35ZM128,136,37.06,88,128,40l90.94,48Z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Study Abroad</h4>
+                                <p class="text-gray-600">University admissions and student visa support</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[#1980e6]" viewBox="0 0 256 256">
+                                    <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V96H40V56Zm0,144H40V112H216v88Z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Work Visas</h4>
+                                <p class="text-gray-600">Employment visa processing and career relocation support</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-8 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4">Our Values</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold">Excellence</h4>
+                            <p class="text-gray-600">Maintaining the highest standards in immigration consulting</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Integrity</h4>
+                            <p class="text-gray-600">Providing honest, transparent guidance and support</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Innovation</h4>
+                            <p class="text-gray-600">Leveraging technology to streamline immigration processes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

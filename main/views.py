@@ -467,4 +467,7 @@ def get_started(request):
 
 
 def learn_more(request):
-    return render(request, 'learn_more.html')
+    return render(request, 'home/learn_more.html')
+
+def about(request):
+    return render(request, 'home/about.html')
