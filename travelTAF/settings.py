@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig',
     'subscribers',
     'tools',
+    'authentication.apps.AuthenticationConfig',
+    'social_django',
 ]
 
 REST_FRAMEWORK = {
@@ -90,7 +92,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates',  # Point to root templates directory
+            os.path.join(BASE_DIR, 'templates'),  # Add this line
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -190,6 +192,29 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 CSRF_TRUSTED_ORIGINS = [
     'https://*.run.app',  # All Cloud Run URLs
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# Social Auth settings
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your-key'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your-secret'
+
+SOCIAL_AUTH_FACEBOOK_KEY = 'your-key'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'your-secret'
+
+# Email settings (for development)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
+# For production, use:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@gmail.com'
+# EMAIL_HOST_USER_PASSWORD = 'your-app-specific-password'
 
 
 

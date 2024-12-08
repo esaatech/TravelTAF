@@ -27,6 +27,8 @@ urlpatterns = [
     path('news/', include('news.urls', namespace='news')),
     path('subscribers/', include('subscribers.urls')),
     path('tools/', include('tools.urls')),  # Include tools app URLs
+    path('authentication/', include('authentication.urls')),
+    path('social-auth/', include('social_django.urls', namespace='social')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
