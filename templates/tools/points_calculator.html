@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-gradient-to-r from-blue-50 to-white py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center">
+            <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+                Canada Express Entry Points Calculator
+            </h1>
+            <p class="text-lg text-gray-600 mb-8">
+                Calculate your Comprehensive Ranking System (CRS) score
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+        <form id="crsCalculator" class="space-y-8">
+            {% csrf_token %}
+
+            <!-- Marital Status Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-6">Marital Status</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            What is your marital status?
+                        </label>
+                        <select name="marital_status" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="single">Single</option>
+                            <option value="married">Married or Common-Law</option>
+                        </select>
+                    </div>
+
+                    <!-- Spouse Fields (initially hidden) -->
+                    <div id="spouseFields" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Is your spouse a Canadian citizen/PR?
+                            </label>
+                            <select name="spouse_canadian_status" class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Will your spouse come to Canada?
+                            </label>
+                            <select name="spouse_coming_to_canada" class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Human Capital Factors -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-6">Core Human Capital Factors</h2>
+                
+                <!-- Age -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        How old are you?
+                        <span class="text-xs text-gray-500 ml-1" data-tooltip="age">(?)</span>
+                    </label>
+                    <input type="number" name="age" min="17" max="45" 
+                           class="w-full p-3 border border-gray-300 rounded-lg">
+                </div>
+
+                <!-- Education -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        What is your level of education?
+                    </label>
+                    <select name="education_level" class="w-full p-3 border border-gray-300 rounded-lg">
+                        <option value="0">Less than secondary school</option>
+                        <option value="28">Secondary diploma (high school)</option>
+                        <option value="84">One-year post-secondary program</option>
+                        <option value="91">Two-year post-secondary program</option>
+                        <option value="112">Bachelor's degree (three or more years)</option>
+                        <option value="119">Two or more post-secondary programs (one 3+ years)</option>
+                        <option value="126">Master's degree</option>
+                        <option value="140">Doctoral degree (Ph.D.)</option>
+                    </select>
+                </div>
+
+                <!-- Canadian Education -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Canadian Education?
+                    </label>
+                    <select name="canadian_education" class="w-full p-3 border border-gray-300 rounded-lg">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+
+                <!-- Language Test -->
+                <div class="space-y-4">
+                    <h3 class="font-medium">Language Test Scores</h3>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Language Test Type
+                        </label>
+                        <select name="language_test_type" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="ielts">IELTS</option>
+                            <option value="celpip">CELPIP</option>
+                            <option value="tef">TEF Canada</option>
+                            <option value="tcf">TCF Canada</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">Speaking</label>
+                            <input type="number" name="speaking" step="0.5" min="0" max="9"
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">Listening</label>
+                            <input type="number" name="listening" step="0.5" min="0" max="9"
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">Reading</label>
+                            <input type="number" name="reading" step="0.5" min="0" max="9"
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">Writing</label>
+                            <input type="number" name="writing" step="0.5" min="0" max="9"
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Experience -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-6">Work Experience</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Canadian Work Experience
+                        </label>
+                        <select name="canadian_work_experience" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="0">None</option>
+                            <option value="35">1 year</option>
+                            <option value="46">2 years</option>
+                            <option value="56">3 years</option>
+                            <option value="63">4 years</option>
+                            <option value="70">5 years or more</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Foreign Work Experience
+                        </label>
+                        <select name="foreign_work_experience" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="0">None</option>
+                            <option value="13">1-2 years</option>
+                            <option value="25">3 years or more</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Points -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-6">Additional Points</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Certificate of Qualification
+                        </label>
+                        <div class="flex items-center">
+                            <input type="checkbox" name="certificate_qualification" class="h-4 w-4 text-blue-600">
+                            <span class="ml-2 text-sm text-gray-600">
+                                I have a certificate of qualification from a Canadian province/territory
+                            </span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Valid Job Offer
+                        </label>
+                        <select name="job_offer" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="0">No job offer</option>
+                            <option value="200">Senior executive role (NOC 00)</option>
+                            <option value="50">NOC TEER 1, 2, 3, or other TEER 0</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Provincial Nomination
+                        </label>
+                        <div class="flex items-center">
+                            <input type="checkbox" name="provincial_nomination" class="h-4 w-4 text-blue-600">
+                            <span class="ml-2 text-sm text-gray-600">
+                                I have a provincial nomination
+                            </span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Sibling in Canada
+                        </label>
+                        <div class="flex items-center">
+                            <input type="checkbox" name="canadian_sibling" class="h-4 w-4 text-blue-600">
+                            <span class="ml-2 text-sm text-gray-600">
+                                I have a sibling who is a Canadian citizen/permanent resident
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spouse Factors (initially hidden) -->
+            <div id="spouseFactors" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                <h2 class="text-xl font-bold mb-6">Spouse Factors</h2>
+                <div class="space-y-4">
+                    <!-- Spouse Education -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Spouse's Education Level
+                        </label>
+                        <select name="spouse_education" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="0">Less than secondary school</option>
+                            <option value="2">Secondary diploma</option>
+                            <option value="6">One-year post-secondary</option>
+                            <option value="7">Two-year post-secondary</option>
+                            <option value="8">Bachelor's degree</option>
+                            <option value="9">Two or more post-secondary degrees</option>
+                            <option value="10">Master's or Doctoral degree</option>
+                        </select>
+                    </div>
+
+                    <!-- Spouse Work Experience -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Spouse's Canadian Work Experience
+                        </label>
+                        <select name="spouse_work_experience" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="0">None</option>
+                            <option value="5">1-2 years</option>
+                            <option value="7">3-4 years</option>
+                            <option value="8">5+ years</option>
+                        </select>
+                    </div>
+
+                    <!-- Spouse Language -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Spouse's Language Test
+                        </label>
+                        <select name="spouse_language_test" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <option value="none">No Test</option>
+                            <option value="ielts">IELTS</option>
+                            <option value="celpip">CELPIP</option>
+                            <option value="tef">TEF Canada</option>
+                            <option value="tcf">TCF Canada</option>
+                        </select>
+                    </div>
+
+                    <!-- Spouse Language Scores -->
+                    <div id="spouseLanguageScores" class="grid grid-cols-2 gap-4 hidden">
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">Speaking</label>
+                            <input type="number" name="spouse_speaking" step="0.5" min="0" max="9"
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">Listening</label>
+                            <input type="number" name="spouse_listening" step="0.5" min="0" max="9"
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">Reading</label>
+                            <input type="number" name="spouse_reading" step="0.5" min="0" max="9"
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">Writing</label>
+                            <input type="number" name="spouse_writing" step="0.5" min="0" max="9"
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculate Button -->
+            <div class="text-center">
+                <button type="submit" 
+                        class="bg-[#1980e6] text-white px-8 py-4 rounded-full hover:bg-blue-700 transition-colors">
+                    Calculate CRS Score
+                </button>
+            </div>
+        </form>
+
+        <!-- Results Section (Initially Hidden) -->
+        <div id="results" class="mt-8 hidden">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Your CRS Score</h2>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-[#1980e6]" id="totalScore">0</div>
+                    <p class="text-gray-600 mt-2">points out of 1200</p>
+                </div>
+                
+                <div class="mt-6 space-y-4">
+                    <div class="flex justify-between">
+                        <span>Core/Human Capital Factors:</span>
+                        <span id="corePoints" class="font-medium">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Spouse Factors:</span>
+                        <span id="spousePoints" class="font-medium">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Skill Transferability:</span>
+                        <span id="skillPoints" class="font-medium">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Additional Points:</span>
+                        <span id="additionalPoints" class="font-medium">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_scripts %}
+<script src="{% static 'js/tools/points_calculator.js' %}"></script>
+{% endblock %}
+
+{% endblock %}
