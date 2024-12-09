@@ -2,7 +2,53 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('coverLetterForm');
     const results = document.getElementById('results');
     const coverLetterContent = document.getElementById('coverLetterContent');
+    const manualEntrySection = document.getElementById('manual-entry-section');
+    const uploadSection = document.getElementById('upload-section');
+    const structuredJobSection = document.getElementById('structured-job-section');
+    const unstructuredJobSection = document.getElementById('unstructured-job-section');
     
+    // Toggle sections based on input method
+    form.querySelectorAll('input[name="input_method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'manual') {
+                manualEntrySection.classList.remove('hidden');
+                uploadSection.classList.add('hidden');
+            } else {
+                manualEntrySection.classList.add('hidden');
+                uploadSection.classList.remove('hidden');
+            }
+        });
+    });
+
+    // Toggle job details sections based on input method
+    document.querySelectorAll('input[name="job_input_method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'structured') {
+                structuredJobSection.classList.remove('hidden');
+                unstructuredJobSection.classList.add('hidden');
+                // Disable unstructured fields
+                unstructuredJobSection.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.disabled = true;
+                });
+                // Enable structured fields
+                structuredJobSection.querySelectorAll('input, textarea').forEach(input => {
+                    input.disabled = false;
+                });
+            } else {
+                structuredJobSection.classList.add('hidden');
+                unstructuredJobSection.classList.remove('hidden');
+                // Enable unstructured fields
+                unstructuredJobSection.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.disabled = false;
+                });
+                // Disable structured fields
+                structuredJobSection.querySelectorAll('input, textarea').forEach(input => {
+                    input.disabled = true;
+                });
+            }
+        });
+    });
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -22,8 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get form data
             const formData = new FormData(form);
             
+            // Determine which endpoint to use based on input method
+            const inputMethod = form.querySelector('input[name="input_method"]:checked').value;
+            const endpoint = inputMethod === 'manual' ? '/tools/generate-cover-letter/' : '/tools/generate-cover-letter-raw/';
+
             // Send request to backend
-            const response = await fetch('/tools/generate-cover-letter/', {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': getCookie('csrftoken'),

@@ -76,11 +76,16 @@ import openai
 @require_http_methods(["GET", "POST"])
 def generate_cover_letter(request):
     if request.method == "GET":
-        # Render the form template
         context = {
             'page_title': 'Cover Letter AI',
             'page_description': 'Generate a professional cover letter using AI',
             'meta_description': 'Create a customized cover letter instantly with our AI-powered tool. Upload your resume and get a professionally written cover letter tailored to your job application.',
+            # Resume input method credits
+            'manual_credit_cost': 5,
+            'automated_credit_cost': 10,
+            # Job input method credits
+            'manual_job_credit_cost': 5,
+            'automated_job_credit_cost': 7,
         }
         return render(request, 'tools/cover_letter_generator.html', context)
     
