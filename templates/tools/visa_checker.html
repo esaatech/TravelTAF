@@ -1,6 +1,133 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Visa Checker</h1>
-<p>Content for the Visa Checker tool goes here.</p>
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-50 to-white py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center">
+            <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+                Visa Requirements Checker
+            </h1>
+            <p class="text-lg text-gray-600 mb-8">
+                Instantly check visa requirements and entry regulations for any country
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Main Tool Section -->
+<section class="py-12 bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+        <!-- Search Form -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+            {% csrf_token %}
+            <div class="grid md:grid-cols-[1fr,auto,1fr] gap-4 items-center">
+                <!-- From Country -->
+                <div class="relative">
+                    <label for="fromCountry" class="block text-sm font-medium text-gray-700 mb-2">
+                        Nationality
+                    </label>
+                    <select id="fromCountry" 
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select your nationality</option>
+                    </select>
+                </div>
+
+                <!-- Swap Button -->
+                <button id="swapCountries" 
+                        class="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#1980e6] text-[#1980e6] hover:bg-blue-50 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M224.49,136.49l-32,32a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L175.51,104.49a12,12,0,0,1,17-17l32,32A12,12,0,0,1,224.49,136.49Z"></path>
+                    </svg>
+                </button>
+
+                <!-- To Country -->
+                <div class="relative">
+                    <label for="toCountry" class="block text-sm font-medium text-gray-700 mb-2">
+                        Destination
+                    </label>
+                    <select id="toCountry" 
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select destination country</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Check Button -->
+            <div class="mt-8 text-center">
+                <button id="checkRequirements" 
+                        class="w-full md:w-auto px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors transform hover:scale-105">
+                    Check Requirements
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section (Initially Hidden) -->
+        <div id="resultsSection" class="mt-8 hidden">
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-12 hidden">
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mx-auto"></div>
+                <p class="mt-4 text-gray-600">Checking requirements...</p>
+            </div>
+
+            <!-- Results Content -->
+            <div id="resultsContent" class="bg-white rounded-lg shadow-lg p-6 md:p-8 space-y-6">
+                <!-- Visa Status -->
+                <div id="visaStatus" class="p-4 rounded-lg text-center">
+                    <!-- Will be filled by JavaScript -->
+                </div>
+
+                <!-- Detailed Requirements -->
+                <div id="detailedRequirements" class="space-y-4">
+                    <!-- Will be filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Additional Information -->
+<section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Tips -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-xl font-bold mb-4">Visa Application Tips</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li>• Apply well in advance of your travel</li>
+                    <li>• Ensure passport validity meets requirements</li>
+                    <li>• Prepare all required documents</li>
+                    <li>• Check processing times</li>
+                </ul>
+            </div>
+
+            <!-- Important Notes -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-xl font-bold mb-4">Important Notes</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li>• Requirements may change without notice</li>
+                    <li>• Additional documents may be required</li>
+                    <li>• Visa fees may apply</li>
+                    <li>• Check official embassy websites</li>
+                </ul>
+            </div>
+
+            <!-- Resources -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-xl font-bold mb-4">Helpful Resources</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li>• Embassy websites</li>
+                    <li>• Official immigration portals</li>
+                    <li>• Travel insurance providers</li>
+                    <li>• Visa application centers</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/tools/visa_checker.js' %}"></script>
 {% endblock %}
