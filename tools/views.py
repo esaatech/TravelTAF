@@ -66,3 +66,82 @@ def job_search(request):
 
 def school_finder(request):
     return render(request, 'tools/school_finder.html')
+
+import json
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_protect
+import openai
+
+@require_http_methods(["GET", "POST"])
+def generate_cover_letter(request):
+    if request.method == "GET":
+        # Render the form template
+        context = {
+            'page_title': 'Cover Letter AI',
+            'page_description': 'Generate a professional cover letter using AI',
+            'meta_description': 'Create a customized cover letter instantly with our AI-powered tool. Upload your resume and get a professionally written cover letter tailored to your job application.',
+        }
+        return render(request, 'tools/cover_letter_generator.html', context)
+    
+    # Handle POST request (existing code)
+    try:
+        # Get form data
+        data = request.POST
+        
+        # Construct the prompt for GPT
+        prompt = f"""
+        Generate a professional cover letter with the following details:
+
+        Applicant Information:
+        - Name: {data.get('full_name')}
+        - Email: {data.get('email')}
+        - Phone: {data.get('phone')}
+        - Location: {data.get('location')}
+
+        Job Details:
+        - Company: {data.get('company_name')}
+        - Position: {data.get('job_title')}
+        - Job Description: {data.get('job_description')}
+
+        Applicant's Key Skills:
+        {data.get('key_skills')}
+
+        Relevant Experience:
+        {data.get('relevant_experience')}
+
+        Please write a compelling cover letter that:
+        1. Addresses the specific job requirements
+        2. Highlights relevant skills and experience
+        3. Shows enthusiasm for the role and company
+        4. Maintains a professional yet engaging tone
+        5. Includes proper formatting with date and contact information
+        """
+
+        # Call OpenAI API
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a professional cover letter writer."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=1000
+        )
+
+        # Get the generated cover letter
+        cover_letter = response.choices[0].message.content
+
+        # Format the cover letter with HTML
+        formatted_letter = cover_letter.replace('\n', '<br>')
+
+        return JsonResponse({
+            'success': True,
+            'cover_letter': formatted_letter
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)

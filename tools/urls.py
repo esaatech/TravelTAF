@@ -13,4 +13,6 @@ urlpatterns = [
     path('language-test/', views.language_test, name='language_test'),
     path('job-search/', views.job_search, name='job_search'),
     path('school-finder/', views.school_finder, name='school_finder'),
+    path('generate-cover-letter/', views.generate_cover_letter, name='generate_cover_letter'),
+
 ]
