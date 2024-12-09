@@ -2,53 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('coverLetterForm');
     const results = document.getElementById('results');
     const coverLetterContent = document.getElementById('coverLetterContent');
-    const manualEntrySection = document.getElementById('manual-entry-section');
-    const uploadSection = document.getElementById('upload-section');
-    const structuredJobSection = document.getElementById('structured-job-section');
-    const unstructuredJobSection = document.getElementById('unstructured-job-section');
     
-    // Toggle sections based on input method
-    form.querySelectorAll('input[name="input_method"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === 'manual') {
-                manualEntrySection.classList.remove('hidden');
-                uploadSection.classList.add('hidden');
-            } else {
-                manualEntrySection.classList.add('hidden');
-                uploadSection.classList.remove('hidden');
-            }
-        });
-    });
-
-    // Toggle job details sections based on input method
-    document.querySelectorAll('input[name="job_input_method"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === 'structured') {
-                structuredJobSection.classList.remove('hidden');
-                unstructuredJobSection.classList.add('hidden');
-                // Disable unstructured fields
-                unstructuredJobSection.querySelectorAll('textarea').forEach(textarea => {
-                    textarea.disabled = true;
-                });
-                // Enable structured fields
-                structuredJobSection.querySelectorAll('input, textarea').forEach(input => {
-                    input.disabled = false;
-                });
-            } else {
-                structuredJobSection.classList.add('hidden');
-                unstructuredJobSection.classList.remove('hidden');
-                // Enable unstructured fields
-                unstructuredJobSection.querySelectorAll('textarea').forEach(textarea => {
-                    textarea.disabled = false;
-                });
-                // Disable structured fields
-                structuredJobSection.querySelectorAll('input, textarea').forEach(input => {
-                    input.disabled = true;
-                });
-            }
-        });
-    });
-
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -70,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Determine which endpoint to use based on input method
             const inputMethod = form.querySelector('input[name="input_method"]:checked').value;
-            const endpoint = inputMethod === 'manual' ? '/tools/generate-cover-letter/' : '/tools/generate-cover-letter-raw/';
+            const endpoint = '/tools/generate-cover-letter/';
 
             // Send request to backend
             const response = await fetch(endpoint, {
@@ -91,32 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
             coverLetterContent.innerHTML = data.cover_letter;
             results.classList.remove('hidden');
             results.scrollIntoView({ behavior: 'smooth' });
-
-            // Setup copy button
-            const copyButton = document.getElementById('copyButton');
-            copyButton.addEventListener('click', () => {
-                navigator.clipboard.writeText(coverLetterContent.textContent)
-                    .then(() => {
-                        copyButton.textContent = 'Copied!';
-                        setTimeout(() => {
-                            copyButton.textContent = 'Copy to Clipboard';
-                        }, 2000);
-                    });
-            });
-
-            // Setup edit button
-            const editButton = document.getElementById('editButton');
-            editButton.addEventListener('click', () => {
-                const content = coverLetterContent.innerHTML;
-                coverLetterContent.contentEditable = true;
-                coverLetterContent.focus();
-                editButton.textContent = 'Save Changes';
-                editButton.onclick = () => {
-                    coverLetterContent.contentEditable = false;
-                    editButton.textContent = 'Edit Letter';
-                    editButton.onclick = null;
-                };
-            });
 
         } catch (error) {
             console.error('Error:', error);

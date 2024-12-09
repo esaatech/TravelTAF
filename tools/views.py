@@ -2,6 +2,13 @@ from django.shortcuts import render
 from django.http import JsonResponse
 import random
 from datetime import timedelta
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_protect
+from .cover_letter import generate_cover_letter_from_fields, generate_cover_letter_from_raw_text
+import logging
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 def visa_checker(request):
     if request.method == 'POST':
@@ -80,73 +87,58 @@ def generate_cover_letter(request):
             'page_title': 'Cover Letter AI',
             'page_description': 'Generate a professional cover letter using AI',
             'meta_description': 'Create a customized cover letter instantly with our AI-powered tool. Upload your resume and get a professionally written cover letter tailored to your job application.',
-            # Resume input method credits
             'manual_credit_cost': 5,
             'automated_credit_cost': 10,
-            # Job input method credits
-            'manual_job_credit_cost': 5,
+            'manual_job_credit_cost': 3,
             'automated_job_credit_cost': 7,
         }
         return render(request, 'tools/cover_letter_generator.html', context)
     
-    # Handle POST request (existing code)
+    # Handle POST request
     try:
         # Get form data
         data = request.POST
-        
-        # Construct the prompt for GPT
-        prompt = f"""
-        Generate a professional cover letter with the following details:
+        input_method = data.get('input_method')
+        job_input_method = data.get('job_input_method')
 
-        Applicant Information:
-        - Name: {data.get('full_name')}
-        - Email: {data.get('email')}
-        - Phone: {data.get('phone')}
-        - Location: {data.get('location')}
+        # Validate input data
+        if input_method == 'manual':
+            candidate_details = {
+                'name': data.get('full_name'),
+                'current_role': data.get('current_role'),
+                'experience': data.get('experience'),
+                'skills': data.get('key_skills'),
+                'achievements': data.get('achievements')
+            }
+            if not all(candidate_details.values()):
+                return JsonResponse({'success': False, 'error': 'All candidate fields are required for manual input.'}, status=400)
+        else:
+            resume_text = request.FILES.get('resume')
+            if not resume_text:
+                return JsonResponse({'success': False, 'error': 'Resume file is required for automated extraction.'}, status=400)
 
-        Job Details:
-        - Company: {data.get('company_name')}
-        - Position: {data.get('job_title')}
-        - Job Description: {data.get('job_description')}
+        if job_input_method == 'structured':
+            job_details = {
+                'position': data.get('position'),
+                'company': data.get('company'),
+                'department': data.get('department'),
+                'description': data.get('description')
+            }
+            if not all(job_details.values()):
+                return JsonResponse({'success': False, 'error': 'All job fields are required for structured input.'}, status=400)
+        else:
+            job_posting = data.get('job_posting')
+            if not job_posting:
+                return JsonResponse({'success': False, 'error': 'Job posting is required for unstructured input.'}, status=400)
 
-        Applicant's Key Skills:
-        {data.get('key_skills')}
+        # Generate cover letter
+        if input_method == 'manual' and job_input_method == 'structured':
+            cover_letter = generate_cover_letter_from_fields(job_details, candidate_details)
+        else:
+            cover_letter = generate_cover_letter_from_raw_text(job_posting, resume_text.read().decode('utf-8'))
 
-        Relevant Experience:
-        {data.get('relevant_experience')}
-
-        Please write a compelling cover letter that:
-        1. Addresses the specific job requirements
-        2. Highlights relevant skills and experience
-        3. Shows enthusiasm for the role and company
-        4. Maintains a professional yet engaging tone
-        5. Includes proper formatting with date and contact information
-        """
-
-        # Call OpenAI API
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "You are a professional cover letter writer."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7,
-            max_tokens=1000
-        )
-
-        # Get the generated cover letter
-        cover_letter = response.choices[0].message.content
-
-        # Format the cover letter with HTML
-        formatted_letter = cover_letter.replace('\n', '<br>')
-
-        return JsonResponse({
-            'success': True,
-            'cover_letter': formatted_letter
-        })
+        return JsonResponse({'success': True, 'cover_letter': cover_letter.replace('\n', '<br>')})
 
     except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'error': str(e)
-        }, status=500)
+        logger.error("Error generating cover letter", exc_info=True)
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)

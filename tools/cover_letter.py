@@ -1,6 +1,9 @@
 from openai import OpenAI
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 # Initialize the client
 client = OpenAI()  # Make sure OPENAI_API_KEY is set in your environment
 
@@ -107,7 +110,7 @@ def generate_cover_letter_from_raw_text(job_posting, resume_text):
 
 
 
-def generate_cover_letter(job_details, candidate_details):
+def generate_cover_letter_from_fields(job_details, candidate_details):
     prompt = f"""
     Generate a professional cover letter with the following details:
 
@@ -184,7 +187,7 @@ if __name__ == "__main__":
         "achievements": "Led team of 5, increased efficiency by 40%"
     }     
 
-    #cover_letter = generate_cover_letter(job_details, candidate_details)       
+    #cover_letter = generate_cover_letter_from_fields(job_details, candidate_details)       
     #print(cover_letter)
 
     
