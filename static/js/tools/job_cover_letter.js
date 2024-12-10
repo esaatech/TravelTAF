@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Determine which endpoint to use based on input method
             const inputMethod = form.querySelector('input[name="input_method"]:checked').value;
-            const endpoint = '/tools/generate-cover-letter/';
+            const endpoint = '/tools/job-cover-letter/';
 
             // Send request to backend
             const response = await fetch(endpoint, {
