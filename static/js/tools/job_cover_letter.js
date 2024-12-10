@@ -87,13 +87,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle resume removal
     function removeResume() {
-        const input = document.getElementById('resume');
+        // Get the file input and preview elements
+        const fileInput = document.querySelector('input[type="file"]');
         const filePreview = document.getElementById('file-preview');
-        const dropzoneContent = document.getElementById('dropzone-content');
+        const fileName = document.getElementById('file-name');
 
-        input.value = '';
+        // Clear the file input value
+        fileInput.value = '';
+
+        // Hide the file preview
         filePreview.classList.add('hidden');
-        dropzoneContent.classList.remove('hidden');
+        
+        // Clear the filename display
+        fileName.textContent = '';
+
+        // If using FormData, you might want to clear that as well
+        if (window.formData) {
+            window.formData.delete('resume');
+        }
     }
 
     // Make these functions globally available
@@ -188,4 +199,55 @@ document.addEventListener('DOMContentLoaded', function() {
         form.insertBefore(errorDiv, form.firstChild);
         setTimeout(() => errorDiv.remove(), 5000);
     }
+
+    // Add this to your existing file input handling code
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            showFilePreview(file);
+        }
+    }
+
+    function showFilePreview(file) {
+        const filePreview = document.getElementById('file-preview');
+        const fileName = document.getElementById('file-name');
+        
+        // Show the preview container
+        filePreview.classList.remove('hidden');
+        
+        // Update the filename display
+        fileName.textContent = file.name;
+    }
+
+    // Add event listeners when the document loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.querySelector('input[type="file"]');
+        
+        // Handle file selection
+        fileInput.addEventListener('change', handleFileUpload);
+
+        // Handle drag and drop
+        const dropZone = fileInput.parentElement;
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-blue-500');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-500');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-500');
+            
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                fileInput.files = files;
+                showFilePreview(files[0]);
+            }
+        });
+    });
 });

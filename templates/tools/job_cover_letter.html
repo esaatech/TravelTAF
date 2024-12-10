@@ -126,7 +126,10 @@
                     </div>
                     
                     <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-6">
-                        <input type="file" name="resume" accept=".pdf,.txt"
+                        <input type="file" 
+                               id="resume" 
+                               name="resume" 
+                               accept=".pdf,.doc,.docx"
                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                                onchange="handleResumeUpload(this)">
                         
@@ -278,5 +281,7 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="{% static 'js/tools/cover_letter_utils.js' %}"></script>
 <script src="{% static 'js/tools/job_cover_letter.js' %}"></script>
 {% endblock %} 
