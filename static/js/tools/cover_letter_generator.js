@@ -3,6 +3,103 @@ document.addEventListener('DOMContentLoaded', function() {
     const results = document.getElementById('results');
     const coverLetterContent = document.getElementById('coverLetterContent');
     
+    // Elements for resume input method toggle
+    const manualEntrySection = document.getElementById('manual-entry-section');
+    const uploadSection = document.getElementById('upload-section');
+    const resumeInputs = document.querySelectorAll('input[name="input_method"]');
+
+    // Elements for job input method toggle
+    const structuredJobSection = document.getElementById('structured-job-section');
+    const unstructuredJobSection = document.getElementById('unstructured-job-section');
+    const jobInputs = document.querySelectorAll('input[name="job_input_method"]');
+
+    // Handle resume input method toggle
+    resumeInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.value === 'manual') {
+                manualEntrySection.classList.remove('hidden');
+                uploadSection.classList.add('hidden');
+                // Enable manual entry fields
+                manualEntrySection.querySelectorAll('input, textarea').forEach(field => {
+                    field.disabled = false;
+                });
+                // Disable upload fields
+                uploadSection.querySelectorAll('input').forEach(field => {
+                    field.disabled = true;
+                });
+            } else {
+                manualEntrySection.classList.add('hidden');
+                uploadSection.classList.remove('hidden');
+                // Disable manual entry fields
+                manualEntrySection.querySelectorAll('input, textarea').forEach(field => {
+                    field.disabled = true;
+                });
+                // Enable upload fields
+                uploadSection.querySelectorAll('input').forEach(field => {
+                    field.disabled = false;
+                });
+            }
+        });
+    });
+
+    // Handle job input method toggle
+    jobInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.value === 'structured') {
+                structuredJobSection.classList.remove('hidden');
+                unstructuredJobSection.classList.add('hidden');
+                // Enable structured fields
+                structuredJobSection.querySelectorAll('input, textarea').forEach(field => {
+                    field.disabled = false;
+                });
+                // Disable unstructured fields
+                unstructuredJobSection.querySelectorAll('textarea').forEach(field => {
+                    field.disabled = true;
+                });
+            } else {
+                structuredJobSection.classList.add('hidden');
+                unstructuredJobSection.classList.remove('hidden');
+                // Disable structured fields
+                structuredJobSection.querySelectorAll('input, textarea').forEach(field => {
+                    field.disabled = true;
+                });
+                // Enable unstructured fields
+                unstructuredJobSection.querySelectorAll('textarea').forEach(field => {
+                    field.disabled = false;
+                });
+            }
+        });
+    });
+
+    // Handle resume file upload
+    function handleResumeUpload(input) {
+        const filePreview = document.getElementById('file-preview');
+        const fileName = document.getElementById('file-name');
+        const dropzoneContent = document.getElementById('dropzone-content');
+
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            fileName.textContent = file.name;
+            filePreview.classList.remove('hidden');
+            dropzoneContent.classList.add('hidden');
+        }
+    }
+
+    // Handle resume removal
+    function removeResume() {
+        const input = document.getElementById('resume');
+        const filePreview = document.getElementById('file-preview');
+        const dropzoneContent = document.getElementById('dropzone-content');
+
+        input.value = '';
+        filePreview.classList.add('hidden');
+        dropzoneContent.classList.remove('hidden');
+    }
+
+    // Make these functions globally available
+    window.handleResumeUpload = handleResumeUpload;
+    window.removeResume = removeResume;
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
