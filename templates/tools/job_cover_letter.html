@@ -267,8 +267,17 @@
                     <button id="copyButton" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                         Copy to Clipboard
                     </button>
-                    <button id="downloadPdfBtn" onclick="coverLetterUtils.downloadAsPDF()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    <button id="downloadPdfBtn" onclick="coverLetterUtils.downloadAsPDF()" 
+                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Download as PDF
+                    </button>
+                    <button id="emailBtn" onclick="coverLetterUtils.emailCoverLetter()" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                        </svg>
+                        Email
                     </button>
                     <button id="editButton" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                         Edit Letter

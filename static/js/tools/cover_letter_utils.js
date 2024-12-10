@@ -131,6 +131,18 @@ class CoverLetterUtils {
         }
     }
 
+    emailCoverLetter() {
+        const content = this.coverLetterContent.innerText;
+        const subject = encodeURIComponent('Cover Letter');
+        const body = encodeURIComponent(content);
+        
+        // Create mailto link
+        const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+        
+        // Open default email client
+        window.location.href = mailtoLink;
+    }
+
     showToast(message, isError = false) {
         // Remove any existing toasts
         const existingToasts = document.querySelectorAll('.toast-message');

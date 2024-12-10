@@ -14,6 +14,9 @@ def generate_cover_letter_from_raw_text(job_posting, resume_text):
     Generate a cover letter from raw job posting and resume text.
     For use with uploaded CV and/or unstructured job posting.
     """
+    # Extract name from resume_text (first line typically)
+    applicant_name = resume_text.strip().split('\n')[0]
+    
     try:
         cover_letter = client.chat.completions.create(
             model="gpt-4",
@@ -29,13 +32,14 @@ def generate_cover_letter_from_raw_text(job_posting, resume_text):
                 {job_posting}
 
                 The cover letter should:
-                1. Be professionally formatted with proper header and date
+                1. Start with "Dear Hiring Manager,"
                 2. Focus on the most relevant experiences from the resume
                 3. Demonstrate clear understanding of the company's needs
                 4. Show enthusiasm for the role and company
                 5. Include specific examples and achievements
                 6. Maintain a professional yet engaging tone
-                7. End with a strong call to action
+                7. End with "Sincerely," followed by "{applicant_name}" on a new line
+                8. Do not include any dates or addresses
 
                 Keep the length to one page maximum.
                 """}
@@ -97,13 +101,14 @@ def generate_cover_letter_from_fields(job_details, candidate_details):
                 Achievements: {candidate_details.get('achievements')}
 
                 The cover letter should:
-                1. Be professionally formatted with proper header and date
+                1. Start with "Dear Hiring Manager,"
                 2. Focus on relevant experiences
                 3. Demonstrate clear understanding of the company's needs
                 4. Show enthusiasm for the role and company
                 5. Include specific examples and achievements
                 6. Maintain a professional yet engaging tone
-                7. End with a strong call to action
+                7. End with "Sincerely," followed by "{candidate_details.get('full_name')}" on a new line
+                8. Do not include any dates or addresses
 
                 Keep the length to one page maximum.
                 """}
