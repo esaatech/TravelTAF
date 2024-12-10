@@ -114,10 +114,6 @@ def job_cover_letter(request):
         total_credits = (CREDIT_COSTS['upload_resume'] if input_method == 'upload' else CREDIT_COSTS['manual_resume']) + \
                        (CREDIT_COSTS['automated_job'] if job_input_method == 'unstructured' else CREDIT_COSTS['manual_job'])
 
-        # TODO: Check if user has enough credits
-        # if not user.has_enough_credits(total_credits):
-        #     return JsonResponse({'success': False, 'error': 'Insufficient credits'}, status=402)
-
         # Handle resume input
         if input_method == 'manual':
             candidate_details = {
@@ -144,7 +140,44 @@ def job_cover_letter(request):
             resume_file = request.FILES.get('resume')
             if not resume_file:
                 return JsonResponse({'success': False, 'error': 'Resume file is required.'}, status=400)
-            resume_text = resume_file.read().decode('utf-8')
+            
+            # Get file extension
+            file_extension = resume_file.name.split('.')[-1].lower()
+            
+            if file_extension == 'pdf':
+                try:
+                    import pdfplumber
+                    with pdfplumber.open(resume_file) as pdf:
+                        resume_text = ""
+                        for page in pdf.pages:
+                            resume_text += page.extract_text() or ""
+                except ImportError:
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'PDF processing is not available. Please upload a TXT file.'
+                    }, status=400)
+                except Exception as e:
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'Error processing PDF file: {str(e)}'
+                    }, status=400)
+            elif file_extension == 'txt':
+                try:
+                    resume_text = resume_file.read().decode('utf-8')
+                except UnicodeDecodeError:
+                    try:
+                        # Fallback to latin-1 if utf-8 fails
+                        resume_text = resume_file.read().decode('latin-1')
+                    except Exception as e:
+                        return JsonResponse({
+                            'success': False,
+                            'error': f'Error reading text file: {str(e)}'
+                        }, status=400)
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Unsupported file format. Please upload a PDF or TXT file.'
+                }, status=400)
 
         # Handle job input
         if job_input_method == 'structured':
