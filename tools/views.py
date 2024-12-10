@@ -84,7 +84,7 @@ from django.views.decorators.csrf import csrf_protect
 import openai
 
 @require_http_methods(["GET", "POST"])
-def generate_cover_letter(request):
+def job_cover_letter(request):
     # Credit costs
     CREDIT_COSTS = {
         'manual_resume': 5,
@@ -103,7 +103,7 @@ def generate_cover_letter(request):
             'manual_job_credit_cost': CREDIT_COSTS['manual_job'],
             'automated_job_credit_cost': CREDIT_COSTS['automated_job'],
         }
-        return render(request, 'tools/cover_letter_generator.html', context)
+        return render(request, 'tools/job_cover_letter.html', context)
     
     try:
         data = request.POST
@@ -195,3 +195,56 @@ def generate_cover_letter(request):
             'success': False,
             'error': str(e)
         }, status=500)
+
+def visa_cover_letter(request):
+    context = {
+        'page_title': 'Visa Application Cover Letter',
+        'page_description': 'Generate a visa application cover letter tailored to your needs.',
+        'visa_credit_cost': 10,  # Example credit cost
+    }
+    return render(request, 'tools/visa_cover_letter.html', context)
+
+def study_abroad_cover_letter(request):
+    context = {
+        'page_title': 'Study Abroad Cover Letter',
+        'page_description': 'Create a study abroad cover letter for your university application.',
+        'study_abroad_credit_cost': 8,  # Example credit cost
+    }
+    return render(request, 'tools/study_abroad_cover_letter.html', context)
+
+def travel_sponsorship_cover_letter(request):
+    context = {
+        'page_title': 'Travel Sponsorship Cover Letter',
+        'page_description': 'Draft a cover letter for travel sponsorship requests.',
+        'sponsorship_credit_cost': 12,  # Example credit cost
+    }
+    return render(request, 'tools/travel_sponsorship_cover_letter.html', context)
+
+def immigration_support_cover_letter(request):
+    context = {
+        'page_title': 'Immigration Support Letter',
+        'page_description': 'Generate an immigration support letter for your application.',
+        'immigration_credit_cost': 15,  # Example credit cost
+    }
+    return render(request, 'tools/immigration_support_cover_letter.html', context)
+
+def tourist_invitation_cover_letter(request):
+    context = {
+        'page_title': 'Tourist Invitation Letter',
+        'page_description': 'Create a tourist invitation letter for your guests.',
+        'invitation_credit_cost': 5,  # Example credit cost
+    }
+    return render(request, 'tools/tourist_invitation_cover_letter.html', context)
+
+def cover_letters(request):
+    context = {
+        'page_title': 'Cover Letter Generator',
+        'page_description': 'Choose from our selection of professional cover letter templates',
+        'job_credit_cost': 5,
+        'visa_credit_cost': 10,
+        'study_abroad_credit_cost': 8,
+        'sponsorship_credit_cost': 12,
+        'immigration_credit_cost': 15,
+        'invitation_credit_cost': 5,
+    }
+    return render(request, 'tools/cover_letters.html', context)

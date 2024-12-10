@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-gradient-to-r from-blue-50 to-white py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center">
+            <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+                AI Cover Letter Generator
+            </h1>
+            <p class="text-lg text-gray-600 mb-8">
+                Choose from our selection of professional cover letter templates
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Job Application Cover Letter -->
+            <a href="{% url 'tools:job_cover_letter' %}" 
+               class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600">
+                            Job Application
+                        </h3>
+                        <span class="text-sm font-semibold text-green-600">
+                            {{ job_credit_cost }} credits
+                        </span>
+                    </div>
+                    <p class="text-gray-600">
+                        Create a professional cover letter for your job application
+                    </p>
+                    <div class="mt-4 flex items-center text-blue-600">
+                        <span class="text-sm font-semibold">Get Started</span>
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Visa Application Cover Letter -->
+            <a href="{% url 'tools:visa_cover_letter' %}" 
+               class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600">
+                            Visa Application
+                        </h3>
+                        <span class="text-sm font-semibold text-green-600">
+                            {{ visa_credit_cost }} credits
+                        </span>
+                    </div>
+                    <p class="text-gray-600">
+                        Generate a compelling visa application cover letter
+                    </p>
+                    <div class="mt-4 flex items-center text-blue-600">
+                        <span class="text-sm font-semibold">Get Started</span>
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Study Abroad Cover Letter -->
+            <a href="{% url 'tools:study_abroad_cover_letter' %}" 
+               class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600">
+                            Study Abroad
+                        </h3>
+                        <span class="text-sm font-semibold text-green-600">
+                            {{ study_abroad_credit_cost }} credits
+                        </span>
+                    </div>
+                    <p class="text-gray-600">
+                        Create a study abroad application cover letter
+                    </p>
+                    <div class="mt-4 flex items-center text-blue-600">
+                        <span class="text-sm font-semibold">Get Started</span>
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Travel Sponsorship Cover Letter -->
+            <a href="{% url 'tools:travel_sponsorship_cover_letter' %}" 
+               class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600">
+                            Travel Sponsorship
+                        </h3>
+                        <span class="text-sm font-semibold text-green-600">
+                            {{ sponsorship_credit_cost }} credits
+                        </span>
+                    </div>
+                    <p class="text-gray-600">
+                        Request travel sponsorship with a professional letter
+                    </p>
+                    <div class="mt-4 flex items-center text-blue-600">
+                        <span class="text-sm font-semibold">Get Started</span>
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Immigration Support Letter -->
+            <a href="{% url 'tools:immigration_support_cover_letter' %}" 
+               class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600">
+                            Immigration Support
+                        </h3>
+                        <span class="text-sm font-semibold text-green-600">
+                            {{ immigration_credit_cost }} credits
+                        </span>
+                    </div>
+                    <p class="text-gray-600">
+                        Generate an immigration support letter
+                    </p>
+                    <div class="mt-4 flex items-center text-blue-600">
+                        <span class="text-sm font-semibold">Get Started</span>
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Tourist Invitation Letter -->
+            <a href="{% url 'tools:tourist_invitation_cover_letter' %}" 
+               class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600">
+                            Tourist Invitation
+                        </h3>
+                        <span class="text-sm font-semibold text-green-600">
+                            {{ invitation_credit_cost }} credits
+                        </span>
+                    </div>
+                    <p class="text-gray-600">
+                        Create a tourist invitation letter
+                    </p>
+                    <div class="mt-4 flex items-center text-blue-600">
+                        <span class="text-sm font-semibold">Get Started</span>
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %} 

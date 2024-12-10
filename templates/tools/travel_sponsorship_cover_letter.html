@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'tools/components/cover_letter_hero.html' %}
+
+    <section class="py-12">
+        <div class="max-w-4xl mx-auto px-4">
+            <form id="travelSponsorshipCoverLetterForm" class="space-y-8">
+                {% csrf_token %}
+                
+                <!-- Personal Information -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold mb-6">Personal Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Full Name
+                            </label>
+                            <input type="text" name="full_name" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Email
+                            </label>
+                            <input type="email" name="email" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Phone
+                            </label>
+                            <input type="tel" name="phone" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Current Address
+                            </label>
+                            <input type="text" name="address" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sponsorship Details -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold mb-6">Sponsorship Details</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Organization/Company Name
+                            </label>
+                            <input type="text" name="organization" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg"
+                                   placeholder="e.g., Example Corp">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Purpose of Travel
+                            </label>
+                            <textarea name="travel_purpose" required rows="4"
+                                      class="w-full p-3 border border-gray-300 rounded-lg"
+                                      placeholder="Explain the purpose of your travel..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Sponsorship Amount Requested
+                            </label>
+                            <input type="text" name="sponsorship_amount" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg"
+                                   placeholder="e.g., $5000">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credit Cost -->
+                <div class="text-center">
+                    <span class="text-sm font-semibold text-green-600">This will cost {{ sponsorship_credit_cost }} credits</span>
+                </div>
+
+                <!-- Generate Button -->
+                <div class="text-center">
+                    <button type="submit" 
+                            class="bg-blue-600 text-white px-8 py-4 rounded-full hover:bg-blue-700 transition-colors">
+                        Generate Sponsorship Cover Letter
+                    </button>
+                </div>
+            </form>
+
+            {% include 'tools/components/cover_letter_response.html' %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/tools/travel_sponsorship_cover_letter.js' %}"></script>
+{% endblock %} 

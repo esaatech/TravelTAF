@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'tools/components/cover_letter_hero.html' %}
+
+    <section class="py-12">
+        <div class="max-w-4xl mx-auto px-4">
+            <form id="studyAbroadCoverLetterForm" class="space-y-8">
+                {% csrf_token %}
+                
+                <!-- Personal Information -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold mb-6">Personal Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Full Name
+                            </label>
+                            <input type="text" name="full_name" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Email
+                            </label>
+                            <input type="email" name="email" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Phone
+                            </label>
+                            <input type="tel" name="phone" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Current Address
+                            </label>
+                            <input type="text" name="address" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study Details -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold mb-6">Study Details</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                University Name
+                            </label>
+                            <input type="text" name="university" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg"
+                                   placeholder="e.g., University of Example">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Course of Study
+                            </label>
+                            <input type="text" name="course" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg"
+                                   placeholder="e.g., Bachelor of Science in Computer Science">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Study Duration
+                            </label>
+                            <input type="text" name="study_duration" required
+                                   class="w-full p-3 border border-gray-300 rounded-lg"
+                                   placeholder="e.g., 4 years">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Career Goals
+                            </label>
+                            <textarea name="career_goals" required rows="4"
+                                      class="w-full p-3 border border-gray-300 rounded-lg"
+                                      placeholder="Describe your career goals..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Information -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold mb-6">Financial Information</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Source of Funding
+                            </label>
+                            <select name="funding_source" required
+                                    class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Select Funding Source</option>
+                                <option value="self">Self-Funded</option>
+                                <option value="sponsor">Sponsored</option>
+                                <option value="scholarship">Scholarship</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Financial Details
+                            </label>
+                            <textarea name="financial_details" required rows="4"
+                                      class="w-full p-3 border border-gray-300 rounded-lg"
+                                      placeholder="Provide details about your financial capacity..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credit Cost -->
+                <div class="text-center">
+                    <span class="text-sm font-semibold text-green-600">This will cost {{ study_abroad_credit_cost }} credits</span>
+                </div>
+
+                <!-- Generate Button -->
+                <div class="text-center">
+                    <button type="submit" 
+                            class="bg-blue-600 text-white px-8 py-4 rounded-full hover:bg-blue-700 transition-colors">
+                        Generate Study Abroad Cover Letter
+                    </button>
+                </div>
+            </form>
+
+            {% include 'tools/components/cover_letter_response.html' %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/tools/study_abroad_cover_letter.js' %}"></script>
+{% endblock %} 
