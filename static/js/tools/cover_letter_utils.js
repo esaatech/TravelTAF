@@ -78,38 +78,43 @@ class CoverLetterUtils {
         }
     }
 
-    downloadAsPDF() {
+    async downloadAsPDF() {
         const element = this.coverLetterContent;
-        const opt = {
-            margin: [0.5, 0.5],
+        const options = {
+            margin: [10, 10],
             filename: 'cover-letter.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
                 scale: 2,
-                useCORS: true
+                useCORS: true,
+                logging: true,
+                // Add these options for better rendering
+                letterRendering: true,
+                allowTaint: true
             },
             jsPDF: { 
-                unit: 'in', 
-                format: 'letter', 
-                orientation: 'portrait'
-            }
+                unit: 'mm', 
+                format: 'a4', 
+                orientation: 'portrait',
+                compress: true
+            },
+            // Add this to force download
+            output: 'save'
         };
 
-        // Show loading toast
-        this.showToast('Generating PDF...');
-
-        // Generate PDF
-        html2pdf()
-            .from(element)
-            .set(opt)
-            .save()
-            .then(() => {
-                this.showToast('PDF downloaded successfully!');
-            })
-            .catch(error => {
-                console.error('PDF generation failed:', error);
-                this.showToast('Failed to generate PDF', true);
-            });
+        try {
+            // Use promise-based approach
+            await html2pdf()
+                .from(element)
+                .set(options)
+                .toPdf()
+                .get('pdf')
+                .then((pdf) => {
+                    pdf.save('cover-letter.pdf');
+                });
+        } catch (error) {
+            console.error('PDF generation error:', error);
+            this.showToast('Error generating PDF', true);
+        }
     }
 
     makeEditable() {

@@ -250,4 +250,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    function updateCoverLetterContent(coverLetter) {
+        const contentDiv = document.getElementById('coverLetterContent');
+        if (contentDiv) {
+            const formattedContent = coverLetter
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line)
+                .join('<br>');
+            
+            contentDiv.innerHTML = formattedContent;
+            
+            // Debug log
+            console.log('Content updated:', contentDiv.innerHTML);
+        }
+    }
 });

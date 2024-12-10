@@ -260,14 +260,14 @@
         <div id="results" class="mt-8 hidden">
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-xl font-bold mb-4">Your Cover Letter</h2>
-                <div id="coverLetterContent" class="prose max-w-none">
-                    <!-- Generated content will go here -->
+                <div id="coverLetterContent" class="prose max-w-none whitespace-pre-line" style="min-height: 200px;">
+                    <!-- Content will be inserted here -->
                 </div>
                 <div class="mt-6 flex justify-center space-x-4">
                     <button id="copyButton" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                         Copy to Clipboard
                     </button>
-                    <button id="downloadButton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    <button id="downloadPdfBtn" onclick="coverLetterUtils.downloadAsPDF()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Download as PDF
                     </button>
                     <button id="editButton" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
@@ -281,7 +281,7 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script src="{% static 'js/tools/cover_letter_utils.js' %}"></script>
 <script src="{% static 'js/tools/job_cover_letter.js' %}"></script>
 {% endblock %} 
