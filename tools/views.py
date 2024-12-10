@@ -281,3 +281,5 @@ def cover_letters(request):
         'invitation_credit_cost': 5,
     }
     return render(request, 'tools/cover_letters.html', context)
+
+ 
