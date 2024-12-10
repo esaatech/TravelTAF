@@ -1,0 +1,48 @@
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #results {
+        page-break-inside: avoid;
+    }
+
+    body {
+        padding: 2cm;
+    }
+
+    .form-section {
+        page-break-inside: avoid;
+    }
+}
+
+
+/* Form validation styles */
+.error-field {
+    border-color: #f56565;
+    background-color: #fff5f5;
+}
+
+.error-field:focus {
+    box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.2);
+    outline: none;
+}
+
+#error-container {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
