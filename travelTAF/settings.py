@@ -133,8 +133,15 @@ WSGI_APPLICATION = 'travelTAF.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'traveltaf',
+        'USER': 'traveltaf-user',
+        'PASSWORD': 'Nawoitomo@1985',
+        'HOST': '35.197.66.221',  # Your Cloud SQL IP
+        'PORT': '3306',           # Default MySQL port
+        'OPTIONS': {
+            'autocommit': True,
+        }
     }
 }
 
