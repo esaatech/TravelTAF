@@ -1,9 +1,6 @@
 import os
-import django
 
-# Setup Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'travelTAF.settings')
-django.setup()
+
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
