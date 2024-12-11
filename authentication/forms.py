@@ -34,3 +34,7 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = ('username', 'email', 'password1', 'password2') 
+
+class LoginForm(forms.Form):
+    username_or_email = forms.CharField(label='Username or Email', max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput) 
