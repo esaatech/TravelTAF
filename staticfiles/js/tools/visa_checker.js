@@ -290,9 +290,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('loadingState').classList.remove('hidden');
         document.getElementById('resultsContent').classList.add('hidden');
 
-        // Add debugging logs
-        console.log('Sending request with:', { fromCountry, toCountry });
-
         // Send request to backend
         const formData = new FormData();
         formData.append('fromCountry', fromCountry);
@@ -302,23 +299,24 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': getCookie('csrftoken')
-            }
+                'X-CSRFToken': getCookie('csrftoken'),
+                // Remove Content-Type header to let the browser set it with boundary
+                // 'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            credentials: 'same-origin' // Include cookies in the request
         })
         .then(response => {
-            console.log('Raw response:', response);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             return response.json();
         })
         .then(data => {
-            console.log('Received data:', data);
+            console.log('Received data:', data); // Debug log
             
             // Hide loading state
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('resultsContent').classList.remove('hidden');
-
-            if (!data.status) {
-                throw new Error('Invalid response format');
-            }
 
             // Update visa status
             const statusColors = {
@@ -335,48 +333,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 'e_visa': 'E-Visa Available'
             };
 
-            const visaStatusElement = document.getElementById('visaStatus');
-            visaStatusElement.className = `p-4 rounded-lg text-center ${statusColors[data.status] || 'bg-gray-100'}`;
-            visaStatusElement.innerHTML = `
-                <h2 class="text-2xl font-bold">${statusText[data.status] || 'Status Unknown'}</h2>
+            document.getElementById('visaStatus').className = `p-4 rounded-lg text-center ${statusColors[data.status]}`;
+            document.getElementById('visaStatus').innerHTML = `
+                <h2 class="text-2xl font-bold">${statusText[data.status]}</h2>
             `;
 
             // Update detailed requirements
-            if (data.details) {
-                document.getElementById('detailedRequirements').innerHTML = `
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="font-bold mb-2">Processing Details</h3>
-                            <ul class="space-y-2">
-                                <li>Processing Time: ${data.details.processing_time || 'N/A'}</li>
-                                <li>Validity: ${data.details.validity || 'N/A'}</li>
-                                <li>Cost: ${data.details.cost || 'N/A'}</li>
-                                <li>Maximum Stay: ${data.details.max_stay || 'N/A'}</li>
-                                <li>Entry Type: ${data.details.entry_type || 'N/A'}</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-2">Required Documents</h3>
-                            <ul class="list-disc pl-4 space-y-1">
-                                ${data.details.requirements ? 
-                                    data.details.requirements.map(req => `<li>${req}</li>`).join('') :
-                                    '<li>No specific requirements listed</li>'}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6">
-                        <h3 class="font-bold mb-2">Additional Information</h3>
-                        <ul class="list-disc pl-4 space-y-1">
-                            ${data.details.additional_info ? 
-                                data.details.additional_info.map(info => `<li>${info}</li>`).join('') :
-                                '<li>No additional information available</li>'}
+            document.getElementById('detailedRequirements').innerHTML = `
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-bold mb-2">Processing Details</h3>
+                        <ul class="space-y-2">
+                            <li>Processing Time: ${data.details.processing_time}</li>
+                            <li>Validity: ${data.details.validity}</li>
+                            <li>Cost: ${data.details.cost}</li>
+                            <li>Maximum Stay: ${data.details.max_stay}</li>
+                            <li>Entry Type: ${data.details.entry_type}</li>
                         </ul>
                     </div>
-                `;
-            }
+                    <div>
+                        <h3 class="font-bold mb-2">Required Documents</h3>
+                        <ul class="list-disc pl-4 space-y-1">
+                            ${data.details.requirements.map(req => `<li>${req}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <h3 class="font-bold mb-2">Additional Information</h3>
+                    <ul class="list-disc pl-4 space-y-1">
+                        ${data.details.additional_info.map(info => `<li>${info}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
         })
         .catch(error => {
-            console.error('Error details:', error);
+            console.error('Full error:', error); // Debug log
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('resultsContent').innerHTML = `
                 <div class="text-red-600 text-center">
