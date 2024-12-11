@@ -5,6 +5,8 @@ from datetime import timedelta
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect
 import logging
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from .cover_letter import (
     generate_cover_letter_from_fields,
 
@@ -12,7 +14,7 @@ from .cover_letter import (
 )
 # Set up logging
 logger = logging.getLogger(__name__)
-
+@ensure_csrf_cookie  # This ensures the CSRF cookie is always set
 def visa_checker(request):
     if request.method == 'POST':
         from_country = request.POST.get('fromCountry')
