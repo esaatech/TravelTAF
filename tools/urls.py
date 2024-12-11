@@ -20,4 +20,5 @@ urlpatterns = [
     path('immigration-support-cover-letter/', views.immigration_support_cover_letter, name='immigration_support_cover_letter'),
     path('tourist-invitation-cover-letter/', views.tourist_invitation_cover_letter, name='tourist_invitation_cover_letter'),
     path('cover-letters/', views.cover_letters, name='cover_letters'),
+    path('test-openai/', views.test_openai, name='test-openai'),
 ]

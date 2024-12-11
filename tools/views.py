@@ -82,6 +82,8 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect
 import openai
+import os
+from openai import OpenAI
 
 @require_http_methods(["GET", "POST"])
 def job_cover_letter(request):
@@ -281,5 +283,39 @@ def cover_letters(request):
         'invitation_credit_cost': 5,
     }
     return render(request, 'tools/cover_letters.html', context)
+
+def test_openai(request):
+    try:
+        # Get the API key
+        api_key = os.getenv('OPENAI_API_KEY')
+        
+        # Check if key exists
+        if not api_key:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'API key not found in environment'
+            })
+            
+        # Try to initialize OpenAI client
+        client = OpenAI()
+        
+        # Try a simple API call
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": "Hello"}],
+            max_tokens=5
+        )
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'OpenAI API is working',
+            'response': response.choices[0].message.content
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Error testing OpenAI: {str(e)}'
+        })
 
  
