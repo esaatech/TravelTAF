@@ -471,3 +471,7 @@ def learn_more(request):
 
 def about(request):
     return render(request, 'home/about.html')
+
+
+def dashboard(request):
+    return render(request, 'dashboard/dashboard.html')

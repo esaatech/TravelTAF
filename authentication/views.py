@@ -10,15 +10,15 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = True
     
     def get_success_url(self):
-        return reverse_lazy('dashboard')  # or your home page
+        return reverse_lazy('main:dashboard')  # or your home page
 
 class RegisterView(CreateView):
     template_name = 'register.html'
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('authentication:login')
+    success_url = reverse_lazy('main:dashboard')
     
     def get_success_url(self):
-        return reverse_lazy('authentication:login')
+        return reverse_lazy('main:dashboard')
         
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
