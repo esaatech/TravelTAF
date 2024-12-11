@@ -6,6 +6,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect
 import logging
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 from .cover_letter import (
     generate_cover_letter_from_fields,
@@ -14,8 +15,11 @@ from .cover_letter import (
 )
 # Set up logging
 logger = logging.getLogger(__name__)
-@ensure_csrf_cookie  # This ensures the CSRF cookie is always set
+@csrf_exempt  # Temporarily disable CSRF for testing
 def visa_checker(request):
+    # Debug prints
+    print("Headers:", dict(request.headers))
+    print("POST data:", request.POST)
     if request.method == 'POST':
         from_country = request.POST.get('fromCountry')
         to_country = request.POST.get('toCountry')
