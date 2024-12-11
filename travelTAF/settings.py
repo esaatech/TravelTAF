@@ -23,8 +23,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-+hl-say_pic)ycn+(n_1ouysg%+li1do49k_kev6%c3u5%3bpt'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
+
+# Set DEBUG based on environment
+DEBUG = False  # For production
+
+# Security settings for production
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_TRUSTED_ORIGINS = [
+    'https://traveltaf.com',
+    'https://www.traveltaf.com',
+]
+
+
+
+
+
+
+
+
+
 
 ALLOWED_HOSTS = [
     'localhost',
