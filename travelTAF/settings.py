@@ -24,7 +24,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+hl-say_pic)ycn+(n_1ouysg%+li1do49k_kev6%c3u5%3bpt'
 
 
-
 # Set DEBUG based on environment
 DEBUG = False  # For production
 
@@ -36,6 +35,14 @@ CSRF_TRUSTED_ORIGINS = [
     'https://www.traveltaf.com',
 ]
 
+# Security headers
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 
 
@@ -51,7 +58,11 @@ ALLOWED_HOSTS = [
     '192.168.0.65',  # Your local IP
     'traveltaf-578103433472.us-central1.run.app',  # Your Cloud Run URL
     '.run.app',  # All Cloud Run URLs
+
     '*', #fixed the inconsistencies
+
+    'traveltaf.com',
+    'www.traveltaf.com',
 ]
 
 # For CSRF protection in Cloud Run
