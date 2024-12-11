@@ -280,6 +280,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const fromCountry = document.getElementById('fromCountry').value;
         const toCountry = document.getElementById('toCountry').value;
         
+        // Debug CSRF token
+        const csrfToken = getCookie('csrftoken');
+        console.log('CSRF Token:', csrfToken); // This will show us if we're getting the token
+        
+        if (!csrfToken) {
+            console.error('No CSRF token found!');
+            return;
+        }
+
         if (!fromCountry || !toCountry) {
             alert('Please select both countries');
             return;
@@ -294,18 +303,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData();
         formData.append('fromCountry', fromCountry);
         formData.append('toCountry', toCountry);
+        formData.append('csrfmiddlewaretoken', csrfToken); // Add token to form data
 
         fetch('/tools/visa-checker/', {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-                // Remove Content-Type header to let the browser set it with boundary
-                // 'Content-Type': 'application/x-www-form-urlencoded'
+                'X-CSRFToken': csrfToken,
             },
-            credentials: 'same-origin' // Include cookies in the request
+            credentials: 'include' // Changed from 'same-origin' to 'include'
         })
         .then(response => {
+            console.log('Response headers:', response.headers);
+            console.log('Response status:', response.status);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -379,10 +389,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Helper function to get CSRF token
+    // Updated getCookie function with debugging
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
+            console.log('All cookies:', document.cookie); // Debug all cookies
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
