@@ -18,8 +18,7 @@ logger = logging.getLogger(__name__)
 @csrf_exempt  # Temporarily disable CSRF for testing
 def visa_checker(request):
     # Debug prints
-    print("Headers:", dict(request.headers))
-    print("POST data:", request.POST)
+   
     if request.method == 'POST':
         from_country = request.POST.get('fromCountry')
         to_country = request.POST.get('toCountry')

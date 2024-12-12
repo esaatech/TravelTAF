@@ -1,6 +1,6 @@
 <section class="min-h-[400px] bg-white py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">Immigration Tools</h2>
+        <h2 class="text-3xl font-bold mb-12 text-center">Travel and Immigration Tools</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Visa Checker -->
             <div class="p-6 border rounded-xl hover:shadow-lg transition-shadow">
@@ -11,7 +11,7 @@
                 </div>
                 <h3 class="text-lg font-semibold mb-2">Visa Checker</h3>
                 <p class="text-gray-600 mb-4">Instantly check visa requirements for any country.</p>
-                <button class="text-[#1980e6] hover:underline">Check Now →</button>
+                <a href="{% url 'tools:visa_checker' %}" class="text-[#1980e6] hover:underline">Check Now →</a>
             </div>
 
             <!-- Points Calculator -->
@@ -23,7 +23,7 @@
                 </div>
                 <h3 class="text-lg font-semibold mb-2">Points Calculator</h3>
                 <p class="text-gray-600 mb-4">Calculate your immigration points score.</p>
-                <button class="text-[#1980e6] hover:underline">Calculate →</button>
+                <a href="{% url 'tools:points_calculator' %}" class="text-[#1980e6] hover:underline">Calculate →</a>
             </div>
 
             <!-- Cost Estimator -->
@@ -35,19 +35,20 @@
                 </div>
                 <h3 class="text-lg font-semibold mb-2">Cost Estimator</h3>
                 <p class="text-gray-600 mb-4">Estimate immigration and living costs.</p>
-                <button class="text-[#1980e6] hover:underline">Estimate →</button>
+                <a href="{% url 'tools:cost_estimator' %}" class="text-[#1980e6] hover:underline">Estimate →</a>
             </div>
 
             <!-- Document Checker -->
             <div class="p-6 border rounded-xl hover:shadow-lg transition-shadow">
                 <div class="w-12 h-12 bg-blue-100 rounded-full mb-4 flex items-center justify-center">
                     <svg class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold mb-2">Document Checker</h3>
-                <p class="text-gray-600 mb-4">Get your required documents checklist.</p>
-                <button class="text-[#1980e6] hover:underline">Check Docs →</button>
+                <h3 class="text-lg font-semibold mb-2">Cover Letter AI</h3>
+                <p class="text-gray-600 mb-4">Generate professional cover letters instantly.</p>
+                <a href="{% url 'tools:cover_letters' %}" class="text-[#1980e6] hover:underline">Write Now →</a>
             </div>
 
             <!-- Timeline Planner -->
@@ -59,7 +60,7 @@
                 </div>
                 <h3 class="text-lg font-semibold mb-2">Timeline Planner</h3>
                 <p class="text-gray-600 mb-4">Plan your immigration timeline.</p>
-                <button class="text-[#1980e6] hover:underline">Plan Now →</button>
+                <a href="{% url 'tools:timeline_planner' %}" class="text-[#1980e6] hover:underline">Plan Now →</a>
             </div>
 
             <!-- Language Test -->
@@ -71,7 +72,7 @@
                 </div>
                 <h3 class="text-lg font-semibold mb-2">Language Test</h3>
                 <p class="text-gray-600 mb-4">Practice language tests for immigration.</p>
-                <button class="text-[#1980e6] hover:underline">Start Test →</button>
+                <a href="{% url 'tools:language_test' %}" class="text-[#1980e6] hover:underline">Start Test →</a>
             </div>
 
             <!-- Job Search -->
@@ -83,7 +84,7 @@
                 </div>
                 <h3 class="text-lg font-semibold mb-2">Job Search</h3>
                 <p class="text-gray-600 mb-4">Find jobs that sponsor work visas.</p>
-                <button class="text-[#1980e6] hover:underline">Search Jobs →</button>
+                <a href="{% url 'tools:job_search' %}" class="text-[#1980e6] hover:underline">Search Jobs →</a>
             </div>
 
             <!-- School Finder -->
@@ -96,14 +97,14 @@
                 </div>
                 <h3 class="text-lg font-semibold mb-2">School Finder</h3>
                 <p class="text-gray-600 mb-4">Find schools accepting international students.</p>
-                <button class="text-[#1980e6] hover:underline">Find Schools →</button>
+                <a href="{% url 'tools:school_finder' %}" class="text-[#1980e6] hover:underline">Find Schools →</a>
             </div>
         </div>
 
         <div class="text-center mt-12">
-            <button class="px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors">
+            <a href="{% url 'tools:cover_letters' %}" class="px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors inline-block">
                 Access All Tools
-            </button>
+            </a>
         </div>
     </div>
 </section>
