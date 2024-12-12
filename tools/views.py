@@ -323,4 +323,6 @@ def test_openai(request):
             'message': f'Error testing OpenAI: {str(e)}'
         })
 
+def all_tools(request):
+    return render(request, 'tools/all-tools.html')
  

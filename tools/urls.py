@@ -21,4 +21,5 @@ urlpatterns = [
     path('tourist-invitation-cover-letter/', views.tourist_invitation_cover_letter, name='tourist_invitation_cover_letter'),
     path('cover-letters/', views.cover_letters, name='cover_letters'),
     path('test-openai/', views.test_openai, name='test-openai'),
+    path('all-tools/', views.all_tools, name='all_tools'),
 ]
