@@ -80,7 +80,226 @@ def job_search(request):
     return render(request, 'tools/job_search.html')
 
 def school_finder(request):
-    return render(request, 'tools/school_finder.html')
+    # Sample school data (move this outside the function or to a separate file)
+    sample_schools = {
+        'usa': [
+            {
+                'name': 'Harvard University',
+                'location': 'Cambridge, USA',
+                'logo': 'path/to/harvard-logo.png',
+                'tuition': 51925,  # Stored as number for easier filtering
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'work_opportunities': True,
+                'housing_available': True,
+                'website': 'https://www.harvard.edu',
+                'fields_of_study': ['Business', 'Law', 'Medicine', 'Engineering'],
+                'ranking': '#1 in USA'
+            },
+            {
+                'name': 'MIT',
+                'location': 'Massachusetts, USA',
+                'logo': 'path/to/mit-logo.png',
+                'tuition': '$53,790',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.mit.edu',
+                'fields_of_study': ['Engineering', 'Computer Science', 'Business'],
+                'ranking': '#2 in USA'
+            },
+
+        ],
+        'uk': [
+            {
+                'name': 'University of Oxford',
+                'location': 'Oxford, UK',
+                'logo': 'path/to/oxford-logo.png',
+                'tuition': '£26,770',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.ox.ac.uk',
+                'fields_of_study': ['Arts', 'Sciences', 'Medicine'],
+                'ranking': '#1 in UK'
+            },
+            {
+                'name': 'University of Cambridge',
+                'location': 'Cambridge, UK',
+                'logo': 'path/to/cambridge-logo.png',
+                'tuition': '£27,426',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.cam.ac.uk',
+                'fields_of_study': ['Engineering', 'Business', 'Law'],
+                'ranking': '#2 in UK'
+            },
+        ],
+         'canada': [
+            {
+                'name': 'University of Toronto',
+                'location': 'Toronto, Canada',
+                'logo': 'path/to/uoft-logo.png',
+                'tuition': 'CAD 45,900',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.utoronto.ca',
+                'fields_of_study': ['Arts', 'Science', 'Medicine'],
+                'ranking': '#1 in Canada'
+            },
+            {
+                'name': 'McGill University',
+                'location': 'Montreal, Canada',
+                'logo': 'path/to/mcgill-logo.png',
+                'tuition': 'CAD 45,500',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.mcgill.ca',
+                'fields_of_study': ['Engineering', 'Medicine', 'Business'],
+                'ranking': '#2 in Canada'
+            },
+        ],
+        'australia': [
+            {
+                'name': 'University of Melbourne',
+                'location': 'Melbourne, Australia',
+                'logo': 'path/to/unimelb-logo.png',
+                'tuition': 'AUD 45,000',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.unimelb.edu.au',
+                'fields_of_study': ['Arts', 'Science', 'Engineering'],
+                'ranking': '#1 in Australia'
+            },
+            {
+                'name': 'University of Sydney',
+                'location': 'Sydney, Australia',
+                'logo': 'path/to/usyd-logo.png',
+                'tuition': 'AUD 46,000',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.sydney.edu.au',
+                'fields_of_study': ['Medicine', 'Business', 'Law'],
+                'ranking': '#2 in Australia'
+            },
+        ],
+        'germany': [
+            {
+                'name': 'Technical University of Munich',
+                'location': 'Munich, Germany',
+                'logo': 'path/to/tum-logo.png',
+                'tuition': '€0 (Public University)',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.tum.de',
+                'fields_of_study': ['Engineering', 'Computer Science', 'Medicine'],
+                'ranking': '#1 in Germany'
+            },
+            {
+                'name': 'Ludwig Maximilian University',
+                'location': 'Munich, Germany',
+                'logo': 'path/to/lmu-logo.png',
+                'tuition': '€0 (Public University)',
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'website': 'https://www.lmu.de',
+                'fields_of_study': ['Arts', 'Sciences', 'Business'],
+                'ranking': '#2 in Germany'
+            },
+        ]
+    }
+
+    if request.method == 'POST':
+        # Get all filter parameters
+        filters = {
+            'country': request.POST.get('country', ''),
+            'program_level': request.POST.get('program_level', ''),
+            'field_of_study': request.POST.get('field_of_study', ''),
+            'tuition_range': request.POST.get('tuition_range', ''),
+            'scholarships_available': request.POST.get('scholarships_available') == 'true',
+            'work_opportunities': request.POST.get('work_opportunities') == 'true',
+            'housing_available': request.POST.get('housing_available') == 'true'
+        }
+
+        # Get schools for selected country
+        schools = sample_schools.get(filters['country'].lower(), [])
+
+        # Apply filters
+        filtered_schools = []
+        for school in schools:
+            # Check program level
+            if filters['program_level'] and filters['program_level'] not in [p.lower() for p in school['programs']]:
+                continue
+
+            # Check field of study
+            if filters['field_of_study'] and filters['field_of_study'] not in [f.lower() for f in school['fields_of_study']]:
+                continue
+
+            # Check tuition range
+            if filters['tuition_range']:
+                tuition = school['tuition']
+                range_min, range_max = map(int, filters['tuition_range'].split('-')) if '-' in filters['tuition_range'] else (30000, float('inf'))
+                if not (range_min <= tuition <= range_max):
+                    continue
+
+            # Check additional filters
+            if filters['scholarships_available'] and not school['scholarships_available']:
+                continue
+            if filters['work_opportunities'] and not school['work_opportunities']:
+                continue
+            if filters['housing_available'] and not school['housing_available']:
+                continue
+
+            filtered_schools.append(school)
+
+        if not filtered_schools:
+            return JsonResponse({
+                'status': 'no_results',
+                'message': 'No schools found matching your criteria.',
+                'schools': []
+            })
+
+        return JsonResponse({
+            'status': 'success',
+            'message': f'Found {len(filtered_schools)} schools matching your criteria.',
+            'schools': filtered_schools
+        })
+
+    # GET request - render initial page
+    context = {
+        'page_title': 'School Finder',
+        'page_description': 'Find the perfect school matching your preferences, budget, and academic goals.',
+        'filters': {
+            'countries': list(sample_schools.keys()),
+            'program_levels': [
+                {'value': 'undergraduate', 'label': 'Undergraduate'},
+                {'value': 'graduate', 'label': 'Graduate'},
+                {'value': 'masters', 'label': 'Masters'},
+                {'value': 'phd', 'label': 'PhD'}
+            ],
+            'fields_of_study': [
+                {'value': 'business', 'label': 'Business'},
+                {'value': 'engineering', 'label': 'Engineering'},
+                {'value': 'medicine', 'label': 'Medicine'},
+                {'value': 'law', 'label': 'Law'},
+                {'value': 'computer_science', 'label': 'Computer Science'},
+                {'value': 'arts', 'label': 'Arts'},
+                {'value': 'sciences', 'label': 'Sciences'},
+                {'value': 'architecture', 'label': 'Architecture'}
+            ],
+            'tuition_ranges': [
+                {'value': '0-10000', 'label': '$0 - $10,000'},
+                {'value': '10000-20000', 'label': '$10,000 - $20,000'},
+                {'value': '20000-30000', 'label': '$20,000 - $30,000'},
+                {'value': '30000-plus', 'label': '$30,000+'}
+            ],
+            'additional_filters': [
+                {'id': 'scholarships_available', 'label': 'Scholarships Available'},
+                {'id': 'work_opportunities', 'label': 'Work Opportunities'},
+                {'id': 'housing_available', 'label': 'Housing Available'}
+            ]
+        }
+    }
+    
+    return render(request, 'tools/school_finder.html', context)
 
 import json
 from django.http import JsonResponse

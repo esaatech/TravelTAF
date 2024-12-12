@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+{% include 'tools/components/tools-hero-section.html' %}
+
+<!-- Search Filters -->
+<section class="bg-white py-8 border-b">
+    <div class="max-w-7xl mx-auto px-4">
+        <form id="school-search-form" class="space-y-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Country Filter -->
+                <div class="space-y-2">
+                    <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                    <select id="country" name="country" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Select Country</option>
+                        {% for country in filters.countries %}
+                            <option value="{{ country }}">{{ country|title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Program Level -->
+                <div class="space-y-2">
+                    <label for="program_level" class="block text-sm font-medium text-gray-700">Program Level</label>
+                    <select id="program_level" name="program_level" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Select Level</option>
+                        {% for program in filters.program_levels %}
+                            <option value="{{ program.value }}">{{ program.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Field of Study -->
+                <div class="space-y-2">
+                    <label for="field_of_study" class="block text-sm font-medium text-gray-700">Field of Study</label>
+                    <select id="field_of_study" name="field_of_study" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Select Field</option>
+                        {% for field in filters.fields_of_study %}
+                            <option value="{{ field.value }}">{{ field.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Tuition Range -->
+                <div class="space-y-2">
+                    <label for="tuition_range" class="block text-sm font-medium text-gray-700">Tuition Range</label>
+                    <select id="tuition_range" name="tuition_range" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Select Range</option>
+                        {% for range in filters.tuition_ranges %}
+                            <option value="{{ range.value }}">{{ range.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Additional Filters -->
+            <div class="flex flex-wrap gap-4">
+                {% for filter in filters.additional_filters %}
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" 
+                               id="{{ filter.id }}" 
+                               name="{{ filter.id }}" 
+                               class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-600">{{ filter.label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+
+            <!-- Search Button -->
+            <div class="text-center">
+                <button type="submit" id="search-button" class="px-8 py-3 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors">
+                    Search Schools
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Results Section -->
+<section id="results-section" class="bg-gray-50 py-12 hidden">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Results Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">Search Results</h2>
+            <select id="sort-select" class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="relevance">Sort by Relevance</option>
+                <option value="tuition-low">Tuition: Low to High</option>
+                <option value="tuition-high">Tuition: High to Low</option>
+                <option value="ranking">Ranking</option>
+            </select>
+        </div>
+
+        <!-- Results Container -->
+        <div id="schools-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Schools will be dynamically inserted here -->
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="mt-12 flex justify-center">
+            <!-- Pagination will be dynamically inserted here -->
+        </div>
+    </div>
+</section>
+
+<!-- School Card Template -->
+<template id="school-card-template">
+    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div class="p-6">
+            <div class="flex items-center mb-4">
+                <img class="school-logo w-12 h-12 object-contain mr-4" alt="University Logo">
+                <div>
+                    <h3 class="school-name text-lg font-semibold"></h3>
+                    <p class="school-location text-sm text-gray-600"></p>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Tuition Fee:</span>
+                    <span class="school-tuition font-medium"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Programs:</span>
+                    <span class="school-programs font-medium"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Scholarships:</span>
+                    <span class="school-scholarships font-medium text-green-600"></span>
+                </div>
+            </div>
+            <div class="mt-6 space-y-3">
+                <a class="school-details block text-center px-4 py-2 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors">
+                    View Details
+                </a>
+                <a class="school-website block text-center px-4 py-2 border border-[#1980e6] text-[#1980e6] rounded-full hover:bg-blue-50 transition-colors">
+                    Visit Website
+                </a>
+            </div>
+        </div>
+    </div>
+</template>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Will add JavaScript in the next response
+</script>
+{% endblock %}
