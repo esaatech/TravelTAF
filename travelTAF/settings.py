@@ -131,6 +131,31 @@ WSGI_APPLICATION = 'travelTAF.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# Comment out or remove the MySQL configuration
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mysql.connector.django',
+#         'NAME': 'traveltaf',
+#         'USER': 'traveltaf-user',
+#         'PASSWORD': 'Nawoitomo@1985',
+#         'HOST': os.getenv('DB_HOST', '35.197.66.221'),
+#         'PORT': '3306',
+#     }
+# }
+
+
+""" 
+
 DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
@@ -149,7 +174,7 @@ if os.getenv('CLOUD_RUN', False):
         'unix_socket': '/cloudsql/esaasolution:us-west1:traveltaf-db'
     }
 
-
+"""
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
