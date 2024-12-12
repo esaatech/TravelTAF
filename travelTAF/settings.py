@@ -137,13 +137,17 @@ DATABASES = {
         'NAME': 'traveltaf',
         'USER': 'traveltaf-user',
         'PASSWORD': 'Nawoitomo@1985',
-        'HOST': '35.197.66.221',  # Your Cloud SQL IP
-        'PORT': '3306',           # Default MySQL port
-        'OPTIONS': {
-            'autocommit': True,
-        }
+        'HOST': os.getenv('DB_HOST', '35.197.66.221'),
+        'PORT': '3306',
     }
 }
+
+# If running on Cloud Run
+if os.getenv('CLOUD_RUN', False):
+    DATABASES['default']['HOST'] = '/cloudsql/esaasolution:us-west1:traveltaf-db'
+    DATABASES['default']['OPTIONS'] = {
+        'unix_socket': '/cloudsql/esaasolution:us-west1:traveltaf-db'
+    }
 
 
 # Password validation
