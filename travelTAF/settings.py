@@ -33,7 +33,8 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
     'https://traveltaf.com',
-    'https://www.traveltaf.com',
+    'https://*.traveltaf.com',
+    'https://*.run.app',  # For default Cloud Run domain
 ]
 
 
@@ -247,6 +248,22 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For developm
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'your-email@gmail.com'
 # EMAIL_HOST_USER_PASSWORD = 'your-app-specific-password'
+
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = [
+    'https://traveltaf.com',
+    'https://*.traveltaf.com',
+    'https://*.run.app',  # For default Cloud Run domain
+]
+
+# If you're using CORS, also add:
+CORS_ALLOWED_ORIGINS = [
+    'https://traveltaf.com',
+    'https://*.traveltaf.com',
+    'https://*.run.app',
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 
 
