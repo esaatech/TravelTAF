@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const schoolsContainer = document.getElementById('schools-container');
     const sortSelect = document.getElementById('sort-select');
     console.log("school finder");
-    // Handle form submission
+    // Handle form submission only on button click
     searchForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         console.log('Form submitted');
@@ -175,13 +175,4 @@ document.addEventListener('DOMContentLoaded', function() {
     window.retrySearch = function() {
         searchForm.dispatchEvent(new Event('submit'));
     }
-
-    // Auto-submit on filter changes
-    const filterInputs = searchForm.querySelectorAll('select, input[type="checkbox"]');
-    filterInputs.forEach(input => {
-        input.addEventListener('change', () => {
-            if (resultsSection.classList.contains('hidden')) return;
-            searchForm.dispatchEvent(new Event('submit'));
-        });
-    });
 });
