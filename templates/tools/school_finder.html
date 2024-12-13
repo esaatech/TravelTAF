@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <!-- Hero Section -->
 {% include 'tools/components/tools-hero-section.html' %}
@@ -15,7 +15,7 @@
                     <select id="country" name="country" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">Select Country</option>
                         {% for country in filters.countries %}
-                            <option value="{{ country }}">{{ country|title }}</option>
+                            <option value="{{ country.value }}">{{ country.label }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -142,7 +142,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    // Will add JavaScript in the next response
-</script>
+
+
 {% endblock %}
