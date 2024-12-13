@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
             schoolCard.innerHTML = `
                 <div class="p-6">
                     <div class="flex items-center mb-4">
-                        <img src="${school.logo}" alt="${school.name} Logo" class="w-12 h-12 object-contain mr-4">
                         <div>
                             <h3 class="text-lg font-semibold">${school.name}</h3>
                             <p class="text-sm text-gray-600">${school.location}</p>

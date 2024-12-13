@@ -88,7 +88,7 @@ def get_filtered_schools(country, program_level, field_of_study, tuition_range):
             {
                 'id': 'harvard',
                 'name': 'Harvard University',
-                'location': 'Cambridge, USA',
+                'location': 'Harvard, Massachusetts, USA',
                 'logo': '/static/images/schools/harvard.png',
                 'tuition': 51925,
                 'programs': ['Undergraduate', 'Graduate', 'PhD'],
@@ -100,18 +100,60 @@ def get_filtered_schools(country, program_level, field_of_study, tuition_range):
                 'ranking': '#1 in USA'
             },
             {
-                'id': 'mit',
-                'name': 'MIT',
-                'location': 'Massachusetts, USA',
-                'logo': '/static/images/schools/mit.png',
-                'tuition': 53790,
+                'id': 'berea',
+                'name': 'Berea College',
+                'location': 'Berea, Kentucky, USA',
+                'logo': '/static/images/schools/berea.png',
+                'tuition': 0,
+                'programs': ['Undergraduate'],
+                'scholarships_available': True,
+                'work_opportunities': True,
+                'housing_available': True,
+                'website': 'https://www.berea.edu',
+                'fields_of_study': ['Arts', 'Sciences', 'Business'],
+                'ranking': 'Top 50 Liberal Arts Colleges'
+            },
+            {
+                'id': 'community-college',
+                'name': 'Santa Monica College',
+                'location': 'Santa Monica, California, USA',
+                'logo': '/static/images/schools/smc.png',
+                'tuition': 8000,
+                'programs': ['Undergraduate'],
+                'scholarships_available': True,
+                'work_opportunities': True,
+                'housing_available': False,
+                'website': 'https://www.smc.edu',
+                'fields_of_study': ['Business', 'Arts', 'Computer Science'],
+                'ranking': 'Top Community College'
+            },
+            {
+                'id': 'state-university',
+                'name': 'University of Illinois',
+                'location': 'Urbana-Champaign, Illinois, USA',
+                'logo': '/static/images/schools/uiuc.png',
+                'tuition': 15000,
                 'programs': ['Undergraduate', 'Graduate', 'PhD'],
                 'scholarships_available': True,
                 'work_opportunities': True,
                 'housing_available': True,
-                'website': 'https://www.mit.edu',
-                'fields_of_study': ['Engineering', 'Computer Science', 'Business'],
-                'ranking': '#2 in USA'
+                'website': 'https://illinois.edu',
+                'fields_of_study': ['Engineering', 'Business', 'Sciences'],
+                'ranking': 'Top 50 National'
+            },
+            {
+                'id': 'private-university',
+                'name': 'Boston University',
+                'location': 'Boston, Massachusetts, USA',
+                'logo': '/static/images/schools/bu.png',
+                'tuition': 28000,
+                'programs': ['Undergraduate', 'Graduate', 'PhD'],
+                'scholarships_available': True,
+                'work_opportunities': True,
+                'housing_available': True,
+                'website': 'https://www.bu.edu',
+                'fields_of_study': ['Medicine', 'Law', 'Business', 'Arts'],
+                'ranking': 'Top 50 National'
             }
         ],
         'uk': [
