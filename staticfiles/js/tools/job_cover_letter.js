@@ -1,3 +1,7 @@
+console.log("job cover letter page loaded");
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('coverLetterForm');
     const results = document.getElementById('results');

@@ -1,28 +1,49 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Search functionality
-    const searchInput = document.querySelector('input[placeholder="Enter a country or region"]');
-    const searchButton = document.querySelector('button span.truncate').closest('button');
+    // Other existing code...
+});
+
+// FAQ Toggle Function
+function toggleFAQ(button) {
+    // Get the content div that follows the button
+    const content = button.nextElementSibling;
     
-    searchButton.addEventListener('click', function() {
-        const searchTerm = searchInput.value;
-        // Add your search logic here
-        console.log('Searching for:', searchTerm);
-    });
-
-    // Comparison button functionality
-    const compareButton = document.querySelector('button span.truncate:last-of-type').closest('button');
-    compareButton.addEventListener('click', function() {
-        // Add your comparison logic here
-        console.log('Starting comparison');
-    });
-
+    // Get the arrow icon
+    const arrow = button.querySelector('svg');
     
+    // Close all other FAQs
+    const allFAQs = document.querySelectorAll('.border.rounded-lg.divide-y .p-4');
+    allFAQs.forEach(faq => {
+        if (faq !== button.parentElement) {
+            const otherContent = faq.querySelector('div.hidden, div:not(.hidden)');
+            const otherArrow = faq.querySelector('svg');
+            if (otherContent && !otherContent.classList.contains('hidden')) {
+                otherContent.classList.add('hidden');
+                otherArrow.style.transform = 'rotate(0deg)';
+            }
+        }
+    });
+    
+    // Toggle current FAQ
+    content.classList.toggle('hidden');
+    
+    // Rotate arrow
+    arrow.style.transform = content.classList.contains('hidden') 
+        ? 'rotate(0deg)' 
+        : 'rotate(180deg)';
+}
 
-
-
-
-
-
+// Optional: Add keyboard accessibility
+document.addEventListener('DOMContentLoaded', function() {
+    const faqButtons = document.querySelectorAll('.border.rounded-lg.divide-y button');
+    
+    faqButtons.forEach(button => {
+        button.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleFAQ(button);
+            }
+        });
+    });
 });
 
 
