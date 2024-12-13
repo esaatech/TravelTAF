@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="text-center mt-12">
-        <form id="subscribeForm" class="inline-flex items-center">
+        <form id="subscribeForm" class="inline-flex items-center" data-subscription-form data-subscription-type="news">
             {% csrf_token %}
             <input type="email" 
                    name="email" 
@@ -35,7 +35,7 @@
                 Subscribe
             </button>
         </form>
-        <div id="subscribeMessage" class="mt-4 text-sm"></div>
+        <div id="subscribeMessage" class="mt-4 text-sm hidden"></div>
     </div>
 </section>
 

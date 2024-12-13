@@ -4,16 +4,16 @@
             <div class="lg:w-1/2 mb-8 lg:mb-0">
                 <h2 class="text-3xl font-bold mb-6">Stay Updated</h2>
                 <p class="text-gray-600 mb-6">Subscribe to our newsletter for the latest immigration updates.</p>
-                <form id="newsletter-form" class="flex gap-4">
+                <form id="newsletter-form" class="flex gap-4" data-subscription-form data-subscription-type="newsletter">
                     {% csrf_token %}
                     <input 
                         type="email" 
-                        id="subscriber-email"
                         name="email" 
                         placeholder="Enter your email" 
                         class="flex-1 px-4 py-3 border rounded-lg"
                         required
                     >
+                    <input type="hidden" name="subscription_type" value="newsletter">
                     <button 
                         type="submit" 
                         class="px-6 py-3 bg-[#1980e6] text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -22,14 +22,11 @@
                     </button>
                 </form>
                 <!-- Success/Error Messages -->
-                <div id="newsletter-message" class="mt-3 hidden">
-                    <p id="success-message" class="text-green-600 hidden">Thanks for subscribing!</p>
-                    <p id="error-message" class="text-red-600 hidden">Something went wrong. Please try again.</p>
-                </div>
+                <div id="newsletter-message" class="mt-3 hidden"></div>
             </div>
             <div class="lg:w-1/2">
                 <h2 class="text-3xl font-bold mb-6">Contact Us</h2>
-                <p class="text-gray-600 mb-6">Get in touch with our immigration experts.</p>
+                <p class="text-gray-600 mb-6">Get in touch with our immigration Partners.</p>
                 <button class="px-6 py-3 border-2 border-[#1980e6] text-[#1980e6] rounded-lg hover:bg-blue-50">
                     Schedule a Call
                 </button>

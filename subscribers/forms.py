@@ -10,7 +10,12 @@ class SubscriberForm(forms.ModelForm):
             }
         )
     )
+    subscription_type = forms.ChoiceField(
+        choices=Subscriber.SUBSCRIPTION_TYPES,
+        required=True,
+        widget=forms.HiddenInput()
+    )
 
     class Meta:
         model = Subscriber
-        fields = ['email']
+        fields = ['email', 'subscription_type']
