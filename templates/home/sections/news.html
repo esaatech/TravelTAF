@@ -8,7 +8,6 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for news in latest_news %}
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <!-- <img src="{% static 'images/svg/news_icons/'|add:news.category.slug|add:'.svg' %}" alt="{{ news.category.name }} Immigration News" class="w-full h-48 object-cover"> -->
                 <div class="p-6">
                     <span class="text-sm text-[#1980e6] font-semibold">{{ news.category.name }}</span>
                     <h3 class="text-xl font-semibold mt-2 mb-3">{{ news.title }}</h3>
@@ -24,12 +23,12 @@
     </div>
     <div class="text-center mt-12">
         <form id="subscribeForm" class="inline-flex items-center" data-subscription-form data-subscription-type="news">
-            {% csrf_token %}
             <input type="email" 
                    name="email" 
                    placeholder="Enter your email" 
                    class="px-4 py-2 border border-gray-300 rounded-l-full focus:outline-none focus:border-[#1980e6] w-64"
                    required>
+            <input type="hidden" name="subscription_type" value="news">
             <button type="submit" 
                     class="px-8 py-2 bg-[#1980e6] text-white rounded-r-full hover:bg-blue-700 transition-colors">
                 Subscribe
@@ -37,47 +36,4 @@
         </form>
         <div id="subscribeMessage" class="mt-4 text-sm hidden"></div>
     </div>
-</section>
-
-<script>
-document.getElementById('subscribeForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const form = this;
-    const messageDiv = document.getElementById('subscribeMessage');
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton.textContent;
-    
-    // Disable the submit button and show loading state
-    submitButton.disabled = true;
-    submitButton.textContent = 'Subscribing...';
-    
-    fetch('/subscribers/subscribe/', {
-        method: 'POST',
-        body: new FormData(form),
-        headers: {
-            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        messageDiv.textContent = data.message;
-        messageDiv.className = data.status === 'success' 
-            ? 'mt-4 text-sm text-green-600' 
-            : 'mt-4 text-sm text-red-600';
-            
-        if (data.status === 'success') {
-            form.reset();
-        }
-    })
-    .catch(error => {
-        messageDiv.textContent = 'An error occurred. Please try again.';
-        messageDiv.className = 'mt-4 text-sm text-red-600';
-    })
-    .finally(() => {
-        // Re-enable the submit button and restore original text
-        submitButton.disabled = false;
-        submitButton.textContent = originalButtonText;
-    });
-});
-</script> 
+</section> 

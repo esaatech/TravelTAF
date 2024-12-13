@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_exempt
 from .forms import SubscriberForm
 from .models import Subscriber
 
@@ -9,7 +9,8 @@ from .models import Subscriber
 
 
 @require_POST
-@csrf_protect
+@csrf_exempt  # Add this decorator
+
 def subscribe(request):
     # Debug prints
     print("POST data received:", request.POST)
