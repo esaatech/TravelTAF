@@ -1,3 +1,98 @@
+/**
+ * Visa Requirements Checker
+ * 
+ * A comprehensive tool for checking visa requirements between countries.
+ * Provides detailed visa information, requirements, and processing details.
+ * 
+ * Data Structure:
+ * countries[] - Array of country objects containing:
+ *   - code: ISO 2-letter country code
+ *   - name: Full country name
+ * 
+ * Features:
+ * - Country selection dropdowns
+ * - Country swap functionality
+ * - Real-time visa requirement checking
+ * - Detailed visa status display
+ * - Processing requirements display
+ * - Document requirements listing
+ * 
+ * Required DOM Elements:
+ * #fromCountry - Source country dropdown
+ * #toCountry - Destination country dropdown
+ * #swapCountries - Country swap button
+ * #checkRequirements - Submit button
+ * #resultsSection - Results container
+ * #loadingState - Loading indicator
+ * #resultsContent - Results content area
+ * #visaStatus - Visa status display
+ * #detailedRequirements - Requirements details
+ * 
+ * Visa Status Types:
+ * - visa_required: Standard visa required
+ * - visa_free: No visa needed
+ * - visa_on_arrival: Visa available at entry
+ * - e_visa: Electronic visa available
+ * 
+ * API Response Structure:
+ * {
+ *   status: string (visa status type),
+ *   details: {
+ *     processing_time: string,
+ *     validity: string,
+ *     cost: string,
+ *     max_stay: string,
+ *     entry_type: string,
+ *     requirements: string[],
+ *     additional_info: string[]
+ *   }
+ * }
+ * 
+ * Status Display Colors:
+ * - visa_required: Red
+ * - visa_free: Green
+ * - visa_on_arrival: Blue
+ * - e_visa: Yellow
+ * 
+ * Functions:
+ * populateCountryDropdowns()
+ * - Populates country selection dropdowns
+ * - Sorts countries alphabetically
+ * - Adds default option
+ * 
+ * getCookie(name)
+ * - Retrieves CSRF token for form submission
+ * - Required for POST requests
+ * 
+ * Error Handling:
+ * - Empty country selection validation
+ * - API error handling
+ * - Network error handling
+ * - User feedback display
+ * 
+ * Security:
+ * - CSRF protection
+ * - Input validation
+ * - Secure form submission
+ * 
+ * UI Features:
+ * - Loading states
+ * - Error messages
+ * - Dynamic content updates
+ * - Responsive design
+ * - Color-coded status display
+ * 
+ * Dependencies:
+ * - Modern browser with Fetch API
+ * - CSRF token implementation
+ * - Tailwind CSS for styling
+ * 
+ * Browser Support:
+ * - Modern browsers with ES6+ support
+ * - FormData API support
+ * - Fetch API support
+ */
+
 // Country data
 const countries = [
     {code: 'AF', name: 'Afghanistan'},
