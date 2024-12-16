@@ -142,6 +142,10 @@
     border: 1px solid #ddd;
     border-radius: 3px;
     cursor: pointer;
+    min-width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .format-btn:hover {
@@ -150,6 +154,7 @@
 
 .format-btn.active {
     background: #e0e0e0;
+    border-color: #999;
 }
 
 .heading-select {
@@ -164,9 +169,28 @@
     border: 1px solid #ddd;
     border-radius: 0 0 4px 4px;
     background: #fff;
+    margin-top: -1px;
 }
 
 .text-editor:focus {
     outline: none;
     border-color: #2271b1;
+}
+
+/* Style for formatted text */
+.text-editor b, .text-editor strong {
+    font-weight: bold;
+}
+
+.text-editor i, .text-editor em {
+    font-style: italic;
+}
+
+.text-editor u {
+    text-decoration: underline;
+}
+
+.text-editor a {
+    color: #2271b1;
+    text-decoration: underline;
 }

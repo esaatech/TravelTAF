@@ -50,17 +50,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 blockContent = `
                     <div class="block-header">Text Block</div>
                     <div class="text-formatting-toolbar">
-                        <button type="button" class="format-btn" data-format="bold" title="Bold">
-                            <i class="fas fa-bold"></i>
+                        <button type="button" class="format-btn" data-format="bold">
+                            <strong>B</strong>
                         </button>
-                        <button type="button" class="format-btn" data-format="italic" title="Italic">
-                            <i class="fas fa-italic"></i>
+                        <button type="button" class="format-btn" data-format="italic">
+                            <em>I</em>
                         </button>
-                        <button type="button" class="format-btn" data-format="underline" title="Underline">
-                            <i class="fas fa-underline"></i>
+                        <button type="button" class="format-btn" data-format="underline">
+                            <u>U</u>
                         </button>
-                        <button type="button" class="format-btn" data-format="link" title="Add Link">
-                            <i class="fas fa-link"></i>
+                        <button type="button" class="format-btn" data-format="link">
+                            🔗
                         </button>
                         <select class="heading-select">
                             <option value="p">Paragraph</option>
@@ -174,6 +174,85 @@ document.addEventListener('DOMContentLoaded', function() {
                 const cols = parseInt(block.querySelector('.cols').value) || 2;
                 console.log(`Creating table with ${rows} rows and ${cols} columns`);
                 createTable(block, rows, cols);
+            });
+        }
+
+        if (block.dataset.type === 'text') {
+            const toolbar = block.querySelector('.text-formatting-toolbar');
+            const editor = block.querySelector('.text-editor');
+
+            // Format buttons
+            toolbar.querySelectorAll('.format-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Make sure editor has focus
+                    editor.focus();
+                    
+                    const format = btn.dataset.format;
+                    
+                    if (format === 'link') {
+                        const url = prompt('Enter URL:');
+                        if (url) {
+                            document.execCommand('createLink', false, url);
+                        }
+                    } else {
+                        // Check current state of the command
+                        const isFormatActive = document.queryCommandState(format);
+                        
+                        if (isFormatActive) {
+                            // If format is active, remove it
+                            if (format === 'bold') document.execCommand('removeFormat', false, 'bold');
+                            if (format === 'italic') document.execCommand('removeFormat', false, 'italic');
+                            if (format === 'underline') document.execCommand('removeFormat', false, 'underline');
+                            btn.classList.remove('active');
+                        } else {
+                            // If format is not active, apply it
+                            document.execCommand(format, false, null);
+                            btn.classList.add('active');
+                        }
+                    }
+                    
+                    // Update toolbar state after format change
+                    updateToolbarState(toolbar);
+                });
+            });
+
+            // Function to update toolbar state
+            function updateToolbarState(toolbar) {
+                const formats = ['bold', 'italic', 'underline'];
+                formats.forEach(format => {
+                    const button = toolbar.querySelector(`[data-format="${format}"]`);
+                    if (button) {
+                        const isActive = document.queryCommandState(format);
+                        button.classList.toggle('active', isActive);
+                    }
+                });
+            }
+
+            // Update toolbar state when text is selected
+            editor.addEventListener('mouseup', () => {
+                updateToolbarState(toolbar);
+            });
+
+            // Update toolbar state when keyboard is used
+            editor.addEventListener('keyup', () => {
+                updateToolbarState(toolbar);
+            });
+
+            // Heading select
+            const headingSelect = toolbar.querySelector('.heading-select');
+            if (headingSelect) {
+                headingSelect.addEventListener('change', () => {
+                    editor.focus();
+                    const tag = headingSelect.value;
+                    document.execCommand('formatBlock', false, `<${tag}>`);
+                });
+            }
+
+            // Update content when text changes
+            editor.addEventListener('input', () => {
+                updateContentInput();
             });
         }
     }
