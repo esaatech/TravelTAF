@@ -49,7 +49,27 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'text':
                 blockContent = `
                     <div class="block-header">Text Block</div>
-                    <textarea class="block-content" rows="4"></textarea>
+                    <div class="text-formatting-toolbar">
+                        <button type="button" class="format-btn" data-format="bold" title="Bold">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button type="button" class="format-btn" data-format="italic" title="Italic">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button type="button" class="format-btn" data-format="underline" title="Underline">
+                            <i class="fas fa-underline"></i>
+                        </button>
+                        <button type="button" class="format-btn" data-format="link" title="Add Link">
+                            <i class="fas fa-link"></i>
+                        </button>
+                        <select class="heading-select">
+                            <option value="p">Paragraph</option>
+                            <option value="h2">Heading 2</option>
+                            <option value="h3">Heading 3</option>
+                            <option value="h4">Heading 4</option>
+                        </select>
+                    </div>
+                    <div class="text-editor" contenteditable="true"></div>
                 `;
                 break;
             case 'image':
