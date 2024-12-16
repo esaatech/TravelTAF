@@ -1,3 +1,96 @@
+/**
+ * Job Cover Letter Generator
+ * 
+ * This script manages a dynamic form for generating cover letters with the following features:
+ * - Dual input methods for resume (manual entry or file upload)
+ * - Dual input methods for job details (structured or unstructured)
+ * - Drag and drop file upload support
+ * - Real-time form field toggling
+ * - Asynchronous form submission with loading states
+ * - Error handling with visual feedback
+ * 
+ * Required DOM Elements:
+ * #coverLetterForm - Main form container
+ * #results - Results display container
+ * #coverLetterContent - Generated cover letter container
+ * #manual-entry-section - Manual resume entry section
+ * #upload-section - Resume file upload section
+ * #structured-job-section - Structured job details section
+ * #unstructured-job-section - Unstructured job details section
+ * 
+ * Input Elements:
+ * input[name="input_method"] - Resume input method radio buttons
+ * input[name="job_input_method"] - Job input method radio buttons
+ * 
+ * File Upload Elements:
+ * #file-preview - File preview container
+ * #file-name - Filename display element
+ * #dropzone-content - Dropzone content container
+ */
+
+/* Function Documentation:
+
+handleResumeUpload(input)
+- Processes file selection
+- Updates UI with file preview
+- Parameters: input (HTMLInputElement) - File input element
+
+removeResume()
+- Clears file input value
+- Resets file preview UI
+- Cleans up FormData if present
+
+handleFileUpload(event)
+- Handles file input change events
+- Triggers file preview update
+- Parameters: event (Event) - File input change event
+
+showFilePreview(file)
+- Updates UI with file information
+- Parameters: file (File) - Selected file object
+
+getCookie(name)
+- Retrieves cookie value by name
+- Used for CSRF token
+- Parameters: name (string) - Cookie name to retrieve
+
+showError(message)
+- Displays error message with styling
+- Auto-removes after 5 seconds
+- Parameters: message (string) - Error message to display
+
+updateCoverLetterContent(coverLetter)
+- Formats and updates cover letter display
+- Handles line breaks and spacing
+- Parameters: coverLetter (string) - Cover letter content
+
+Event Handlers:
+- Resume input method toggle
+- Job input method toggle
+- Form submission
+- File drag and drop
+- File selection
+
+Form Submission Process:
+1. Prevents default form submission
+2. Shows loading state
+3. Collects form data
+4. Sends to backend endpoint
+5. Handles response/errors
+6. Updates UI with results
+
+Error Handling:
+- Network errors
+- Form validation
+- File upload errors
+- Server response errors
+
+Dependencies:
+- Modern browser with FormData support
+- CSRF token implementation
+- Tailwind CSS for styling classes
+*/
+
 console.log("job cover letter page loaded");
 
 

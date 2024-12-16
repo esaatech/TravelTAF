@@ -21,6 +21,7 @@ openai = "^1.57.0"
 pdfplumber = "^0.11.4"
 load-dotenv = "^0.1.0"
 mysql-connector-python = "^9.1.0"
+psycopg2-binary = "^2.9.10"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

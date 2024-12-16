@@ -1,4 +1,111 @@
-console.log("school finder page loaded");
+/**
+ * School Finder Application
+ * 
+ * A dynamic search interface for finding and filtering educational institutions.
+ * Provides real-time search results, sorting capabilities, and detailed school information.
+ * 
+ * Features:
+ * - Asynchronous school search
+ * - Dynamic results display
+ * - Sorting functionality (tuition, ranking)
+ * - Error handling
+ * - Filter reset capability
+ * 
+ * Required DOM Elements:
+ * #school-search-form - Main search form
+ * #results-section - Container for search results
+ * #schools-container - Grid container for school cards
+ * #sort-select - Dropdown for sorting options
+ * 
+ * API Endpoints:
+ * POST /tools/school-finder/ - Main search endpoint
+ * GET /tools/school-finder/details/{id}/ - School details endpoint
+ * 
+ * Functions Overview:
+ * 
+ * displayResults(schools)
+ * - Renders school cards with provided data
+ * - Creates interactive cards with school information
+ * - Displays tuition, programs, and scholarship info
+ * - Provides links to details and school website
+ * 
+ * displayNoResults(message)
+ * - Shows message when no schools match criteria
+ * - Provides option to reset filters
+ * 
+ * displayError(message)
+ * - Handles and displays error states
+ * - Provides retry option
+ * 
+ * Sorting Functions:
+ * getTuitionValue(schoolCard)
+ * - Extracts tuition value for sorting
+ * 
+ * getRankingValue(schoolCard)
+ * - Extracts ranking value for sorting
+ * 
+ * Helper Functions:
+ * getCookie(name)
+ * - Retrieves CSRF token for form submission
+ * 
+ * Global Functions:
+ * resetFilters()
+ * - Resets form and hides results
+ * 
+ * retrySearch()
+ * - Retries failed search
+ * 
+ * School Card Data Structure:
+ * {
+ *   name: string,
+ *   location: string,
+ *   tuition: number,
+ *   programs: string[],
+ *   scholarships_available: boolean,
+ *   website: string,
+ *   id: number
+ * }
+ * 
+ * Sort Options:
+ * - tuition-low: Ascending tuition
+ * - tuition-high: Descending tuition
+ * - ranking: By school ranking
+ * 
+ * Error Handling:
+ * - Network errors
+ * - Empty results
+ * - API errors
+ * 
+ * UI Features:
+ * - Loading states
+ * - Error messages
+ * - No results handling
+ * - Smooth transitions
+ * - Interactive cards
+ * 
+ * Dependencies:
+ * - Modern browser with Fetch API
+ * - ES6+ support
+ * - CSRF token implementation
+ * - Tailwind CSS for styling
+ * 
+ * Security:
+ * - CSRF protection
+ * - XHR header verification
+ * - Secure form submission
+ * 
+ * Performance:
+ * - Asynchronous data loading
+ * - Efficient DOM manipulation
+ * - Optimized sorting algorithms
+ * 
+ * Accessibility:
+ * - Semantic HTML structure
+ * - Interactive elements
+ * - Clear error states
+ * - Readable content
+ */
+
 
 
 document.addEventListener('DOMContentLoaded', function() {

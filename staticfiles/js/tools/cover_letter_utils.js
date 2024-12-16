@@ -1,3 +1,91 @@
+/**
+ * CoverLetterUtils Class Documentation
+ * 
+ * A utility class for managing cover letter functionality including:
+ * - File upload handling
+ * - Cover letter content management
+ * - PDF generation
+ * - Clipboard operations
+ * - Content editing
+ * - Email functionality
+ * - Toast notifications
+ * 
+ * Usage:
+ * const utils = new CoverLetterUtils();
+ * 
+ * Required HTML Elements:
+ * - File input element
+ * - File preview element with ID 'filePreview'
+ * - Clear file button with ID 'clearFile'
+ * - Results container with ID 'results'
+ * - Cover letter content div with ID 'coverLetterContent'
+ * - Copy button with ID 'copyButton'
+ * - Download button with ID 'downloadButton'
+ * - Edit button with ID 'editButton'
+ */
+
+/* Method Documentation:
+
+constructor()
+Initializes the CoverLetterUtils instance by:
+- Setting up element references
+- Calling initializeEventListeners()
+
+initializeEventListeners()
+Sets up event listeners for:
+- File upload handling
+- Clear file functionality
+- Copy to clipboard
+- PDF download
+- Content editing
+
+handleFileUpload()
+Handles file selection:
+- Updates file preview
+- Shows file name
+- Manages visibility of preview element
+
+clearFileUpload(event)
+Clears the selected file:
+- Creates new file input
+- Resets preview
+- Maintains event listeners
+
+copyToClipboard()
+Copies cover letter content to clipboard:
+- Uses navigator.clipboard API
+- Shows success/error toast
+
+downloadAsPDF()
+Generates and downloads PDF:
+- Uses html2pdf library
+- Configures PDF options
+- Handles errors with toast notifications
+
+makeEditable()
+Toggles content editability:
+- Switches between view/edit modes
+- Updates UI elements
+- Shows status toasts
+
+emailCoverLetter()
+Opens email client with cover letter:
+- Creates mailto link
+- Encodes content
+- Opens default email client
+
+showToast(message, isError)
+Displays notification toast:
+- Creates toast element
+- Handles animations
+- Supports success/error states
+- Auto-removes after delay
+
+Dependencies:
+- html2pdf.js for PDF generation
+- Modern browser with clipboard API support
+*/
+
 class CoverLetterUtils {
     constructor() {
         // File upload related elements

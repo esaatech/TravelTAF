@@ -1,6 +1,26 @@
+from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import News, NewsCategory
+
+class ContentBlockInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        # Validate content blocks structure
+        for form in self.forms:
+            if form.cleaned_data:
+                block_type = form.cleaned_data.get('block_type')
+                content = form.cleaned_data.get('content')
+                # Add validation logic here
+
+class NewsAdminForm(forms.ModelForm):
+    class Meta:
+        model = News
+        fields = '__all__'
+        widgets = {
+            'summary': forms.Textarea(attrs={'rows': 3}),
+            'content_blocks': forms.HiddenInput()  # Will be managed by custom JS
+        }
 
 @admin.register(NewsCategory)
 class NewsCategoryAdmin(admin.ModelAdmin):
@@ -10,106 +30,39 @@ class NewsCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
-    # Fields to display in the list view
-    list_display = (
-        'title',
-        'category_display',
-        'published_date',
-        'author',
-        'is_featured',
-        'is_published',
-        'image_preview'
-    )
-
-    # Fields that can be edited directly in the list view
-    list_editable = ('is_featured', 'is_published')
-
-    # Filters shown in the right sidebar
-    list_filter = (
-        'category',
-        'is_featured',
-        'is_published',
-        'published_date',
-        'author'
-    )
-
-    # Fields to search
-    search_fields = (
-        'title',
-        'content',
-        'author'
-    )
-
-    # Default ordering
-    ordering = ('-published_date',)
-
-    # Fields to automatically populate
+    form = NewsAdminForm
+    list_display = ('title', 'category', 'author', 'published_date', 'is_published', 'is_featured')
+    list_filter = ('category', 'is_published', 'is_featured', 'published_date')
+    search_fields = ('title', 'summary', 'author')
     prepopulated_fields = {'slug': ('title',)}
-
-    # Organize fields into fieldsets
+    
     fieldsets = (
-        ('Content', {
-            'fields': ('title', 'slug', 'content', 'image')
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'category', 'author', 'featured_image', 'summary')
         }),
-        ('Category & Status', {
-            'fields': ('category', 'is_featured', 'is_published')
+        ('Content Blocks', {
+            'fields': ('content_blocks',),
+            'classes': ('content-blocks-section',),  # CSS class for styling
+            'description': 'Add and manage content blocks below'
         }),
-        ('Author & Dates', {
-            'fields': ('author',),
+        ('Publishing', {
+            'fields': ('is_published', 'is_featured')
+        }),
+        ('Source Information', {
+            'fields': ('source_name', 'source_url'),
             'classes': ('collapse',)
         })
     )
 
-    # Number of items per page
-    list_per_page = 20
-
-    # Add date hierarchy navigation
-    date_hierarchy = 'published_date'
-
-    # Custom display methods
-    def category_display(self, obj):
-        return format_html(
-            '<span style="color: {};">{}</span>',
-            '#1980e6',
-            obj.category.name
-        )
-    category_display.short_description = 'Category'
-
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html(
-                '<img src="{}" style="max-height: 50px; max-width: 100px;"/>',
-                obj.image.url
-            )
-        return "No Image"
-    image_preview.short_description = 'Image Preview'
-
-    # Custom actions
-    actions = ['make_published', 'make_unpublished', 'mark_as_featured', 'unmark_as_featured']
-
-    def make_published(self, request, queryset):
-        queryset.update(is_published=True)
-    make_published.short_description = "Mark selected news as published"
-
-    def make_unpublished(self, request, queryset):
-        queryset.update(is_published=False)
-    make_unpublished.short_description = "Mark selected news as unpublished"
-
-    def mark_as_featured(self, request, queryset):
-        queryset.update(is_featured=True)
-    mark_as_featured.short_description = "Mark selected news as featured"
-
-    def unmark_as_featured(self, request, queryset):
-        queryset.update(is_featured=False)
-    unmark_as_featured.short_description = "Unmark selected news as featured"
-
-    # Add save message
-    def save_model(self, request, obj, form, change):
-        if not change:
-            obj.author = request.user.get_full_name() or request.user.username
-        super().save_model(request, obj, form, change)
-
     class Media:
         css = {
-            'all': ('css/custom_admin.css',)
+            'all': ('admin/css/content-blocks.css',)
         }
+        js = ('admin/js/content-blocks.js',)
+
+    def save_model(self, request, obj, form, change):
+        # Process content blocks before saving
+        if 'content_blocks' in form.cleaned_data:
+            blocks = form.cleaned_data['content_blocks']
+            # Add any processing logic here
+        super().save_model(request, obj, form, change)

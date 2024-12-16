@@ -1,3 +1,98 @@
+/**
+ * Visa Requirements Checker
+ * 
+ * A comprehensive tool for checking visa requirements between countries.
+ * Provides detailed visa information, requirements, and processing details.
+ * 
+ * Data Structure:
+ * countries[] - Array of country objects containing:
+ *   - code: ISO 2-letter country code
+ *   - name: Full country name
+ * 
+ * Features:
+ * - Country selection dropdowns
+ * - Country swap functionality
+ * - Real-time visa requirement checking
+ * - Detailed visa status display
+ * - Processing requirements display
+ * - Document requirements listing
+ * 
+ * Required DOM Elements:
+ * #fromCountry - Source country dropdown
+ * #toCountry - Destination country dropdown
+ * #swapCountries - Country swap button
+ * #checkRequirements - Submit button
+ * #resultsSection - Results container
+ * #loadingState - Loading indicator
+ * #resultsContent - Results content area
+ * #visaStatus - Visa status display
+ * #detailedRequirements - Requirements details
+ * 
+ * Visa Status Types:
+ * - visa_required: Standard visa required
+ * - visa_free: No visa needed
+ * - visa_on_arrival: Visa available at entry
+ * - e_visa: Electronic visa available
+ * 
+ * API Response Structure:
+ * {
+ *   status: string (visa status type),
+ *   details: {
+ *     processing_time: string,
+ *     validity: string,
+ *     cost: string,
+ *     max_stay: string,
+ *     entry_type: string,
+ *     requirements: string[],
+ *     additional_info: string[]
+ *   }
+ * }
+ * 
+ * Status Display Colors:
+ * - visa_required: Red
+ * - visa_free: Green
+ * - visa_on_arrival: Blue
+ * - e_visa: Yellow
+ * 
+ * Functions:
+ * populateCountryDropdowns()
+ * - Populates country selection dropdowns
+ * - Sorts countries alphabetically
+ * - Adds default option
+ * 
+ * getCookie(name)
+ * - Retrieves CSRF token for form submission
+ * - Required for POST requests
+ * 
+ * Error Handling:
+ * - Empty country selection validation
+ * - API error handling
+ * - Network error handling
+ * - User feedback display
+ * 
+ * Security:
+ * - CSRF protection
+ * - Input validation
+ * - Secure form submission
+ * 
+ * UI Features:
+ * - Loading states
+ * - Error messages
+ * - Dynamic content updates
+ * - Responsive design
+ * - Color-coded status display
+ * 
+ * Dependencies:
+ * - Modern browser with Fetch API
+ * - CSRF token implementation
+ * - Tailwind CSS for styling
+ * 
+ * Browser Support:
+ * - Modern browsers with ES6+ support
+ * - FormData API support
+ * - Fetch API support
+ */
+
 // Country data
 const countries = [
     {code: 'AF', name: 'Afghanistan'},
@@ -280,15 +375,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const fromCountry = document.getElementById('fromCountry').value;
         const toCountry = document.getElementById('toCountry').value;
         
-        // Debug CSRF token
-        const csrfToken = getCookie('csrftoken');
-        console.log('CSRF Token:', csrfToken); // This will show us if we're getting the token
-        
-        if (!csrfToken) {
-            console.error('No CSRF token found!');
-            return;
-        }
-
         if (!fromCountry || !toCountry) {
             alert('Please select both countries');
             return;
@@ -303,27 +389,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData();
         formData.append('fromCountry', fromCountry);
         formData.append('toCountry', toCountry);
-        formData.append('csrfmiddlewaretoken', csrfToken); // Add token to form data
 
         fetch('/tools/visa-checker/', {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': csrfToken,
-            },
-            credentials: 'include' // Changed from 'same-origin' to 'include'
-        })
-        .then(response => {
-            console.log('Response headers:', response.headers);
-            console.log('Response status:', response.status);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                'X-CSRFToken': getCookie('csrftoken')
             }
-            return response.json();
         })
+        .then(response => response.json())
         .then(data => {
-            console.log('Received data:', data); // Debug log
-            
             // Hide loading state
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('resultsContent').classList.remove('hidden');
@@ -377,23 +452,21 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         })
         .catch(error => {
-            console.error('Full error:', error); // Debug log
+            console.error('Error:', error);
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('resultsContent').innerHTML = `
                 <div class="text-red-600 text-center">
-                    <p>Error: ${error.message}</p>
-                    <p class="text-sm mt-2">Please try again or contact support if this persists.</p>
+                    An error occurred while fetching visa requirements. Please try again.
                 </div>
             `;
             document.getElementById('resultsContent').classList.remove('hidden');
         });
     });
 
-    // Updated getCookie function with debugging
+    // Helper function to get CSRF token
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
-            console.log('All cookies:', document.cookie); // Debug all cookies
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
