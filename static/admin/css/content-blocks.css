@@ -63,3 +63,65 @@
 .block-controls button:hover {
     background: #e0e0e0;
 }
+
+.content-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.content-table th,
+.content-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.content-table input {
+    width: 100%;
+    border: none;
+    padding: 4px;
+}
+
+.content-table th input {
+    font-weight: bold;
+}
+
+.table-controls {
+    margin: 15px 0;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+}
+
+.table-controls input {
+    width: 80px;
+    margin-right: 10px;
+}
+
+.create-table-btn {
+    padding: 8px 16px;
+    background: #417690;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.create-table-btn:hover {
+    background: #2b5172;
+}
+
+.content-block {
+    margin: 15px 0;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.table-container {
+    margin-top: 15px;
+    border: 1px dashed #ccc;
+    min-height: 50px;
+}

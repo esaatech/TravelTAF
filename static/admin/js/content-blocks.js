@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Content blocks JS loaded');
+
     const contentSection = document.querySelector('.content-blocks-section');
     const contentInput = document.getElementById('id_content_blocks');
     let blocks = [];
@@ -30,13 +32,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle block addition
     toolbar.addEventListener('click', function(e) {
         if (e.target.classList.contains('add-block-btn')) {
-            const blockType = e.target.dataset.type;
-            addNewBlock(blockType);
+            console.log('Toolbar button clicked:', e.target.dataset.type);
+            addNewBlock(e.target.dataset.type);
         }
     });
 
     // Function to add new block
     function addNewBlock(type) {
+        console.log('Adding new block of type:', type);
         const blockElement = document.createElement('div');
         blockElement.className = 'content-block';
         blockElement.dataset.type = type;
@@ -57,12 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 break;
             case 'table':
+                console.log('Creating table block interface');
                 blockContent = `
                     <div class="block-header">Table Block</div>
                     <div class="table-controls">
                         <input type="number" class="rows" value="2" min="1" placeholder="Rows">
                         <input type="number" class="cols" value="2" min="1" placeholder="Columns">
-                        <button type="button" class="create-table">Create Table</button>
+                        <button type="button" class="create-table-btn">Create Table</button>
                     </div>
                     <div class="table-container"></div>
                 `;
@@ -102,12 +106,15 @@ document.addEventListener('DOMContentLoaded', function() {
         blocksContainer.appendChild(blockElement);
         updateContentInput();
 
-        // Add event listeners for the new block
+        // Initialize listeners immediately after adding the block
+        console.log('Initializing block listeners');
         initializeBlockListeners(blockElement);
     }
 
     // Initialize block event listeners
     function initializeBlockListeners(block) {
+        console.log('Setting up listeners for block:', block.dataset.type);
+
         // Delete block
         block.querySelector('.delete-block').addEventListener('click', () => {
             block.remove();
@@ -136,28 +143,87 @@ document.addEventListener('DOMContentLoaded', function() {
             contentElement.addEventListener('change', updateContentInput);
             contentElement.addEventListener('input', updateContentInput);
         }
+
+        // Table creation listener
+        const createTableBtn = block.querySelector('.create-table-btn');
+        if (createTableBtn) {
+            console.log('Found create table button, adding listener');
+            createTableBtn.addEventListener('click', () => {
+                console.log('Create table button clicked');
+                const rows = parseInt(block.querySelector('.rows').value) || 2;
+                const cols = parseInt(block.querySelector('.cols').value) || 2;
+                console.log(`Creating table with ${rows} rows and ${cols} columns`);
+                createTable(block, rows, cols);
+            });
+        }
+    }
+
+    // Add this new function to create tables
+    function createTable(block, rows, cols) {
+        console.log('Creating table structure');
+        const tableContainer = block.querySelector('.table-container');
+        let tableHTML = '<table class="content-table">';
+        
+        // Create header row
+        tableHTML += '<thead><tr>';
+        for (let j = 0; j < cols; j++) {
+            tableHTML += `<th><input type="text" placeholder="Header ${j + 1}"></th>`;
+        }
+        tableHTML += '</tr></thead>';
+        
+        // Create body rows
+        tableHTML += '<tbody>';
+        for (let i = 0; i < rows - 1; i++) {
+            tableHTML += '<tr>';
+            for (let j = 0; j < cols; j++) {
+                tableHTML += `<td><input type="text" placeholder="Cell ${i + 1},${j + 1}"></td>`;
+            }
+            tableHTML += '</tr>';
+        }
+        tableHTML += '</tbody></table>';
+        
+        console.log('Setting table HTML');
+        tableContainer.innerHTML = tableHTML;
+        
+        // Add to content blocks data
+        updateContentInput();
     }
 
     // Update hidden input with current blocks data
     function updateContentInput() {
         const blocks = [];
         blocksContainer.querySelectorAll('.content-block').forEach(block => {
-            const blockData = {
-                type: block.dataset.type,
-                content: block.querySelector('.block-content')?.value || ''
-            };
-
-            // Add additional data based on block type
-            switch(block.dataset.type) {
-                case 'image':
-                    blockData.caption = block.querySelector('.image-caption')?.value || '';
-                    break;
-                case 'quote':
-                    blockData.source = block.querySelector('.quote-source')?.value || '';
-                    break;
+            if (block.dataset.type === 'table') {
+                const tableData = {
+                    type: 'table',
+                    headers: [],
+                    rows: []
+                };
+                
+                // Get headers
+                const headerCells = block.querySelectorAll('thead input');
+                headerCells.forEach(cell => {
+                    tableData.headers.push(cell.value || '');
+                });
+                
+                // Get rows
+                const bodyRows = block.querySelectorAll('tbody tr');
+                bodyRows.forEach(row => {
+                    const rowData = [];
+                    row.querySelectorAll('input').forEach(cell => {
+                        rowData.push(cell.value || '');
+                    });
+                    tableData.rows.push(rowData);
+                });
+                
+                blocks.push(tableData);
+            } else {
+                // Handle other block types as before
+                blocks.push({
+                    type: block.dataset.type,
+                    content: block.querySelector('.block-content')?.value || ''
+                });
             }
-
-            blocks.push(blockData);
         });
 
         contentInput.value = JSON.stringify(blocks);
