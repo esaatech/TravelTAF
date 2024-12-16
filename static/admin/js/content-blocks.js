@@ -50,24 +50,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 blockContent = `
                     <div class="block-header">Text Block</div>
                     <div class="text-formatting-toolbar">
-                        <button type="button" class="format-btn" data-format="bold">
-                            <strong>B</strong>
-                        </button>
-                        <button type="button" class="format-btn" data-format="italic">
-                            <em>I</em>
-                        </button>
-                        <button type="button" class="format-btn" data-format="underline">
-                            <u>U</u>
-                        </button>
-                        <button type="button" class="format-btn" data-format="link">
-                            🔗
-                        </button>
-                        <select class="heading-select">
-                            <option value="p">Paragraph</option>
-                            <option value="h2">Heading 2</option>
-                            <option value="h3">Heading 3</option>
-                            <option value="h4">Heading 4</option>
-                        </select>
+                        <div class="format-group">
+                            <button type="button" class="format-btn" data-format="bold">
+                                <strong>B</strong>
+                            </button>
+                            <button type="button" class="format-btn" data-format="italic">
+                                <em>I</em>
+                            </button>
+                            <button type="button" class="format-btn" data-format="underline">
+                                <u>U</u>
+                            </button>
+                            <button type="button" class="format-btn" data-format="link">
+                                🔗
+                            </button>
+                        </div>
+                        <div class="format-group">
+                            <button type="button" class="format-btn" data-format="p">P</button>
+                        </div>
+                        <div class="format-group">
+                            <button type="button" class="format-btn" data-format="h2">H2</button>
+                            <button type="button" class="format-btn" data-format="h3">H3</button>
+                            <button type="button" class="format-btn" data-format="h4">H4</button>
+                        </div>
                     </div>
                     <div class="text-editor" contenteditable="true"></div>
                 `;
@@ -185,48 +189,56 @@ document.addEventListener('DOMContentLoaded', function() {
             toolbar.querySelectorAll('.format-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    
-                    // Make sure editor has focus
                     editor.focus();
                     
                     const format = btn.dataset.format;
                     
-                    if (format === 'link') {
+                    // Handle different format types
+                    if (['h2', 'h3', 'h4', 'p'].includes(format)) {
+                        // Handle headings and paragraph
+                        const isCurrentFormat = document.queryCommandValue('formatBlock') === format;
+                        
+                        if (isCurrentFormat) {
+                            // If current format is active, convert to paragraph
+                            document.execCommand('formatBlock', false, '<p>');
+                            toolbar.querySelectorAll('.format-btn[data-format^="h"]').forEach(b => b.classList.remove('active'));
+                            toolbar.querySelector('.format-btn[data-format="p"]').classList.add('active');
+                        } else {
+                            // Apply new format
+                            document.execCommand('formatBlock', false, `<${format}>`);
+                            toolbar.querySelectorAll('.format-btn[data-format^="h"], .format-btn[data-format="p"]').forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                        }
+                    } else if (format === 'link') {
                         const url = prompt('Enter URL:');
                         if (url) {
                             document.execCommand('createLink', false, url);
                         }
                     } else {
-                        // Check current state of the command
+                        // Handle other formatting (bold, italic, underline)
                         const isFormatActive = document.queryCommandState(format);
-                        
-                        if (isFormatActive) {
-                            // If format is active, remove it
-                            if (format === 'bold') document.execCommand('removeFormat', false, 'bold');
-                            if (format === 'italic') document.execCommand('removeFormat', false, 'italic');
-                            if (format === 'underline') document.execCommand('removeFormat', false, 'underline');
-                            btn.classList.remove('active');
-                        } else {
-                            // If format is not active, apply it
-                            document.execCommand(format, false, null);
-                            btn.classList.add('active');
-                        }
+                        document.execCommand(format, false, null);
+                        btn.classList.toggle('active', !isFormatActive);
                     }
                     
-                    // Update toolbar state after format change
                     updateToolbarState(toolbar);
                 });
             });
 
             // Function to update toolbar state
             function updateToolbarState(toolbar) {
-                const formats = ['bold', 'italic', 'underline'];
-                formats.forEach(format => {
+                // Check basic formats
+                ['bold', 'italic', 'underline'].forEach(format => {
                     const button = toolbar.querySelector(`[data-format="${format}"]`);
                     if (button) {
-                        const isActive = document.queryCommandState(format);
-                        button.classList.toggle('active', isActive);
+                        button.classList.toggle('active', document.queryCommandState(format));
                     }
+                });
+
+                // Check current block format
+                const currentFormat = document.queryCommandValue('formatBlock').replace(/[<>]/g, '');
+                toolbar.querySelectorAll('.format-btn[data-format^="h"], .format-btn[data-format="p"]').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.format === currentFormat);
                 });
             }
 
@@ -241,12 +253,37 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Heading select
-            const headingSelect = toolbar.querySelector('.heading-select');
+            const headingSelect = block.querySelector('.heading-select');
             if (headingSelect) {
                 headingSelect.addEventListener('change', () => {
-                    editor.focus();
                     const tag = headingSelect.value;
-                    document.execCommand('formatBlock', false, `<${tag}>`);
+                    if (!tag) return; // Skip if no value selected
+                    
+                    editor.focus();
+                    const selection = window.getSelection();
+                    const range = selection.getRangeAt(0);
+                    
+                    // Get the current block element
+                    let currentBlock = range.commonAncestorContainer;
+                    while (currentBlock && currentBlock.nodeType === 3) {
+                        currentBlock = currentBlock.parentNode;
+                    }
+                    
+                    // Create new element with selected tag
+                    const newElement = document.createElement(tag);
+                    newElement.innerHTML = currentBlock.innerHTML || '';
+                    
+                    // Replace the current block with new element
+                    if (currentBlock && currentBlock.parentNode) {
+                        currentBlock.parentNode.replaceChild(newElement, currentBlock);
+                    } else {
+                        // If no current block, wrap selection in new element
+                        range.surroundContents(newElement);
+                    }
+                    
+                    // Reset selection
+                    headingSelect.value = '';
+                    updateContentInput();
                 });
             }
 
