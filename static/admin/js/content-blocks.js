@@ -193,22 +193,33 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     const format = btn.dataset.format;
                     
-                    // Handle different format types
-                    if (['h2', 'h3', 'h4', 'p'].includes(format)) {
-                        // Handle headings and paragraph
-                        const isCurrentFormat = document.queryCommandValue('formatBlock') === format;
+                    if (format === 'p') {
+                        // Handle paragraph insertion
+                        const selection = window.getSelection();
+                        const range = selection.getRangeAt(0);
                         
-                        if (isCurrentFormat) {
-                            // If current format is active, convert to paragraph
-                            document.execCommand('formatBlock', false, '<p>');
-                            toolbar.querySelectorAll('.format-btn[data-format^="h"]').forEach(b => b.classList.remove('active'));
-                            toolbar.querySelector('.format-btn[data-format="p"]').classList.add('active');
-                        } else {
-                            // Apply new format
-                            document.execCommand('formatBlock', false, `<${format}>`);
-                            toolbar.querySelectorAll('.format-btn[data-format^="h"], .format-btn[data-format="p"]').forEach(b => b.classList.remove('active'));
-                            btn.classList.add('active');
-                        }
+                        // Create new paragraph
+                        const newParagraph = document.createElement('p');
+                        newParagraph.style.marginTop = '1em';  // Add spacing
+                        newParagraph.style.marginBottom = '1em';
+                        
+                        // Insert paragraph and move cursor
+                        range.insertNode(newParagraph);
+                        
+                        // Create and move cursor to new paragraph
+                        const newRange = document.createRange();
+                        newRange.setStart(newParagraph, 0);
+                        newRange.collapse(true);
+                        selection.removeAllRanges();
+                        selection.addRange(newRange);
+                        
+                        // Update toolbar state
+                        updateToolbarState(toolbar);
+                    } else if (['h2', 'h3', 'h4'].includes(format)) {
+                        // Handle headings
+                        document.execCommand('formatBlock', false, `<${format}>`);
+                        toolbar.querySelectorAll('.format-btn[data-format^="h"]').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
                     } else if (format === 'link') {
                         const url = prompt('Enter URL:');
                         if (url) {
@@ -220,8 +231,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.execCommand(format, false, null);
                         btn.classList.toggle('active', !isFormatActive);
                     }
-                    
-                    updateToolbarState(toolbar);
                 });
             });
 
