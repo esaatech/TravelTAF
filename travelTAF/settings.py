@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'tools',
     'authentication.apps.AuthenticationConfig',
     'social_django',
+    'django_ckeditor_5',
 ]
 
 REST_FRAMEWORK = {
@@ -264,6 +265,18 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+# Add CKEditor5 configuration
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
+                   'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
+    }
+}
+
+# Add media settings if not already present
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 

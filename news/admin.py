@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import News, NewsCategory
+from django_ckeditor_5.fields import CKEditor5Field
 
 class ContentBlockInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
@@ -31,27 +32,25 @@ class NewsCategoryAdmin(admin.ModelAdmin):
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     form = NewsAdminForm
-    list_display = ('title', 'category', 'author', 'published_date', 'is_published', 'is_featured')
-    list_filter = ('category', 'is_published', 'is_featured', 'published_date')
-    search_fields = ('title', 'summary', 'author')
+    list_display = ('title', 'published_date', 'is_featured', 'is_published')
+    list_filter = ('is_featured', 'is_published', 'category')
+    search_fields = ('title', 'summary')
     prepopulated_fields = {'slug': ('title',)}
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'slug', 'category', 'author', 'featured_image', 'summary')
+            'fields': ('title', 'slug', 'category', 'author', 'featured_image')
         }),
-        ('Content Blocks', {
-            'fields': ('content_blocks',),
-            'classes': ('content-blocks-section',),  # CSS class for styling
-            'description': 'Add and manage content blocks below'
+        ('Content', {
+            'fields': ('summary', 'content')
         }),
         ('Publishing', {
-            'fields': ('is_published', 'is_featured')
+            'fields': ('is_featured', 'is_published')
         }),
-        ('Source Information', {
+        ('Source', {
             'fields': ('source_name', 'source_url'),
             'classes': ('collapse',)
-        })
+        }),
     )
 
     class Media:

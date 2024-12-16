@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
 from django.db.models import JSONField
+from django_ckeditor_5.fields import CKEditor5Field
 
 class NewsCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -31,7 +32,7 @@ class News(models.Model):
     
     featured_image = models.ImageField(upload_to='news_images/featured/', null=True, blank=True)
     summary = models.TextField(help_text="A brief introduction or summary of the article",blank=True)
-    content_blocks = JSONField(default=list, help_text="Structured content blocks")
+    content = CKEditor5Field('Content', config_name='default')
     source_name = models.CharField(max_length=100, blank=True)
     source_url = models.URLField(blank=True)
 
