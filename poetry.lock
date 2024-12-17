@@ -398,6 +398,24 @@ asgiref = ">=3.6"
 django = ">=4.2"
 
 [[package]]
+name = "django-ckeditor-5"
+version = "0.2.15"
+description = "CKEditor 5 for Django."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django_ckeditor_5-0.2.15-py3-none-any.whl", hash = "sha256:71980998d4bef7b272e50cb6878cca5c0bedec42b389a3827ffe1bbb88babd29"},
+    {file = "django_ckeditor_5-0.2.15.tar.gz", hash = "sha256:587f0485a3dca6a1a7c7c68e4160770e46389b8cf50205bf352bd47fcb63567c"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+Pillow = "*"
+
+[package.extras]
+dev = ["bandit[toml] (==1.7.6)", "black (==22.12.0)", "codespell (==2.2.2)", "coverage (==7.4.0)", "mypy (==1.8.0)", "mypy-extensions (==1.0.0)", "pytest (==7.4.4)", "pytest-cov (==4.0.0)", "pytest-django (==4.5.2)", "pytest-mock (==3.10.0)", "safety (==2.3.5)", "types-setuptools (==65.6.0.2)", "typing-extensions (==4.9.0)"]
+
+[[package]]
 name = "django-cors-headers"
 version = "4.6.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -1760,4 +1778,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0705a776247b5919d9685d7d5dd9f95a7895e401daae47102b413142f35837b2"
+content-hash = "28cd5034277bb5fa9ed6ea6cf14fc6df687c8a583e0e99fd3ea449a136eadbee"

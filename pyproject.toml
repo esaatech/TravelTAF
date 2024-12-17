@@ -22,6 +22,7 @@ pdfplumber = "^0.11.4"
 load-dotenv = "^0.1.0"
 mysql-connector-python = "^9.1.0"
 psycopg2-binary = "^2.9.10"
+django-ckeditor-5 = "^0.2.15"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
