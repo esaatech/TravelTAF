@@ -285,7 +285,7 @@ if DEBUG:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
 else:
-    # Production settings (Cloud Run)
+    # the following are used in Production settings (Cloud Run)
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME', 'traveltaf-media')
     GS_DEFAULT_ACL = 'publicRead'
