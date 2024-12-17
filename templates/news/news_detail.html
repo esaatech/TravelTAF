@@ -12,7 +12,9 @@
         <!-- Article Header -->
         <header>
             <div class="category-date">
-                <span>{{ news.category.name }}</span>
+                <a href="{% url 'news:category' category_slug=news.category.slug %}" class="category-link">
+                    {{ news.category.name }}
+                </a>
                 <span class="separator">•</span>
                 <time>{{ news.published_date|date:"F j, Y" }}</time>
             </div>
