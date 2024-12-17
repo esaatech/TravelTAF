@@ -12,6 +12,42 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+# Add logging to debug storage
+import logging
+# Add this near the top of settings.py after imports
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        '': {  # Root logger
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -202,9 +238,6 @@ if DEBUG:
         BASE_DIR / 'static',
     ]
 
-# Media files settings
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
@@ -276,9 +309,15 @@ CKEDITOR_5_CONFIGS = {
 }
 
 # Add media settings if not already present
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = BASE_DIR / 'media'
 
+
+# Media files settings
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+""" 
 # Media files configuration
 if DEBUG:
     # Local development settings
@@ -291,7 +330,40 @@ else:
     GS_DEFAULT_ACL = 'publicRead'
     MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
+"""
+# Media files configuration - Always use GCS
+# At the top with imports
+from google.cloud import storage
+from django.core.files.storage import default_storage
+import logging
 
+# Near your GCS configuration
+from google.cloud import storage
+from google.oauth2 import service_account
+import json
 
+logger = logging.getLogger(__name__)
 
+ #Media files configuration - Always use GCS
+from google.oauth2 import service_account
 
+# Explicitly set credentials
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'service-account-key.json'),
+    scopes=['https://www.googleapis.com/auth/cloud-platform']
+)
+
+# Storage settings
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Keep this for static files
+
+# GCS settings
+GS_BUCKET_NAME = 'traveltaf-media'
+GS_PROJECT_ID = 'esaasolution'
+GS_DEFAULT_ACL = 'publicRead'
+GS_FILE_OVERWRITE = True
+MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
+
+# Add this to verify storage backend
+from django.core.files.storage import default_storage
+logger.info(f"Configured storage backend: {default_storage.__class__.__name__}")
