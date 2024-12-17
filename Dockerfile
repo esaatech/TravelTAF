@@ -11,6 +11,7 @@ ENV POETRY_CACHE_DIR=/opt/.cache
 ENV PATH="/opt/poetry/bin:$PATH"
 ENV DEBUG=False
 ENV PORT=8080
+#ENV GOOGLE_APPLICATION_CREDENTIALS=/app/service-account-key.json
 
 # Install system dependencies
 RUN apt-get update \
@@ -41,6 +42,10 @@ RUN poetry install --no-interaction --no-ansi
 
 # Collect static files
 RUN poetry run python manage.py collectstatic --noinput
+
+# Copy the service account key
+#COPY service-account-key.json /app/service-account-key.json
+#ENV GOOGLE_APPLICATION_CREDENTIALS=/app/service-account-key.json
 
 # Expose port
 EXPOSE 8080

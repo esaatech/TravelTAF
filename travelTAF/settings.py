@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-+hl-say_pic)ycn+(n_1ouysg%+li1do49k_kev6%c3u5%3bpt
 
 
 # Set DEBUG based on environment
-DEBUG = False  # For production
+DEBUG = True  # For production
 
 # Security settings for production
 CSRF_COOKIE_SECURE = True
@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'social_django',
     'django_ckeditor_5',
+    'storages',
 ]
 
 REST_FRAMEWORK = {
@@ -277,6 +278,18 @@ CKEDITOR_5_CONFIGS = {
 # Add media settings if not already present
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Media files configuration
+if DEBUG:
+    # Local development settings
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    # Production settings (Cloud Run)
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME', 'traveltaf-media')
+    GS_DEFAULT_ACL = 'publicRead'
+    MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
 
 
