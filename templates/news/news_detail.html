@@ -12,7 +12,7 @@
         <!-- Article Header -->
         <header>
             <div class="category-date">
-                <a href="{% url 'news:category' category_slug=news.category.slug %}" class="category-link">
+                <a href="{% url 'news:category' news.category.slug %}" class="category-link">
                     {{ news.category.name }}
                 </a>
                 <span class="separator">•</span>
@@ -24,16 +24,14 @@
             </div>
         </header>
 
-        <!-- Article Image -->
-        {% if news.image %}
+        <!-- Featured Image -->
+        {% if news.featured_image %}
             <div class="article-image">
-                <img src="{{ news.image.url }}" 
-                     alt="{{ news.title }}">
-            </div>
-        {% else %}
-            <div class="article-image">
-                <img src="{% static 'images/svg/news_icons/'|add:news.category.slug|add:'.svg' %}" 
-                     alt="{{ news.category.name }} News">
+                <img src="{{ news.featured_image.url }}" 
+                     alt="{{ news.title }}"
+                     width="1200"
+                     height="630"
+                     class="featured-image">
             </div>
         {% endif %}
 
