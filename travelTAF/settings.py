@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-+hl-say_pic)ycn+(n_1ouysg%+li1do49k_kev6%c3u5%3bpt
 
 
 # Set DEBUG based on environment
-DEBUG = True  # For production
+DEBUG = False  # For production
 
 # Security settings for production
 CSRF_COOKIE_SECURE = True
