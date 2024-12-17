@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-+hl-say_pic)ycn+(n_1ouysg%+li1do49k_kev6%c3u5%3bpt
 
 
 
-# Set DEBUG based on environment
-DEBUG = True  # For production
+# Set DEBUG based on environment - default to True for development then for production we set debug to false in cloudrun
+DEBUG = os.getenv('DEBUG', 'True') == 'True'  # Default to True for development
 
 # Security settings for production
 CSRF_COOKIE_SECURE = True
