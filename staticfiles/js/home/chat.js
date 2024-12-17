@@ -1,7 +1,95 @@
 // Chat Module
-console.log("Chat Module loaded");
 
-
+/**
+ * SpeakModule - ElevenLabs Voice Integration
+ * 
+ * A module that integrates ElevenLabs' conversational AI widget into the application.
+ * Provides voice interaction capabilities through a floating widget interface.
+ * 
+ * Module Structure:
+ * {
+ *   elements: {
+ *     elevenLabsWidget: ElevenLabs widget instance
+ *     callButton: Button to toggle widget visibility
+ *   }
+ * }
+ * 
+ * Required DOM Elements:
+ * #callButton - Button element to trigger widget display
+ * 
+ * Initialization Flow:
+ * 1. init() - Main initialization function
+ * 2. initializeElements() - DOM element setup
+ * 3. attachEventListeners() - Event binding
+ * 4. initializeElevenLabs() - Widget creation and setup
+ * 
+ * Widget Configuration:
+ * - agent-id: 'FyamG7HPN1mpqH5gAcjK'
+ * - Dimensions: 100px x 100px
+ * - Styling: White background, rounded corners, shadow
+ * - Position: Fixed, bottom-right corner
+ * 
+ * Functions:
+ * 
+ * init()
+ * - Entry point for module initialization
+ * - Coordinates all setup functions
+ * - Logs initialization progress
+ * 
+ * initializeElements()
+ * - Finds and stores DOM element references
+ * - Sets up initial element state
+ * 
+ * initializeElevenLabs()
+ * - Creates ElevenLabs widget element
+ * - Loads required script
+ * - Handles loading errors
+ * - Sets initial widget styling
+ * 
+ * attachEventListeners()
+ * - Sets up click handlers for widget toggle
+ * - Implements click-outside-to-close functionality
+ * - Manages widget visibility
+ * 
+ * toggleCallWidget()
+ * - Controls widget visibility
+ * - Positions widget relative to call button
+ * - Handles show/hide logic
+ * 
+ * Event Handling:
+ * - Button click detection
+ * - Document click for outside clicks
+ * - Script loading error handling
+ * 
+ * Widget Positioning:
+ * - Bottom: 150px from bottom
+ * - Right: 20px from right
+ * - z-index: 1000 for overlay
+ * 
+ * Error Handling:
+ * - Script loading failures
+ * - Missing DOM elements
+ * - Widget initialization issues
+ * 
+ * Dependencies:
+ * - ElevenLabs Convai Widget (https://elevenlabs.io/convai-widget/index.js)
+ * - Modern browser with custom elements support
+ * 
+ * Debug Features:
+ * - Extensive console logging
+ * - State change tracking
+ * - Element existence verification
+ * 
+ * Security Considerations:
+ * - External script loading
+ * - Cross-origin resource handling
+ * - DOM manipulation safety
+ * 
+ * Performance:
+ * - Async script loading
+ * - Event delegation
+ * - Efficient DOM updates
+ */
 
 
 const ChatModule = {

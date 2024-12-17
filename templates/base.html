@@ -11,6 +11,7 @@
     <link href="{% static 'css/index.css' %}" rel="stylesheet">
     <link href="{% static 'css/point_calculator.css' %}" rel="stylesheet">
     <link href="{% static 'css/cover_letter.css' %}" rel="stylesheet">
+    
     <style>
         body { font-family: 'Noto Sans', sans-serif; }
         
@@ -95,7 +96,10 @@
                 z-index: 1001;
             }
         }
+
     </style>
+    {% block extra_css %}
+    {% endblock %}
 </head>
 <body class="bg-white min-h-screen flex flex-col">
     <!-- Navigation -->

@@ -2,50 +2,51 @@
 
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/news/news_detail.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <article class="max-w-3xl mx-auto">
+<div class="container">
+    <article>
         <!-- Article Header -->
-        <header class="mb-8">
-            <div class="flex items-center text-sm text-[#1980e6] mb-4">
-                <span>{{ news.category.name }}</span>
-                <span class="mx-2">•</span>
+        <header>
+            <div class="category-date">
+                <a href="{% url 'news:category' news.category.slug %}" class="category-link">
+                    {{ news.category.name }}
+                </a>
+                <span class="separator">•</span>
                 <time>{{ news.published_date|date:"F j, Y" }}</time>
             </div>
-            <h1 class="text-4xl font-bold mb-4">{{ news.title }}</h1>
-            <div class="flex items-center text-gray-600">
+            <h1 class="article-title">{{ news.title }}</h1>
+            <div class="article-author">
                 <span>By {{ news.author }}</span>
             </div>
         </header>
 
-        <!-- Article Image -->
-        {% if news.image %}
-            <div class="mb-8">
-                <img src="{{ news.image.url }}" 
-                     alt="{{ news.title }}" 
-                     class="w-full h-[400px] object-cover rounded-xl shadow-lg">
-            </div>
-        {% else %}
-            <div class="mb-8">
-                <img src="{% static 'images/svg/news_icons/'|add:news.category.slug|add:'.svg' %}" 
-                     alt="{{ news.category.name }} News" 
-                     class="w-full h-[400px] object-contain bg-gray-50 rounded-xl">
+        <!-- Featured Image -->
+        {% if news.featured_image %}
+            <div class="article-image">
+                <img src="{{ news.featured_image.url }}" 
+                     alt="{{ news.title }}"
+                     width="1200"
+                     height="630"
+                     class="featured-image">
             </div>
         {% endif %}
 
         <!-- Article Content -->
-        <div class="prose max-w-none">
-            {{ news.content|linebreaks }}
+        <div class="article-content">
+            {{ news.content|safe }}
         </div>
 
         <!-- Article Footer -->
-        <footer class="mt-8 pt-8 border-t">
-            <div class="flex justify-between items-center">
-                <div class="text-sm text-gray-600">
+        <footer class="article-footer">
+            <div class="footer-content">
+                <div class="update-date">
                     Last updated: {{ news.updated_date|date:"F j, Y" }}
                 </div>
-                <a href="{% url 'news:list' %}" 
-                   class="text-[#1980e6] hover:text-blue-700">
+                <a href="{% url 'news:list' %}" class="back-link">
                     ← Back to News
                 </a>
             </div>

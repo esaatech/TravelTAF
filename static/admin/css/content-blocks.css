@@ -1,0 +1,364 @@
+.content-blocks-editor {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.content-blocks-toolbar {
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.add-block-btn {
+    margin-right: 10px;
+    padding: 8px 16px;
+    background: #417690;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-block-btn:hover {
+    background: #2b5172;
+}
+
+.content-block {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.block-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.block-content {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.block-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.block-controls button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #f5f5f5;
+    cursor: pointer;
+}
+
+.block-controls button:hover {
+    background: #e0e0e0;
+}
+
+.content-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.content-table th,
+.content-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.content-table input {
+    width: 100%;
+    border: none;
+    padding: 4px;
+}
+
+.content-table th input {
+    font-weight: bold;
+}
+
+.table-controls {
+    margin: 15px 0;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+}
+
+.table-controls input {
+    width: 80px;
+    margin-right: 10px;
+}
+
+.create-table-btn {
+    padding: 8px 16px;
+    background: #417690;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.create-table-btn:hover {
+    background: #2b5172;
+}
+
+.content-block {
+    margin: 15px 0;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.table-container {
+    margin-top: 15px;
+    border: 1px dashed #ccc;
+    min-height: 50px;
+}
+
+.text-formatting-toolbar {
+    padding: 10px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.format-group {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 0 10px;
+    border-right: 1px solid #ddd;
+}
+
+.format-group:last-child {
+    border-right: none;
+}
+
+.format-btn {
+    padding: 5px 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    cursor: pointer;
+    min-width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.format-btn[data-format^="h"] {
+    font-weight: bold;
+}
+
+.format-btn.active {
+    background: #e0e0e0;
+    border-color: #999;
+}
+
+/* Add specific styles for heading buttons */
+.format-btn[data-format="h2"] { font-size: 1.2em; }
+.format-btn[data-format="h3"] { font-size: 1.1em; }
+.format-btn[data-format="h4"] { font-size: 1em; }
+
+.heading-select {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #fff;
+    min-width: 150px;
+    height: 32px;
+}
+
+.text-editor {
+    min-height: 200px;
+    padding: 15px;
+    line-height: 1.5;
+}
+
+.text-editor:focus {
+    outline: none;
+    border-color: #2271b1;
+}
+
+/* Style for formatted text */
+.text-editor b, .text-editor strong {
+    font-weight: bold;
+}
+
+.text-editor i, .text-editor em {
+    font-style: italic;
+}
+
+.text-editor u {
+    text-decoration: underline;
+}
+
+.text-editor a {
+    color: #2271b1;
+    text-decoration: underline;
+}
+
+/* Add styles for different heading levels in the editor */
+.text-editor h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+.text-editor h2 {
+    font-size: 1.5em;
+    margin: 0.75em 0;
+}
+
+.text-editor h3 {
+    font-size: 1.17em;
+    margin: 0.83em 0;
+}
+
+.text-editor h4 {
+    font-size: 1em;
+    margin: 1.12em 0;
+}
+
+.text-editor p {
+    margin: 1em 0;
+    min-height: 1.2em;
+}
+
+/* Add spacing between paragraphs */
+.text-editor p + p {
+    margin-top: 1.5em;
+}
+
+/* Style for empty paragraphs to maintain spacing */
+.text-editor p:empty::after {
+    content: '\200B'; /* Zero-width space to maintain height */
+}
+
+.content-editor-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    margin: 20px 0;
+}
+
+.editor-toolbar {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    background: #f8f9fa;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 5px;
+    padding-right: 10px;
+    border-right: 1px solid #ddd;
+}
+
+.toolbar-group:last-child {
+    border-right: none;
+}
+
+.toolbar-group button {
+    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toolbar-group button:hover {
+    background: #f0f0f0;
+}
+
+.toolbar-group button.active {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.format-select {
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.content-editor {
+    min-height: 300px;
+    padding: 20px;
+    outline: none;
+    line-height: 1.5;
+}
+
+/* Editor content styles */
+.content-editor h1 { font-size: 2em; margin: 0.67em 0; }
+.content-editor h2 { font-size: 1.5em; margin: 0.75em 0; }
+.content-editor h3 { font-size: 1.17em; margin: 0.83em 0; }
+.content-editor p { margin: 1em 0; }
+.content-editor ul, .content-editor ol { margin: 1em 0; padding-left: 40px; }
+
+/* Additional styles for the editor content */
+.content-editor table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.content-editor th,
+.content-editor td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.content-editor th {
+    background-color: #f8f9fa;
+}
+
+.content-editor a {
+    color: #0d6efd;
+    text-decoration: underline;
+}
+
+.content-editor ul {
+    list-style-type: disc;
+}
+
+.content-editor ol {
+    list-style-type: decimal;
+}
+
+/* Active state for toolbar buttons */
+.editor-toolbar button.active {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+/* Hover states */
+.editor-toolbar button:hover {
+    background-color: #f8f9fa;
+}
+
+.format-select:hover {
+    border-color: #adb5bd;
+}

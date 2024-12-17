@@ -1,0 +1,163 @@
+/* static/css/news_detail.css */
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Article */
+article {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+.category-date {
+    margin-bottom: 1rem;
+    color: #1980e6;
+    font-size: 0.9rem;
+}
+
+.separator {
+    margin: 0 0.5rem;
+}
+
+.article-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.article-author {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+/* Image Container */
+.article-image {
+    margin: 2rem auto;
+    max-width: 1200px;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.featured-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+}
+
+/* Content Styles */
+.article-content {
+    line-height: 1.8;
+    color: #333;
+}
+
+/* Spacing for content elements */
+.article-content > * {
+    margin-bottom: 1.5rem; /* Add space between all direct children */
+}
+
+.article-content h1 {
+    font-size: 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+}
+
+.article-content h2 {
+    font-size: 1.75rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.article-content h3 {
+    font-size: 1.5rem;
+    margin-top: 1.75rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.article-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+/* Lists with proper spacing */
+.article-content ul,
+.article-content ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+
+.article-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* Tables with better spacing */
+.article-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+}
+
+.article-content th,
+.article-content td {
+    border: 1px solid #e5e7eb;
+    padding: 1rem;
+    text-align: left;
+}
+
+.article-content th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+/* Footer Styles */
+.article-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.update-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.back-link {
+    color: #1980e6;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .article-title {
+        font-size: 2rem;
+    }
+
+    .article-image {
+        margin: 1.5rem auto;
+    }
+}

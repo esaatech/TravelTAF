@@ -1,3 +1,113 @@
+/**
+ * CRS (Comprehensive Ranking System) Points Calculator
+ * 
+ * A comprehensive tool for calculating immigration points based on various factors:
+ * 1. Core/Human Capital Factors (max 500 points)
+ * 2. Spouse Factors (max 40 points)
+ * 3. Skill Transferability (max 100 points)
+ * 4. Additional Points (max 600 points)
+ * 
+ * Required DOM Elements:
+ * #crsCalculator - Main calculator form
+ * #results - Results display container
+ * #totalScore - Total score display
+ * #corePoints - Core points display
+ * #spousePoints - Spouse points display
+ * #skillPoints - Skill points display
+ * #additionalPoints - Additional points display
+ * 
+ * Score Calculation Functions:
+ * 
+ * calculateScore(data)
+ * - Main calculation function
+ * - Processes all point categories
+ * - Combines scores for final result
+ * 
+ * calculateAgePoints(age)
+ * - Age points (17-45 years)
+ * - Returns 0-110 points based on age
+ * 
+ * calculateLanguagePoints(data)
+ * - Language proficiency points
+ * - CLB levels for speaking, listening, reading, writing
+ * - Returns 0-128 points
+ * 
+ * calculateSpouseLanguagePoints(data)
+ * - Spouse language points
+ * - Similar to primary applicant but lower scale
+ * - Returns 0-20 points
+ * 
+ * calculateSkillTransferability(data)
+ * - Education + Language combination
+ * - Education + Experience combination
+ * - Foreign Work + Language combination
+ * - Max 100 points
+ * 
+ * calculateAdditionalPoints(data)
+ * - Provincial nomination (600 points)
+ * - Job offer (50-200 points)
+ * - Canadian education (15-30 points)
+ * - Sibling in Canada (15 points)
+ * 
+ * Validation:
+ * - Required fields
+ * - Age range (17-45)
+ * - Language scores (0-9)
+ * - Education levels
+ * - Work experience
+ * 
+ * Error Handling:
+ * - Field validation
+ * - Visual error indicators
+ * - Error messages display
+ * - Automatic error clearing
+ * 
+ * UI Features:
+ * - Real-time validation
+ * - Error highlighting
+ * - Smooth scrolling to results/errors
+ * - Clear error messages
+ * 
+ * Score Categories:
+ * 1. Core Points (max 500)
+ *    - Age
+ *    - Education
+ *    - Language skills
+ *    - Canadian work experience
+ * 
+ * 2. Spouse Points (max 40)
+ *    - Education
+ *    - Language skills
+ *    - Work experience
+ * 
+ * 3. Skill Transferability (max 100)
+ *    - Education + Language
+ *    - Education + Experience
+ *    - Foreign Work + Language
+ * 
+ * 4. Additional Points (max 600)
+ *    - Provincial nomination
+ *    - Job offer
+ *    - Canadian education
+ *    - Sibling in Canada
+ * 
+ * Dependencies:
+ * - Modern browser with ES6+ support
+ * - DOM manipulation capabilities
+ * - FormData API support
+ * 
+ * Usage:
+ * - Fill out the form with applicant details
+ * - Submit for immediate calculation
+ * - View breakdown of points by category
+ * - Review any validation errors
+ * 
+ * Error Display:
+ * - Red border on error fields
+ * - Error messages at top of form
+ * - Automatic scroll to errors
+ * - Clear indication of required fixes
+ */
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('crsCalculator');
     const results = document.getElementById('results');
