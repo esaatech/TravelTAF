@@ -22,7 +22,7 @@
                 <div class="flex items-center space-x-4">
                     <!-- Credits -->
                     <div class="text-sm font-medium text-gray-900">
-                        Credits: {{ user.credits }}
+                        Credits: {{ credit_balance }}
                     </div>
 
                     <!-- Notifications -->
@@ -58,7 +58,7 @@
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Welcome Section -->
         <div class="px-4 py-6 sm:px-0">
-            <h1 class="text-2xl font-semibold text-gray-900">Welcome back, {{ user.first_name }}!</h1>
+            <h1 class="text-2xl font-semibold text-gray-900">Welcome back, {{ display_name }}!</h1>
         </div>
 
         <!-- Dashboard Grid -->
@@ -81,7 +81,7 @@
                                         Available Credits
                                     </dt>
                                     <dd class="text-lg font-medium text-gray-900">
-                                        {{ user.credits }}
+                                        {{ credit_balance }}
                                     </dd>
                                 </dl>
                             </div>

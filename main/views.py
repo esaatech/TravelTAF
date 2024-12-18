@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.utils import timezone
 from news.models import News  # Import the News model
-from credits.models import CreditTransaction
+from credits.models import CreditTransaction, UserCredit
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
 
 def home(request):
     # Query the latest 3 news articles
@@ -477,14 +478,23 @@ def about(request):
 
 @login_required
 def dashboard(request):
+    # Get user's credit balance
+    user_credit = UserCredit.objects.filter(user=request.user).first()
+    credit_balance = user_credit.balance if user_credit else 0
+
     # Get recent transactions
     recent_transactions = CreditTransaction.objects.filter(
         user=request.user
     ).order_by('-created_at')[:5]
 
+    # Get user's display name (full name if available, otherwise username)
+    display_name = request.user.get_full_name() or request.user.username
+
     context = {
         'recent_transactions': recent_transactions,
         'unread_notifications': request.user.notifications.unread().exists() if hasattr(request.user, 'notifications') else False,
+        'credit_balance': credit_balance,
+        'display_name': display_name,
     }
     
     return render(request, 'dashboard/dashboard.html', context)
