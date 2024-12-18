@@ -1,0 +1,420 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Security Banner -->
+    <div class="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center">
+                    <svg class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">Secure Payment</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">256-bit Encryption</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">PCI Compliant</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <img src="{% static 'images/credits/visa-master-paypal.png' %}" alt="Visa" class="h-8">
+               
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Credit Packages -->
+        <div class="md:col-span-2 space-y-6">
+            <h2 class="text-2xl font-bold text-gray-900">Select Credit Package</h2>
+            
+            <!-- Popular Package -->
+            <div class="relative bg-white rounded-lg shadow-sm border-2 border-[#1980e6] p-6 package-select" data-amount="100" data-credits="110">
+                <div class="absolute top-0 right-0 -translate-y-1/2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#1980e6] text-white">
+                        Most Popular
+                    </span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Pro Package</h3>
+                        <p class="text-sm text-gray-500">Perfect for regular users</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-bold text-[#1980e6]">$100</p>
+                        <p class="text-sm text-green-600">110 Credits (10% Bonus)</p>
+                    </div>
+                </div>
+                <button class="mt-4 w-full bg-[#1980e6] text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                    Select Package
+                </button>
+            </div>
+
+            <!-- Other Packages -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 package-select" data-amount="50" data-credits="50">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Starter Package</h3>
+                            <p class="text-sm text-gray-500">Try it out</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-gray-900">$50</p>
+                            <p class="text-sm text-gray-600">50 Credits</p>
+                        </div>
+                    </div>
+                    <button class="mt-4 w-full border border-[#1980e6] text-[#1980e6] py-2 px-4 rounded-lg hover:bg-blue-50">
+                        Select Package
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 package-select" data-amount="200" data-credits="240">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Premium Package</h3>
+                            <p class="text-sm text-gray-500">Best value</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-gray-900">$200</p>
+                            <p class="text-sm text-green-600">240 Credits (20% Bonus)</p>
+                        </div>
+                    </div>
+                    <button class="mt-4 w-full border border-[#1980e6] text-[#1980e6] py-2 px-4 rounded-lg hover:bg-blue-50">
+                        Select Package
+                    </button>
+                </div>
+            </div>
+
+            <!-- Custom Amount -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Custom Amount</h3>
+                <div class="flex items-center space-x-4">
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 sm:text-sm">$</span>
+                        </div>
+                        <input type="number" id="customAmount" name="amount" min="10" step="1"
+                               class="block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
+                               placeholder="Enter amount">
+                    </div>
+                    <button class="px-4 py-2 border border-[#1980e6] text-[#1980e6] rounded-lg hover:bg-blue-50" id="customAmountBtn">
+                        Apply
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="md:col-span-1">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Payment Details</h2>
+                <form id="payment-form" class="space-y-4">
+                    {% csrf_token %}
+
+                    <!-- Card holder name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Card Holder Name
+                        </label>
+                        <input type="text" id="cardholder-name" required
+                               class="block w-full border-gray-300 rounded-md shadow-sm"
+                               placeholder="Name on card">
+                    </div>
+
+                    <!-- Card number -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Card Number
+                        </label>
+                        <div id="card-number-element" 
+                             class="p-3 border rounded-md bg-gray-50">
+                            <!-- Stripe Elements will insert the card number input here -->
+                        </div>
+                    </div>
+
+                    <!-- Expiry and CVV -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Expiry Date
+                            </label>
+                            <div id="card-expiry-element"
+                                 class="p-3 border rounded-md bg-gray-50">
+                                <!-- Stripe Elements will insert the expiry date input here -->
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Security Code (CVV)
+                                <span class="ml-1 text-gray-400 hover:text-gray-500 cursor-help" 
+                                      title="3 or 4 digit code on the back of your card">
+                                    <svg class="inline-block h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </span>
+                            </label>
+                            <div id="card-cvc-element"
+                                 class="p-3 border rounded-md bg-gray-50">
+                                <!-- Stripe Elements will insert the CVV input here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="card-errors" class="mt-1 text-sm text-red-600" role="alert"></div>
+
+                    <!-- Save Card Option -->
+                    <div class="flex items-center">
+                        <input type="checkbox" id="save-card" name="save-card"
+                               class="h-4 w-4 text-[#1980e6] border-gray-300 rounded">
+                        <label for="save-card" class="ml-2 block text-sm text-gray-700">
+                            Save card for future payments
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                            id="submit-button"
+                            class="w-full bg-[#1980e6] text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
+                        <span id="spinner" class="hidden mr-2">
+                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </span>
+                        Pay <span id="payment-amount">$0.00</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Stripe Elements
+    const elements = stripe.elements();
+
+    // Create individual card elements
+    const cardNumber = elements.create('cardNumber', {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+            }
+        }
+    });
+
+    const cardExpiry = elements.create('cardExpiry', {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+            }
+        }
+    });
+
+    const cardCvc = elements.create('cardCvc', {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+            }
+        }
+    });
+
+    // Mount the elements
+    cardNumber.mount('#card-number-element');
+    cardExpiry.mount('#card-expiry-element');
+    cardCvc.mount('#card-cvc-element');
+
+    // Handle real-time validation errors
+    [cardNumber, cardExpiry, cardCvc].forEach(element => {
+        element.addEventListener('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+    });
+
+    // Handle form submission
+    const form = document.getElementById('payment-form');
+    const submitButton = document.getElementById('submit-button');
+    const spinner = document.getElementById('spinner');
+
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        submitButton.disabled = true;
+        spinner.classList.remove('hidden');
+
+        const cardholderName = document.getElementById('cardholder-name').value;
+
+        try {
+            const {paymentMethod, error} = await stripe.createPaymentMethod({
+                type: 'card',
+                card: cardNumber,
+                billing_details: {
+                    name: cardholderName,
+                }
+            });
+
+            if (error) {
+                handleError(error);
+                return;
+            }
+
+            // Process payment
+            const response = await fetch('/credits/process-payment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                body: JSON.stringify({
+                    payment_method_id: paymentMethod.id,
+                    amount: selectedAmount,
+                    save_card: document.getElementById('save-card').checked
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                window.location.href = result.redirect_url;
+            } else {
+                handleError(new Error(result.error));
+            }
+
+        } catch (error) {
+            handleError(error);
+        }
+    });
+
+    function handleError(error) {
+        const errorElement = document.getElementById('card-errors');
+        errorElement.textContent = error.message;
+        submitButton.disabled = false;
+        spinner.classList.add('hidden');
+    }
+
+    // Package selection and amount handling
+    const packages = document.querySelectorAll('.package-select');
+    const customAmount = document.getElementById('customAmount');
+    const customAmountBtn = document.getElementById('customAmountBtn');
+    const paymentAmount = document.getElementById('payment-amount');
+    let selectedAmount = 0;
+
+    // Function to update selected package styling and amount
+    function updatePackageSelection(selectedPackage, amount) {
+        // Remove selection styling from all packages
+        packages.forEach(pkg => {
+            pkg.classList.remove('border-2', 'border-[#1980e6]');
+            pkg.classList.add('border', 'border-gray-200');
+            
+            // Reset button styling
+            const button = pkg.querySelector('button');
+            if (button) {
+                button.classList.remove('bg-[#1980e6]', 'text-white');
+                button.classList.add('border', 'border-[#1980e6]', 'text-[#1980e6]');
+            }
+        });
+
+        // Add selection styling to selected package
+        if (selectedPackage) {
+            selectedPackage.classList.remove('border', 'border-gray-200');
+            selectedPackage.classList.add('border-2', 'border-[#1980e6]');
+            
+            // Update button styling
+            const button = selectedPackage.querySelector('button');
+            if (button) {
+                button.classList.remove('border', 'border-[#1980e6]', 'text-[#1980e6]');
+                button.classList.add('bg-[#1980e6]', 'text-white');
+            }
+        }
+
+        // Update selected amount
+        selectedAmount = amount;
+        paymentAmount.textContent = `$${amount.toFixed(2)}`;
+
+        // Enable/disable submit button based on amount
+        const submitButton = document.getElementById('submit-button');
+        submitButton.disabled = amount <= 0;
+    }
+
+    // Add click event listeners to package containers
+    packages.forEach(pkg => {
+        pkg.addEventListener('click', function() {
+            const amount = parseFloat(this.dataset.amount);
+            customAmount.value = ''; // Clear custom amount
+            updatePackageSelection(this, amount);
+        });
+    });
+
+    // Handle custom amount
+    customAmountBtn.addEventListener('click', function() {
+        const amount = parseFloat(customAmount.value);
+        if (amount >= 10) {
+            updatePackageSelection(null, amount); // null because no package is selected
+        } else {
+            alert('Minimum amount is $10');
+        }
+    });
+
+    // Initialize with Pro package selected (or your default package)
+    const defaultPackage = document.querySelector('.package-select[data-amount="100"]');
+    if (defaultPackage) {
+        updatePackageSelection(defaultPackage, 100);
+    }
+
+    // Add input event listener to custom amount for real-time validation
+    customAmount.addEventListener('input', function() {
+        if (this.value && parseFloat(this.value) < 10) {
+            this.classList.add('border-red-500');
+        } else {
+            this.classList.remove('border-red-500');
+        }
+    });
+});
+</script>
+{% endblock %}

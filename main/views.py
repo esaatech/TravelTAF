@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.utils import timezone
 from news.models import News  # Import the News model
+from credits.models import CreditTransaction
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     # Query the latest 3 news articles
@@ -473,5 +475,16 @@ def about(request):
     return render(request, 'home/about.html')
 
 
+@login_required
 def dashboard(request):
-    return render(request, 'dashboard/dashboard.html')
+    # Get recent transactions
+    recent_transactions = CreditTransaction.objects.filter(
+        user=request.user
+    ).order_by('-created_at')[:5]
+
+    context = {
+        'recent_transactions': recent_transactions,
+        'unread_notifications': request.user.notifications.unread().exists() if hasattr(request.user, 'notifications') else False,
+    }
+    
+    return render(request, 'dashboard/dashboard.html', context)

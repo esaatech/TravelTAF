@@ -30,6 +30,8 @@ urlpatterns = [
     path('authentication/', include('authentication.urls')),
     path('social-auth/', include('social_django.urls', namespace='social')),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
+    path('credits/', include('credits.urls')),
+    path('payments/', include('payments.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
