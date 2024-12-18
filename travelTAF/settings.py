@@ -348,10 +348,10 @@ logger = logging.getLogger(__name__)
 from google.oauth2 import service_account
 
 # Explicitly set credentials
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    os.path.join(BASE_DIR, 'service-account-key.json'),
-    scopes=['https://www.googleapis.com/auth/cloud-platform']
-)
+#GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+#    os.path.join(BASE_DIR, 'service-account-key.json'),
+#    scopes=['https://www.googleapis.com/auth/cloud-platform']
+#)
 
 # Storage settings
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
