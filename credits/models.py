@@ -21,6 +21,13 @@ class CreditPayment(BasePayment):
             'currency': self.currency,
         }]
 
+    def handle_payment_status_change(self, old_status, new_status):
+        from .add_user_credit import add_credits_to_user
+        if new_status == 'confirmed' and not self.extra_data.get('credits_added'):
+            add_credits_to_user(self.user, self.total)
+            self.extra_data = {'credits_added': True}
+            self.save()
+
 class UserCredit(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)

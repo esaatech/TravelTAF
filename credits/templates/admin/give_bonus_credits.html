@@ -1,0 +1,35 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    
+    <div>
+        <p>Add bonus credits to the following users:</p>
+        <ul>
+            {% for user_credit in users %}
+                <li>{{ user_credit.user.email }} (Current balance: {{ user_credit.balance }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <fieldset class="module aligned">
+        {% for field in form %}
+            <div class="form-row">
+                {{ field.errors }}
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <p class="help">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </fieldset>
+
+    <div class="submit-row">
+        <input type="hidden" name="action" value="give_bonus_credits" />
+        <input type="submit" name="apply" value="Give Credits" />
+        <a href="{{ request.META.HTTP_REFERER }}" class="button cancel-link">Cancel</a>
+    </div>
+</form>
+{% endblock %}
