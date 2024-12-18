@@ -2,6 +2,8 @@ from decimal import Decimal
 from django.db import models
 from django.conf import settings
 from payments.models import BasePayment
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class CreditPayment(BasePayment):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -53,3 +55,23 @@ class CreditTransaction(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.transaction_type} - {self.amount}"
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user_credit_with_bonus(sender, instance, created, **kwargs):
+    """
+    Signal to create UserCredit with 100 bonus credits when a new user is created
+    """
+    if created:  # Only when a new user is created
+        # Create UserCredit with initial balance
+        user_credit, _ = UserCredit.objects.get_or_create(
+            user=instance,
+            defaults={'balance': Decimal('100.00')}
+        )
+
+        # Create transaction record for the welcome bonus
+        CreditTransaction.objects.create(
+            user=instance,
+            amount=Decimal('100.00'),
+            transaction_type='BONUS',
+            description='Welcome bonus credits'
+        )
