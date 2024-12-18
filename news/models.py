@@ -56,26 +56,42 @@ class News(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+    def delete_image(self):
+        """Delete the image from GCS bucket"""
         if self.featured_image:
-            logger.info("=== Starting image upload ===")
-            logger.info(f"Image name: {self.featured_image.name}")
-            logger.info(f"Storage backend: {self.featured_image.storage.__class__.__name__}")
-            
+            logger.info(f"Deleting image: {self.featured_image.name}")
             try:
-                super().save(*args, **kwargs)
-                logger.info(f"Image saved successfully")
-                logger.info(f"Image URL: {self.featured_image.url}")
+                # Delete the file from GCS
+                self.featured_image.storage.delete(self.featured_image.name)
+                logger.info(f"Successfully deleted image from GCS")
             except Exception as e:
-                logger.error(f"Upload failed: {str(e)}")
-                logger.error(f"Storage details: {vars(self.featured_image.storage)}")
+                logger.error(f"Error deleting image from GCS: {str(e)}")
                 raise
-            
-            logger.info("=== Upload process completed ===")
-        else:
-            super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.pk:  # If this is an update
+            try:
+                # Get the old instance from the database
+                old_instance = News.objects.get(pk=self.pk)
+                # If the image has changed or been cleared
+                if old_instance.featured_image and (not self.featured_image or 
+                   old_instance.featured_image != self.featured_image):
+                    # Delete the old image
+                    old_instance.delete_image()
+                    logger.info("Old image deleted successfully")
+            except News.DoesNotExist:
+                pass  # This is a new instance
+            except Exception as e:
+                logger.error(f"Error handling old image: {str(e)}")
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Override delete to clean up files"""
+        # Delete the image first
+        self.delete_image()
+        # Then delete the model instance
+        super().delete(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('news:detail', kwargs={'slug': self.slug})
