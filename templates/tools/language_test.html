@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'tools/components/tools-hero-section.html' %}
+
+    <!-- Coming Soon Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center">
+            <!-- Coming Soon Icon -->
+            <div class="mb-8">
+                <svg class="mx-auto h-24 w-24 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+
+            <!-- Coming Soon Message -->
+            <div class="bg-blue-50 rounded-lg p-8 max-w-2xl mx-auto">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">
+                    Coming Soon!
+                </h2>
+                <p class="text-gray-600 mb-6">
+                    We're working hard to bring you a comprehensive language test preparation tool. Features will include:
+                </p>
+                <ul class="text-left text-gray-600 space-y-3 max-w-md mx-auto mb-8">
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-[#1980e6] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Practice tests for IELTS, TOEFL, and more
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-[#1980e6] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        AI-powered speaking and writing feedback
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-[#1980e6] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Personalized study plans
+                    </li>
+                </ul>
+                <!-- Optional: Notification Sign-up -->
+                <button class="bg-[#1980e6] text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    Get notified when we launch
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
