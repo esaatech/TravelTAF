@@ -119,6 +119,8 @@ INSTALLED_APPS = [
     'social_django',
     'django_ckeditor_5',
     'storages',
+    'payments',
+    'credits',
 ]
 
 REST_FRAMEWORK = {
@@ -367,3 +369,21 @@ MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 # Add this to verify storage backend
 from django.core.files.storage import default_storage
 logger.info(f"Configured storage backend: {default_storage.__class__.__name__}")
+
+# Payment settings
+# Stripe and Payment Settings
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')  # Optional
+
+# Django-payments configuration
+PAYMENT_HOST = 'localhost:8000'  # Change in production
+PAYMENT_USES_SSL = False  # Set to True in production
+PAYMENT_MODEL = 'credits.CreditPayment'
+PAYMENT_VARIANTS = {
+    'default': ('payments.dummy.DummyProvider', {}),
+    'stripe': ('payments.stripe.StripeProvider', {
+        'secret_key': STRIPE_SECRET_KEY,  # Use the same key
+        'public_key': STRIPE_PUBLIC_KEY,  # Use the same key
+    }),
+}

@@ -25,6 +25,8 @@ psycopg2-binary = "^2.9.10"
 django-ckeditor-5 = "^0.2.15"
 django-storages = "^1.14.4"
 google-cloud-storage = "^2.19.0"
+django-payments = "^3.0.1"
+stripe = "^11.3.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

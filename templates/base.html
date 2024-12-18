@@ -11,7 +11,8 @@
     <link href="{% static 'css/index.css' %}" rel="stylesheet">
     <link href="{% static 'css/point_calculator.css' %}" rel="stylesheet">
     <link href="{% static 'css/cover_letter.css' %}" rel="stylesheet">
-    
+    {% block extra_head %}
+    {% endblock %}
     <style>
         body { font-family: 'Noto Sans', sans-serif; }
         

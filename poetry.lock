@@ -431,6 +431,51 @@ asgiref = ">=3.6"
 django = ">=4.2"
 
 [[package]]
+name = "django-payments"
+version = "3.0.1"
+description = "Universal payment handling for Django"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django_payments-3.0.1-py3-none-any.whl", hash = "sha256:8490a55990371b527302d50a17b9843cdd6ff3ee17780771f026fddb06fbce3d"},
+    {file = "django_payments-3.0.1.tar.gz", hash = "sha256:008eb91c36b75f926f4d2487d338bb7c569c8524dee306f5f6aab93695570e2e"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+django-phonenumber-field = {version = ">=5.0.0", extras = ["phonenumberslite"]}
+requests = ">=1.2.0"
+
+[package.extras]
+braintree = ["braintree (>=3.14.0)"]
+cybersource = ["suds-community (>=0.6)"]
+dev = ["coverage", "django-stubs[compatible-mypy]", "mock", "pytest", "pytest-cov", "pytest-django", "types-braintree", "types-dj-database-url", "types-requests", "types-stripe", "types-xmltodict"]
+docs = ["sphinx_rtd_theme"]
+mercadopago = ["mercadopago (>=2.0.0,<3.0.0)"]
+sagepay = ["cryptography (>=1.1.0)"]
+sofort = ["xmltodict (>=0.9.2)"]
+stripe = ["stripe (>=2.6.0)"]
+
+[[package]]
+name = "django-phonenumber-field"
+version = "8.0.0"
+description = "An international phone number field for django models."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django_phonenumber_field-8.0.0-py3-none-any.whl", hash = "sha256:196c917b70c01a98e327f482eb8a4a4a55a29891db551f99078585397370b3ba"},
+    {file = "django_phonenumber_field-8.0.0.tar.gz", hash = "sha256:8a560fe1b01b94c9de8cde22bc373b695f023cc6df4baba00264cb079da9f631"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+phonenumberslite = {version = ">=7.0.2", optional = true, markers = "extra == \"phonenumberslite\""}
+
+[package.extras]
+phonenumbers = ["phonenumbers (>=7.0.2)"]
+phonenumberslite = ["phonenumberslite (>=7.0.2)"]
+
+[[package]]
 name = "django-storages"
 version = "1.14.4"
 description = "Support for many storage backends in Django"
@@ -1148,6 +1193,17 @@ Pillow = ">=9.1"
 pypdfium2 = ">=4.18.0"
 
 [[package]]
+name = "phonenumberslite"
+version = "8.13.52"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+optional = false
+python-versions = "*"
+files = [
+    {file = "phonenumberslite-8.13.52-py2.py3-none-any.whl", hash = "sha256:02da5e78c67b213bae95afd6289f40486c93e302e518769911dfa5e7287ddeee"},
+    {file = "phonenumberslite-8.13.52.tar.gz", hash = "sha256:dfa44a4bae2e46d737ae5301cb96b14cdcbf45063236c74c6ddb08f5fd471b0d"},
+]
+
+[[package]]
 name = "pillow"
 version = "11.0.0"
 description = "Python Imaging Library (Fork)"
@@ -1712,6 +1768,21 @@ dev = ["build", "hatch"]
 doc = ["sphinx"]
 
 [[package]]
+name = "stripe"
+version = "11.3.0"
+description = "Python bindings for the Stripe API"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "stripe-11.3.0-py2.py3-none-any.whl", hash = "sha256:9d2e86943e1e4f325835d3860c4f58aa98d49229c9caf67588f9f9b2451e8e56"},
+    {file = "stripe-11.3.0.tar.gz", hash = "sha256:98e625d9ddbabcecf02666867169696e113d9eaba27979fb310a7a8dfd44097c"},
+]
+
+[package.dependencies]
+requests = {version = ">=2.20", markers = "python_version >= \"3.0\""}
+typing-extensions = {version = ">=4.5.0", markers = "python_version >= \"3.7\""}
+
+[[package]]
 name = "tqdm"
 version = "4.67.1"
 description = "Fast, Extensible Progress Meter"
@@ -1881,4 +1952,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7171ff9c968b9eb1f5af8c36ca56ca3b5ae58f9e9af188c990448b1b791e48b2"
+content-hash = "4b2a3ab6c638ad8dcbe6c4f0cf7b18eda567f3ad064ac529f06bf52a56b423b3"
