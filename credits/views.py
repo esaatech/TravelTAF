@@ -12,7 +12,8 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 import json
 from django.urls import reverse
-
+from .credit_calculator import CreditCalculator
+from .add_user_credit import add_credits_to_user
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
@@ -28,34 +29,45 @@ def process_payment(request):
     try:
         data = json.loads(request.body)
         payment_method_id = data.get('payment_method_id')
-        amount = int(float(data.get('amount')) * 100)  # Convert to cents
+        amount = float(data.get('amount'))
+        currency = data.get('currency', 'USD')  # Default to USD if not specified
 
-        # Create payment intent
+        # Calculate credits
+        credit_result = CreditCalculator.calculate_credits(amount, currency)
+
+        # Create payment intent with metadata
         intent = stripe.PaymentIntent.create(
             payment_method=payment_method_id,
-            amount=amount,
-            currency='usd',
-            confirmation_method='manual',
-            confirm=True,
+            amount=int(amount * 100),  # Convert to cents
+            currency=currency.lower(),
             metadata={
                 'user_id': request.user.id,
-                'credits': calculate_credits(amount/100)  # Add your credit calculation logic
-            }
+                'base_credits': credit_result.base_credits,
+                'bonus_credits': credit_result.bonus_credits,
+                'total_credits': credit_result.total_credits,
+                'currency': currency
+            },
+            confirmation_method='manual',
+            confirm=True
         )
 
         if intent.status == 'succeeded':
-            # Create payment record and add credits
-            payment = CreditPayment.objects.create(
-                user=request.user,
-                amount=amount/100,
-                payment_id=intent.id
-            )
+            # Add credits to user account
+            add_credits_to_user(request.user, credit_result.total_credits)
             
-            add_credits_to_user(request.user, amount/100)
+            # Create transaction record
+            CreditTransaction.objects.create(
+                user=request.user,
+                amount=credit_result.total_credits,
+                transaction_type='PURCHASE',
+                payment_intent_id=intent.id,
+                currency=currency,
+                description=f"Purchased {credit_result.base_credits} credits + {credit_result.bonus_credits} bonus credits"
+            )
 
             return JsonResponse({
                 'success': True,
-                'redirect_url': reverse('credits:payment_success', args=[payment.id])
+                'redirect_url': reverse('credits:payment_success')
             })
         else:
             return JsonResponse({
@@ -76,25 +88,24 @@ def process_payment(request):
 
 @login_required
 def payment_success(request, payment_id):
-    payment = get_object_or_404(CreditPayment, id=payment_id)
+    payment = get_object_or_404(CreditPayment, id=payment_id, user=request.user)
     
-    if payment.status == PaymentStatus.CONFIRMED:
-        with transaction.atomic():
-            user_credit, created = UserCredit.objects.get_or_create(user=request.user)
-            user_credit.balance += payment.total
-            user_credit.save()
-
-            CreditTransaction.objects.create(
-                user=request.user,
-                amount=payment.total,
-                transaction_type='PURCHASE',
-                payment=payment,
-                description=f"Credit purchase of {payment.total}"
-            )
-
-        messages.success(request, f'Successfully added {payment.total} credits to your account!')
+    if payment.status == 'confirmed' and not payment.extra_data.get('credits_added'):
+        # Calculate credits from the payment amount
+        credits_to_add = payment.total  # Or use your CreditCalculator here
+        
+        # Add credits to user
+        add_credits_to_user(request.user, credits_to_add)
+        
+        # Mark credits as added to prevent double-crediting
+        payment.extra_data = {'credits_added': True}
+        payment.save()
+        
+        messages.success(request, f'{credits_to_add} credits have been added to your account!')
     
-    return redirect('credits:balance')
+    return render(request, 'credits/payment_success.html', {
+        'payment': payment
+    })
 
 @login_required
 def credit_balance(request):
