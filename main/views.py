@@ -46,7 +46,105 @@ def services(request):
     return render(request, 'home/all-services.html')
 
 def moving_abroad(request):
-    return render(request, 'services/moving_abroad.html')
+    context = {
+        'page_title': 'Moving Abroad Guide',
+        'page_description': 'Discover different pathways and options for moving abroad',
+        
+        'pathways': {
+            'education': {
+                'title': 'Education Route',
+                'icon': 'M12 14l9-5-9-5-9 5 9 5z',  # Graduation cap icon
+                'options': [
+                    {'name': 'Student Visas', 'description': 'Full-time study at recognized institutions'},
+                    {'name': 'Language Schools', 'description': 'Language study programs and cultural exchange'},
+                    {'name': 'Exchange Programs', 'description': 'Academic and cultural exchange opportunities'},
+                    {'name': 'Post-Study Work', 'description': 'Work opportunities after graduation'},
+                ]
+            },
+            'employment': {
+                'title': 'Employment Route',
+                'icon': 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',  # Briefcase icon
+                'options': [
+                    {'name': 'Work Visas', 'description': 'Employment-based immigration options'},
+                    {'name': 'Skilled Migration', 'description': 'Programs for qualified professionals'},
+                    {'name': 'Digital Nomad Visas', 'description': 'Remote work opportunities abroad'},
+                    {'name': 'Working Holiday', 'description': 'Temporary work and travel programs'},
+                ]
+            },
+            'family': {
+                'title': 'Family Route',
+                'icon': 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',  # Family icon
+                'options': [
+                    {'name': 'Family Reunification', 'description': 'Join family members abroad'},
+                    {'name': 'Partner/Spouse Visas', 'description': 'Marriage and partnership-based options'},
+                    {'name': 'Parent Visas', 'description': 'Options for parents and guardians'},
+                    {'name': 'Child Dependent Visas', 'description': 'Programs for dependent children'},
+                ]
+            },
+            'investment': {
+                'title': 'Investment Route',
+                'icon': 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',  # Money icon
+                'options': [
+                    {'name': 'Business Visas', 'description': 'For business owners and entrepreneurs'},
+                    {'name': 'Investor Programs', 'description': 'Investment-based immigration options'},
+                    {'name': 'Start-up Visas', 'description': 'Programs for innovative businesses'},
+                ]
+            },
+            'special': {
+                'title': 'Special Categories',
+                'icon': 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z',  # Star icon
+                'options': [
+                    {'name': 'Retirement Visas', 'description': 'Programs for retirees'},
+                    {'name': 'Religious Worker Visas', 'description': 'For religious and charitable work'},
+                    {'name': 'Volunteer Visas', 'description': 'Humanitarian and volunteer opportunities'},
+                    {'name': 'Artist/Cultural Visas', 'description': 'For artists and performers'},
+                ]
+            },
+            'humanitarian': {
+                'title': 'Humanitarian Protection',
+                'icon': 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',  # Heart icon
+                'options': [
+                    {
+                        'name': 'Asylum',
+                        'description': 'Protection for those fleeing persecution in their home country'
+                    },
+                    {
+                        'name': 'Refugee Status',
+                        'description': 'UN-recognized refugee resettlement programs'
+                    },
+                    {
+                        'name': 'Humanitarian Visas',
+                        'description': 'Special programs for humanitarian circumstances'
+                    },
+                    {
+                        'name': 'Temporary Protected Status',
+                        'description': 'Temporary protection for specific country conditions'
+                    }
+                ],
+                'note': 'These options are for individuals seeking protection from persecution or serious harm. Please consult official government resources or legal professionals for specific guidance.'
+            }
+        },
+        
+        'consultation_services': {
+            'pathway_assessment': {
+                'title': 'Pathway Assessment',
+                'credits': 25,
+                'description': 'Personal review and recommendations for your best moving abroad options'
+            },
+            'detailed_consultation': {
+                'title': 'Detailed Consultation',
+                'credits': 40,
+                'description': 'In-depth planning and guidance for your chosen pathway'
+            },
+            'document_strategy': {
+                'title': 'Document Strategy',
+                'credits': 20,
+                'description': 'Comprehensive document preparation guide and timeline'
+            }
+        }
+    }
+    return render(request, 'services/moving_abroad.html', context)
+
 
 def immigration_consulting(request):
     context = {
