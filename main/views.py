@@ -45,6 +45,8 @@ def contact(request):
 def services(request):
     return render(request, 'home/all-services.html')
 
+def moving_abroad(request):
+    return render(request, 'services/moving_abroad.html')
 
 def immigration_consulting(request):
     context = {

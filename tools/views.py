@@ -73,11 +73,67 @@ def document_checker(request):
 def timeline_planner(request):
     return render(request, 'tools/timeline_planner.html')
 
+def resume_builder(request):
+    return render(request, 'tools/resume_builder.html')
+
+def resume_review(request):
+    return render(request, 'tools/resume_review.html')
+
 def language_test(request):
     return render(request, 'tools/language_test.html')
 
 def job_search(request):
-    return render(request, 'tools/job_search.html')
+    context = {
+        'page_title': 'International Job Search Resources',
+        'page_description': 'Access curated job boards and premium tools to find international job opportunities and optimize your applications.',
+        'resume_services': {
+            'builder_cost': 25,  # Combined cost for build & optimize
+            'cover_letter_cost': 15,  # Cost for cover letter
+        },
+        'countries': {
+            'usa': {
+                'name': 'United States',
+                'job_boards': [
+                    {
+                        'name': 'LinkedIn Jobs',
+                        'url': 'https://www.linkedin.com/jobs',
+                        'description': 'Professional networking and job search platform with extensive US listings.'
+                    },
+                    {
+                        'name': 'H1B.io',
+                        'url': 'https://h1b.io/',
+                        'description': 'Specialized in H1B visa sponsorship jobs.'
+                    },
+                    {
+                        'name': 'MyVisaJobs',
+                        'url': 'https://www.myvisajobs.com/',
+                        'description': 'Focus on visa-sponsored jobs and H1B opportunities.'
+                    }
+                ],
+                'visa_info': 'Most common work visas: H1B, L1, O1',
+                'avg_salary': '$65,000 - $120,000'
+            },
+            'canada': {
+                'name': 'Canada',
+                'job_boards': [
+                    {
+                        'name': 'Job Bank Canada',
+                        'url': 'https://www.jobbank.gc.ca/',
+                        'description': 'Official Canadian government job site.'
+                    },
+                    {
+                        'name': 'Indeed Canada',
+                        'url': 'https://ca.indeed.com/',
+                        'description': 'Large job aggregator with Canadian opportunities.'
+                    }
+                ],
+                'visa_info': 'Work permits via LMIA or Express Entry',
+                'avg_salary': 'CAD 55,000 - 95,000'
+            },
+            # Add more countries...
+        }
+    }
+    return render(request, 'tools/job_search.html', context)
 
 def get_filtered_schools(country, program_level, field_of_study, tuition_range):
     """

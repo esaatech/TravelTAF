@@ -22,4 +22,6 @@ urlpatterns = [
     path('cover-letters/', views.cover_letters, name='cover_letters'),
     path('test-openai/', views.test_openai, name='test-openai'),
     path('all-tools/', views.all_tools, name='all_tools'),
+    path('resume-builder/', views.resume_builder, name='resume_builder'),
+    path('resume-review/', views.resume_review, name='resume_review'),
 ]

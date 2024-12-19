@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'tools/components/tools-hero-section.html' %}
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Resume Services Section -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8">Job Application Tools</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Resume Builder & Optimizer -->
+                <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold">Resume Builder & Optimizer</h3>
+                        <span class="text-[#1980e6] font-medium">{{ resume_services.builder_cost }} Credits</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Create or optimize your ATS-friendly resume with our professional templates and AI-powered suggestions.</p>
+                    <ul class="text-gray-600 text-sm mb-6 space-y-2">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Professional ATS-friendly templates
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            AI-powered content suggestions
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Keyword optimization for job markets
+                        </li>
+                    </ul>
+                    <a href="{% url 'tools:resume_builder' %}" class="block text-center bg-[#1980e6] text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Build & Optimize Resume
+                    </a>
+                </div>
+
+                <!-- Cover Letter Generator -->
+                <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold">Cover Letter Generator</h3>
+                        <span class="text-[#1980e6] font-medium">{{ resume_services.cover_letter_cost }} Credits</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Generate a personalized cover letter tailored to your target job and company.</p>
+                    <ul class="text-gray-600 text-sm mb-6 space-y-2">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            AI-powered personalization
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Multiple industry templates
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Professional formatting
+                        </li>
+                    </ul>
+                    <a href="{% url 'tools:job_cover_letter' %}" class="block text-center bg-[#1980e6] text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Generate Cover Letter
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Boards by Country -->
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-8">International Job Boards</h2>
+            
+            {% for country_code, country in countries.items %}
+            <div class="mb-12">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">{{ country.name }}</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <!-- Country Info -->
+                    <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <p class="font-medium text-gray-700">Visa Information:</p>
+                            <p class="text-gray-600">{{ country.visa_info }}</p>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <p class="font-medium text-gray-700">Average Salary Range:</p>
+                            <p class="text-gray-600">{{ country.avg_salary }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Job Boards -->
+                    <div class="space-y-4">
+                        {% for board in country.job_boards %}
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-[#1980e6] transition-colors">
+                            <div>
+                                <h4 class="font-medium text-gray-900">{{ board.name }}</h4>
+                                <p class="text-gray-600 text-sm">{{ board.description }}</p>
+                            </div>
+                            <a href="{{ board.url }}" target="_blank" rel="noopener noreferrer" 
+                               class="flex items-center text-[#1980e6] hover:text-blue-700">
+                                Visit Site
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
