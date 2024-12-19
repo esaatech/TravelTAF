@@ -14,6 +14,11 @@ from pathlib import Path
 import os
 # Add logging to debug storage
 import logging
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 # Add this near the top of settings.py after imports
 LOGGING = {
     'version': 1,
@@ -387,3 +392,8 @@ PAYMENT_VARIANTS = {
         'public_key': STRIPE_PUBLIC_KEY,  # Use the same key
     }),
 }
+
+
+# Amadeus API settings
+AMADEUS_CLIENT_ID = os.getenv('AMADEUS_CLIENT_ID')
+AMADEUS_CLIENT_SECRET = os.getenv('AMADEUS_CLIENT_SECRET')
