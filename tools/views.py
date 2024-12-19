@@ -7,6 +7,11 @@ from django.views.decorators.csrf import csrf_protect
 import logging
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from asgiref.sync import sync_to_async
+import asyncio
+
+from .services.amadeus import AmadeusFlightService
+from .services.flight_interfaces import FlightSearchParams, FlightDestination
 
 from .cover_letter import (
     generate_cover_letter_from_fields,
@@ -585,4 +590,31 @@ def test_openai(request):
 
 def all_tools(request):
     return render(request, 'tools/all-tools.html')
- 
+
+
+
+
+
+def flight_search(request):
+    if request.method == 'POST':
+        try:
+            service = AmadeusFlightService()
+            params = FlightSearchParams(
+                origin=request.POST.get('origin'),
+                max_price=float(request.POST.get('maxPrice')) if request.POST.get('maxPrice') else None
+            )
+            
+            results = asyncio.run(service.search_destinations(params))
+            return JsonResponse({
+                'success': True,
+                'results': [vars(result) for result in results]
+            }, safe=False)
+            
+        except Exception as e:
+            print(f"Error: {str(e)}")  # Debug log
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            })
+    
+    return render(request, 'tools/flight_search.html')

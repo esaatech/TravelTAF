@@ -24,4 +24,5 @@ urlpatterns = [
     path('all-tools/', views.all_tools, name='all_tools'),
     path('resume-builder/', views.resume_builder, name='resume_builder'),
     path('resume-review/', views.resume_review, name='resume_review'),
+    path('flight-search/', views.flight_search, name='flight_search'),
 ]
