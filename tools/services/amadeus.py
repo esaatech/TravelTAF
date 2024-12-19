@@ -2,37 +2,60 @@ import aiohttp
 from datetime import datetime
 from typing import List
 from .flight_interfaces import FlightSearchService, FlightSearchParams, FlightDestination
+import os
+from django.conf import settings
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class AmadeusFlightService(FlightSearchService):
     def __init__(self):
-        self.client_id = 'ldVOG4IqYVNgHM2fLkH5dvqxQbs7LtOV'
-        self.client_secret = 'EMTXJAqssGmfvOK7'
+        # Get credentials from environment variables or settings
+        self.client_id = os.getenv('AMADEUS_CLIENT_ID')
+        #'ldVOG4IqYVNgHM2fLkH5dvqxQbs7LtOV'
+        #os.getenv('AMADEUS_CLIENT_ID', settings.AMADEUS_CLIENT_ID)
+        self.client_secret = os.getenv('AMADEUS_CLIENT_SECRET')
+        #os.getenv('AMADEUS_CLIENT_SECRET')
+        #'EMTXJAqssGmfvOK7'
+        #os.getenv('AMADEUS_CLIENT_SECRET', settings.AMADEUS_CLIENT_SECRET)
+        
+        
+        if not self.client_id or not self.client_secret:
+            raise ValueError("Amadeus API credentials not configured")
+            
         self.token = None
         self.token_expires = None
         self.base_url = 'https://test.api.amadeus.com/v1'
 
     async def get_access_token(self) -> str:
         """Get or refresh Amadeus API token"""
-        if self.token and self.token_expires and datetime.now() < self.token_expires:
-            return self.token
-
-        async with aiohttp.ClientSession() as session:
-            data = {
-                'grant_type': 'client_credentials',
-                'client_id': self.client_id,
-                'client_secret': self.client_secret
-            }
-            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            
-            async with session.post(
-                f'{self.base_url}/security/oauth2/token',
-                data=data,
-                headers=headers
-            ) as response:
-                result = await response.json()
-                self.token = result['access_token']
-                self.token_expires = datetime.now().timestamp() + result['expires_in']
-                return self.token
+        try:
+            async with aiohttp.ClientSession() as session:
+                data = {
+                    'grant_type': 'client_credentials',
+                    'client_id': self.client_id,
+                    'client_secret': self.client_secret
+                }
+                headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                
+                async with session.post(
+                    f'{self.base_url}/security/oauth2/token',
+                    data=data,
+                    headers=headers
+                ) as response:
+                    if response.status != 200:
+                        error_text = await response.text()
+                        raise Exception(f"Failed to get access token. Status: {response.status}, Response: {error_text}")
+                        
+                    result = await response.json()
+                    if 'access_token' not in result:
+                        raise Exception(f"Invalid token response: {result}")
+                        
+                    self.token = result['access_token']
+                    return self.token
+                    
+        except Exception as e:
+            raise Exception(f"Authentication failed: {str(e)}")
 
     async def search_destinations(self, params: FlightSearchParams) -> List[FlightDestination]:
         """Search flight destinations using Amadeus API"""
