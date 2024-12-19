@@ -43,16 +43,17 @@
                     <!-- Dropdown Menu -->
                     <div class="absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                         <div class="p-4 space-y-3">
-                            <!-- Immigration Consulting -->
-                            <a href="{% url 'main:immigration_consulting' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition-colors">
+                            <!-- Moving Abroad -->
+                            <a href="{% url 'main:moving_abroad' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition-colors">
                                 <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path d="M12 4.354a4 4 0 110 5.292V15M15 21h3a2 2 0 002-2v-6a2 2 0 00-2-2h-3M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a2 2 0 012-2h0a2 2 0 012 2v5m-4 0h4" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <div class="font-medium">Immigration Consulting</div>
-                                    <div class="text-sm text-gray-500">Visa & documentation support</div>
+                                    <div class="font-medium">Moving Abroad</div>
+                                    <div class="text-sm text-gray-500">Relocation guides & tips</div>
                                 </div>
                             </a>
 
@@ -238,11 +239,12 @@
                     </svg>
                 </button>
                 <div id="mobileServicesMenu" class="hidden pl-4 mt-2 space-y-1">
-                    <a href="{% url 'main:immigration_consulting' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
+                    <a href="{% url 'main:moving_abroad' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M12 4.354a4 4 0 110 5.292V15M15 21h3a2 2 0 002-2v-6a2 2 0 00-2-2h-3M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a2 2 0 012-2h0a2 2 0 012 2v5m-4 0h4" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                         </svg>
-                        <span>Immigration Consulting</span>
+                        <span>Moving Abroad</span>
                     </a>
                     <a href="{% url 'main:study_abroad' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
