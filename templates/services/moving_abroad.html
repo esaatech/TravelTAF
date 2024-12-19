@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-50 to-white py-20">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold mb-4">Moving Abroad Guide</h1>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                Discover different pathways and options available for moving abroad. Get expert guidance for your journey.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Pathways Section -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center">Pathways to Move Abroad</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for key, pathway in pathways.items %}
+            {% if key == 'humanitarian' %}
+            <div class="bg-white rounded-xl border hover:shadow-lg transition-shadow p-6">
+                <div class="w-12 h-12 bg-rose-100 rounded-lg mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ pathway.icon }}" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4">{{ pathway.title }}</h3>
+                <ul class="space-y-3">
+                    {% for option in pathway.options %}
+                    <li>
+                        <h4 class="font-medium text-gray-900">{{ option.name }}</h4>
+                        <p class="text-sm text-gray-600">{{ option.description }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% if pathway.note %}
+                <div class="mt-4 p-3 bg-rose-50 rounded-lg">
+                    <p class="text-sm text-rose-700">{{ pathway.note }}</p>
+                </div>
+                {% endif %}
+                <div class="mt-4">
+                    <a href="https://www.unhcr.org" target="_blank" rel="noopener noreferrer" 
+                       class="text-rose-600 hover:underline text-sm flex items-center">
+                        Learn more at UNHCR
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-white rounded-xl border hover:shadow-lg transition-shadow p-6">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ pathway.icon }}" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4">{{ pathway.title }}</h3>
+                <ul class="space-y-3">
+                    {% for option in pathway.options %}
+                    <li>
+                        <h4 class="font-medium text-gray-900">{{ option.name }}</h4>
+                        <p class="text-sm text-gray-600">{{ option.description }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Premium Services Section -->
+<section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center">Expert Guidance Services</h2>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            {% for key, service in consultation_services.items %}
+            <div class="bg-white rounded-xl border hover:shadow-lg transition-shadow p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">{{ service.title }}</h3>
+                    <span class="text-[#1980e6] font-medium">{{ service.credits }} Credits</span>
+                </div>
+                <p class="text-gray-600 mb-6">{{ service.description }}</p>
+                <a href="#" 
+                   class="block text-center bg-[#1980e6] text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Book Now
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+        
+        <div class="max-w-3xl mx-auto space-y-6">
+            <!-- Add FAQ items here -->
+            <div class="border rounded-lg p-4">
+                <h3 class="font-semibold mb-2">How do I choose the right pathway?</h3>
+                <p class="text-gray-600">The best pathway depends on your qualifications, circumstances, and goals. Our pathway assessment service can help you identify the most suitable options for your situation.</p>
+            </div>
+            <!-- Add more FAQ items as needed -->
+        </div>
+    </div>
+</section>
+{% endblock %}
