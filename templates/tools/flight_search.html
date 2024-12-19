@@ -146,14 +146,27 @@
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold">Available Flights</h2>
                 <div class="flex space-x-4">
-                    <select id="sortBy" class="border rounded-lg px-3 py-2 text-sm">
+                    <!-- Sorting Controls -->
+                    <select id="sortField" class="border rounded-lg px-3 py-2">
                         <option value="price">Sort by Price</option>
-                        <option value="departure">Sort by Departure</option>
+                        <option value="departure_date">Sort by Departure Date</option>
+                        <option value="destination">Sort by Destination</option>
+                    </select>
+                    <select id="sortOrder" class="border rounded-lg px-3 py-2">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
                     </select>
                 </div>
             </div>
+
+            <!-- Results Grid -->
             <div id="resultsGrid" class="space-y-4">
                 <!-- Results will be inserted here -->
+            </div>
+
+            <!-- Pagination -->
+            <div id="paginationContainer" class="mt-6">
+                <!-- Pagination will be inserted here -->
             </div>
         </div>
 
@@ -168,93 +181,58 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="{% static 'js/tools/flight_search.js' %}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('booking  DOM loaded'); // Debug log
-    
+    // Initialize FlightResultsManager
+    const resultsManager = new FlightResultsManager({
+        resultsPerPage: 10,
+        container: document.getElementById('resultsGrid'),
+        paginationContainer: document.getElementById('paginationContainer')
+    });
+
+    // Handle sort controls
+    const sortField = document.getElementById('sortField');
+    const sortOrder = document.getElementById('sortOrder');
+
+    function updateSort() {
+        resultsManager.handleSort(sortField.value, sortOrder.value);
+    }
+
+    sortField.addEventListener('change', updateSort);
+    sortOrder.addEventListener('change', updateSort);
+
+    // Handle form submission
     const form = document.getElementById('flightSearchForm');
-    console.log('Form found:', form); // Debug log
-    
+    const loadingState = document.getElementById('loadingState');
+    const resultsSection = document.getElementById('resultsSection');
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        console.log('Form submitted'); // Debug log
         
-        const resultsSection = document.getElementById('resultsSection');
-        const resultsGrid = document.getElementById('resultsGrid');
-        const loadingState = document.getElementById('loadingState');
-        
-        // Show loading state
         loadingState.classList.remove('hidden');
         resultsSection.classList.add('hidden');
         
         try {
-            console.log('Sending fetch request'); // Debug log
             const response = await fetch('{% url "tools:flight_search" %}', {
                 method: 'POST',
                 body: new FormData(form),
                 headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                    'Accept': 'application/json' // Add this line
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 }
             });
             
             const data = await response.json();
-            console.log('Received data:', data); // Debug log
             
             if (data.success) {
-                // Clear previous results
-                resultsGrid.innerHTML = '';
-                
-                // Add each result to the grid
-                data.results.forEach(result => {
-                    const resultCard = `
-                        <div class="bg-white rounded-lg shadow-sm p-6 border hover:shadow-md transition-shadow">
-                            <div class="flex justify-between items-start">
-                                <div class="flex-1">
-                                    <div class="flex items-center space-x-4 mb-4">
-                                        <span class="text-lg font-semibold">${result.destination}</span>
-                                        <div class="flex items-center text-gray-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M10.293 15.707a1 1 0 010-1.414L12.586 12H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                                        <div>
-                                            <p class="font-medium">Departure</p>
-                                            <p>${new Date(result.departure_date).toLocaleDateString()}</p>
-                                        </div>
-                                        ${result.return_date ? `
-                                            <div>
-                                                <p class="font-medium">Return</p>
-                                                <p>${new Date(result.return_date).toLocaleDateString()}</p>
-                                            </div>
-                                        ` : ''}
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-bold text-[#1980e6]">€${result.price}</div>
-                                </div>
-                            </div>
-                            <div class="mt-4 pt-4 border-t flex justify-between items-center">
-                                <button class="w-full bg-[#1980e6] text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
-                                    Select Flight
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    resultsGrid.insertAdjacentHTML('beforeend', resultCard);
-                });
-                
-                // Show results section
+                resultsManager.setResults(data.results);
                 resultsSection.classList.remove('hidden');
-                // Scroll to results
                 resultsSection.scrollIntoView({ behavior: 'smooth' });
             } else {
                 alert('Error: ' + data.error);
             }
         } catch (error) {
-            console.error('Error:', error); // Debug log
+            console.error('Error:', error);
             alert('An error occurred while searching for flights.');
         } finally {
             loadingState.classList.add('hidden');
