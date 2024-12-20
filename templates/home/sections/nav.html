@@ -19,7 +19,16 @@
                     </svg>
                     <span>Home</span>
                 </a>
-                
+
+                <!-- Flight Booking -->
+                <a href="{% url 'tools:flight_search' %}" class="flex items-center space-x-2 text-gray-700 hover:text-[#1980e6] transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    <span>Flight Booking</span>
+                </a>
+
                 <!-- Travel News -->
                 <a href="{% url 'news:list' %}" class="flex items-center space-x-2 text-gray-700 hover:text-[#1980e6] transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,7 +152,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                     </svg>
                                 </div>
-                                <div class="text-sm font-medium">Flight Search</div>
+                                <div class="text-sm font-medium">Flight Booking</div>
                             </a>
 
                             <!-- Cost Estimator -->
@@ -177,7 +186,7 @@
                                     <a href="{% url 'tools:language_test' %}" class="text-sm text-gray-600 hover:text-[#1980e6] transition-colors">Language Test</a>
                                     <a href="{% url 'tools:job_search' %}" class="text-sm text-gray-600 hover:text-[#1980e6] transition-colors">Job Search</a>
                                     <a href="{% url 'tools:cover_letters' %}" class="text-sm text-gray-600 hover:text-[#1980e6] transition-colors">Cover Letter AI</a>
-                                    <a href="{% url 'tools:timeline_planner' %}" class="text-sm text-gray-600 hover:text-[#1980e6] transition-colors">Timeline Planner</a>
+                                    <a href="{% url 'resume_builder:create_resume' %}" class="text-sm text-gray-600 hover:text-[#1980e6] transition-colors">Resume AI</a>
                                 </div>
                             </div>
 
@@ -225,12 +234,21 @@
         <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
             <a href="{% url 'main:home' %}" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-blue-50 rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
                 <span>Home</span>
             </a>
-            
-            <!-- Add Travel News to mobile menu -->
+
+            <!-- Flight Booking -->
+            <a href="{% url 'tools:flight_search' %}" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-blue-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                <span>Flight Booking</span>
+            </a>
+
+            <!-- Travel News -->
             <a href="{% url 'news:list' %}" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-blue-50 rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -313,12 +331,41 @@
                         </svg>
                         <span>Cost Estimator</span>
                     </a>
-                    <a href="#" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
+                    <a href="{% url 'tools:flight_search' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
-                        <span>Document Checker</span>
+                        <span>Flight Booking</span>
                     </a>
+                    
+                   
+                        
+                        <a href="{% url 'tools:language_test' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                            </svg>
+                            <span>Language Test</span>
+                        </a>
+                        <a href="{% url 'tools:job_search' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span>Job Search</span>
+                        </a>
+                        <a href="{% url 'tools:cover_letters' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <span>Cover Letter AI</span>
+                        </a>
+                        <a href="{% url 'resume_builder:create_resume' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <span>Resume AI</span>
+                        </a>
+                    
                     <a href="{% url 'tools:all_tools' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#1980e6]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
