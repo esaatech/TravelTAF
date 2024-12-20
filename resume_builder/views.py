@@ -8,7 +8,7 @@ import json
 def resume_home(request):
     return render(request, 'resume_builder/home.html')
 
-@login_required
+
 def create_resume(request):
     # Hero section content
     hero_content = {
@@ -32,14 +32,14 @@ def create_resume(request):
 
     return render(request, 'resume.html', context)
 
-@login_required
+
 def optimize_resume(request):
     if request.method == 'POST':
         # Handle resume optimization
         pass
     return render(request, 'optimize.html')
 
-@login_required
+
 def download_resume(request, resume_id):
     # Handle resume download
     pass
