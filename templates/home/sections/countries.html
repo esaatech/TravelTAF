@@ -1,11 +1,10 @@
-
 {% load static %}
 <section class="min-h-[500px] bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4">
         <h2 class="text-3xl font-bold mb-12 text-center">Popular Travel Destinations 2024</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Canada -->
-            <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
+            <a href="#" class="block bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
                 <img src="{% static 'images/Flag_of_Canada_(Pantone).svg.png' %}" alt="Canada" class="w-full rounded-lg mb-4 object-cover h-48">
                 <h3 class="text-xl font-semibold mb-4">Canada</h3>
                 <ul class="space-y-3 mb-6">
@@ -13,7 +12,7 @@
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Express Entry Program
+                        Banff National Park
                     </li>
                     <li class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,11 +27,11 @@
                         Work Permits
                     </li>
                 </ul>
-                <a href="#" class="text-[#1980e6] hover:underline">Explore Canada →</a>
-            </div>
+                <span class="text-[#1980e6] hover:underline">Explore Canada →</span>
+            </a>
  
             <!-- Australia -->
-            <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
+            <a href="#" class="block bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
                 <img src="{% static 'images/Flag_of_Australia_(converted).png' %}" alt="Australia" class="w-full rounded-lg mb-4 object-cover h-48">
                 <h3 class="text-xl font-semibold mb-4">Australia</h3>
                 <ul class="space-y-3 mb-6">
@@ -40,7 +39,7 @@
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Skilled Migration
+                        Great Barrier Reef
                     </li>
                     <li class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,11 +54,11 @@
                         Business Visas
                     </li>
                 </ul>
-                <a href="#" class="text-[#1980e6] hover:underline">Explore Australia →</a>
-            </div>
+                <span class="text-[#1980e6] hover:underline">Explore Australia →</span>
+            </a>
  
             <!-- UK -->
-            <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
+            <a href="#" class="block bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
                 <img src="{% static 'images/Flag_of_the_United_Kingdom.svg.png' %}" alt="United Kingdom" class="w-full rounded-lg mb-4 object-cover h-48">
                 <h3 class="text-xl font-semibold mb-4">United Kingdom</h3>
                 <ul class="space-y-3 mb-6">
@@ -67,7 +66,7 @@
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Skilled Worker Visa
+                        London Eye
                     </li>
                     <li class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,14 +81,14 @@
                         Innovator Visa
                     </li>
                 </ul>
-                <a href="#" class="text-[#1980e6] hover:underline">Explore UK →</a>
-            </div>
+                <span class="text-[#1980e6] hover:underline">Explore UK →</span>
+            </a>
         </div>
           
         <div class="text-center mt-12">
-            <button class="px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors">
+            <a href="{% url 'main:compare_countries' %}" class="px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors inline-block">
                 Compare Countries
-            </button>
+            </a>
         </div>
     </div>
- </section>
+</section>

@@ -4,6 +4,7 @@ from news.models import News  # Import the News model
 from credits.models import CreditTransaction, UserCredit
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
+from django.http import JsonResponse
 
 def home(request):
     # Query the latest 3 news articles
@@ -606,3 +607,63 @@ def dashboard(request):
     }
     
     return render(request, 'dashboard/dashboard.html', context)
+
+def compare_countries(request):
+    context = {
+        'page_title': 'Compare Countries',
+        'page_description': 'Make informed decisions by comparing key aspects of different countries for travel, study, or migration.',
+        'countries': [
+            {'code': 'ca', 'name': 'Canada'},
+            {'code': 'au', 'name': 'Australia'},
+            {'code': 'uk', 'name': 'United Kingdom'},
+            # Add more countries as needed
+        ]
+    }
+    return render(request, 'home/compare-countries.html', context)
+
+def get_country_data(request):
+    # Sample data structure
+    country_data = {
+        'ca': {
+            'cost': {
+                'rent': '$1,500',
+                'food': '$500',
+                'transport': '$150'
+            },
+            'tourism': {
+                'attractions': 'Banff, Niagara Falls',
+                'season': 'June-September',
+                'visa': 'eTA required'
+            },
+            'immigration': {
+                'work_visa': 'Express Entry',
+                'study_permit': '20-30 days',
+                'pr_options': 'CEC, FSW, PNP'
+            }
+        },
+        'au': {
+            'cost': {
+                'rent': '$1,800',
+                'food': '$600',
+                'transport': '$170'
+            },
+            'tourism': {
+                'attractions': 'Great Barrier Reef, Sydney Opera House',
+                'season': 'December-February',
+                'visa': 'ETA required'
+            },
+            'immigration': {
+                'work_visa': 'Skilled Migration',
+                'study_permit': '4-6 weeks',
+                'pr_options': 'Points Based System'
+            }
+        }
+    }
+    
+    country1 = request.GET.get('country1')
+    country2 = request.GET.get('country2')
+    
+    return JsonResponse({
+        'country1': country_data.get(country1),
+        'country2': country_data.get(country2)
+    })
