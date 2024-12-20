@@ -18,7 +18,12 @@ urlpatterns = [
 
     # Terms of Service page
     path('terms/', views.terms, name='terms'),
+
+    # Compare Countries page
+    path('compare-countries/', views.compare_countries, name='compare_countries'),  
     
+    # urls.py
+  path('api/compare', views.get_country_data, name='compare_countries_api'),
     # Contact page
     path('contact/', views.contact, name='contact'),
     
