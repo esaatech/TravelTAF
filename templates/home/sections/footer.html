@@ -8,27 +8,27 @@
             <div>
                 <h4 class="text-lg font-semibold mb-4">Services</h4>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-400 hover:text-white">Immigration Consulting</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Visa Applications</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Country Comparison</a></li>
+                    <li><a href="{% url 'main:moving_abroad' %}" class="text-gray-400 hover:text-white">Moving Abroad</a></li>
+                    <li><a href="{% url 'main:study_abroad' %}" class="text-gray-400 hover:text-white">Study Abroad</a></li>
+                    <li><a href="{% url 'main:work_visas' %}" class="text-gray-400 hover:text-white">Work Visa</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white">Travel Planning</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="text-lg font-semibold mb-4">Company</h4>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    <li><a href="{% url 'main:about' %}" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                    <li><a href="{% url 'news:list' %}" class="text-gray-400 hover:text-white">News & Updates</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Travel Guides</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="text-lg font-semibold mb-4">Legal</h4>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a></li>
+                    <li><a href="{% url 'main:privacypolicy' %}" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    <li><a href="{% url 'main:terms' %}" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    <li><a href="{% url 'main:cookies' %}" class="text-gray-400 hover:text-white">Cookie Policy</a></li>
                 </ul>
             </div>
         </div>

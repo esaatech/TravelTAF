@@ -35,7 +35,7 @@ def home(request):
 
 
 def about(request):
-    pass
+    return render(request, 'home/about.html')
 
 
 def contact(request):
@@ -575,6 +575,14 @@ def learn_more(request):
 def about(request):
     return render(request, 'home/about.html')
 
+def privacypolicy(request):
+    return render(request, 'home/privacypolicy.html')
+
+def terms(request):
+    return render(request, 'home/terms.html')
+
+def cookies(request):
+    return render(request, 'home/cookies.html')
 
 @login_required
 def dashboard(request):

@@ -10,6 +10,15 @@ urlpatterns = [
     # About page
     path('about/', views.about, name='about'),
     
+    # Privacy Policy page
+    path('privacypolicy/', views.privacypolicy, name='privacypolicy'),
+
+    # Cookies page
+    path('cookies/', views.cookies, name='cookies'),
+
+    # Terms of Service page
+    path('terms/', views.terms, name='terms'),
+    
     # Contact page
     path('contact/', views.contact, name='contact'),
     
