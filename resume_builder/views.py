@@ -4,6 +4,59 @@ from django.http import JsonResponse, HttpResponse
 from .models import Resume
 from .forms import ResumeForm
 import json
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
+from langchain.output_parsers import PydanticOutputParser
+from pydantic import BaseModel, Field
+from typing import List
+
+class OptimizedResume(BaseModel):
+    optimized_content: str = Field(description="The ATS-optimized resume content")
+    keyword_matches: List[str] = Field(description="List of important keywords matched from job description")
+    improvement_suggestions: List[str] = Field(description="List of suggestions for improving the resume")
+    ats_score: int = Field(description="ATS compatibility score out of 100")
+
+class ResumeOptimizer:
+    def __init__(self, api_key: str):
+        self.llm = ChatOpenAI(
+            temperature=0.1,
+            model_name="gpt-4",
+            openai_api_key=api_key
+        )
+        self.output_parser = PydanticOutputParser(pydantic_object=OptimizedResume)
+
+    def optimize(self, resume_text: str, job_description: str) -> OptimizedResume:
+        template = """
+        You are an expert ATS (Applicant Tracking System) optimization specialist and professional resume writer.
+        Analyze the provided resume and job description, then optimize the resume for ATS compatibility while 
+        maintaining a professional tone.
+
+        Resume:
+        {resume_text}
+
+        Job Description:
+        {job_description}
+
+        Please optimize the resume by:
+        1. Identifying and incorporating relevant keywords from the job description
+        2. Improving formatting for ATS readability
+        3. Enhancing bullet points to better match job requirements
+        4. Maintaining professional language and tone
+        5. Ensuring proper section organization
+
+        {format_instructions}
+        """
+
+        prompt = ChatPromptTemplate.from_template(template)
+        
+        messages = prompt.format_messages(
+            resume_text=resume_text,
+            job_description=job_description,
+            format_instructions=self.output_parser.get_format_instructions()
+        )
+
+        response = self.llm.predict_messages(messages)
+        return self.output_parser.parse(response.content)
 
 def resume_home(request):
     return render(request, 'resume_builder/home.html')
