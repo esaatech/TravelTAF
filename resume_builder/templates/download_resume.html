@@ -80,6 +80,14 @@
                     </svg>
                     <span>Share Resume</span>
                 </button>
+
+                <button onclick="saveResume()" 
+                        class="w-full bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700 flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                    </svg>
+                    <span>Save Resume</span>
+                </button>
             </div>
 
             <!-- Keywords Matched -->
@@ -196,6 +204,32 @@ function shareResume() {
         }).catch(console.error);
     } else {
         alert('Sharing is not supported on this browser');
+    }
+}
+
+async function saveResume() {
+    try {
+        const response = await fetch("{% url 'resume_builder:save_resume' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                content: document.getElementById('resumeContent').innerText
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to save resume');
+        }
+
+        const data = await response.json();
+        alert('Resume saved successfully!');
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to save resume. Please try again.');
     }
 }
 </script>

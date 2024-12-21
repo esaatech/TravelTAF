@@ -23,6 +23,10 @@ from reportlab.lib.pagesizes import letter
 from io import BytesIO
 from docx import Document
 from docx.shared import Inches
+from django.core.files.base import ContentFile
+from google.cloud import storage
+from django.conf import settings
+import uuid
 
 # Load environment variables from .env file
 
@@ -266,41 +270,69 @@ def download_pdf(request):
 def download_word(request):
     if request.method == 'POST':
         try:
-            # Get the content from the request
             data = json.loads(request.body)
             content = data.get('content', '')
+            save_to_cloud = data.get('save_to_cloud', False)
 
             # Create a new Word document
             doc = Document()
-            
-            # Add a title
             doc.add_heading('Optimized Resume', 0)
 
-            # Add content with proper formatting
             for paragraph in content.split('\n'):
-                if paragraph.strip():  # Only process non-empty lines
+                if paragraph.strip():
                     doc.add_paragraph(paragraph.strip())
 
-            # Create a temporary file to save the document
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.docx') as temp_file:
-                doc.save(temp_file.name)
-                temp_file_path = temp_file.name
+            # Save to BytesIO instead of temporary file
+            doc_io = BytesIO()
+            doc.save(doc_io)
+            doc_io.seek(0)
 
-            # Open the file and create the response
-            with open(temp_file_path, 'rb') as file:
-                response = FileResponse(
-                    file,
-                    as_attachment=True,
-                    filename='optimized_resume.docx',
-                    content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                )
+            if save_to_cloud:
+                # Save to Google Cloud Storage
+                try:
+                    storage_client = storage.Client()
+                    bucket = storage_client.bucket(settings.GCS_BUCKET_NAME)
+                    
+                    # Generate unique filename
+                    filename = f"resumes/{uuid.uuid4()}.docx"
+                    blob = bucket.blob(filename)
+                    
+                    # Upload from memory
+                    blob.upload_from_file(
+                        doc_io, 
+                        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                    )
 
-            # Clean up the temporary file after sending the response
-            os.unlink(temp_file_path)
+                    # Save reference to database
+                    resume = Resume.objects.create(
+                        user=request.user,
+                        file_url=f"gs://{settings.GCS_BUCKET_NAME}/{filename}",
+                        file_type='docx'
+                    )
 
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'Resume saved to cloud',
+                        'file_url': resume.file_url
+                    })
+
+                except Exception as e:
+                    logger.error(f"Cloud storage error: {str(e)}")
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'Failed to save to cloud storage'
+                    }, status=500)
+
+            # For direct download
+            response = HttpResponse(
+                doc_io.getvalue(),
+                content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            )
+            response['Content-Disposition'] = 'attachment; filename=optimized_resume.docx'
             return response
 
         except Exception as e:
+            logger.error(f"Word generation error: {str(e)}")
             return JsonResponse({
                 'success': False,
                 'error': str(e)
@@ -310,3 +342,8 @@ def download_word(request):
         'success': False,
         'error': 'Only POST requests are allowed'
     }, status=405)
+
+
+
+def save_resume(request):
+    return HttpResponse(r'saved')
