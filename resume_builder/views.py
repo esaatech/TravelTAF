@@ -33,11 +33,31 @@ def create_resume(request):
     return render(request, 'resume.html', context)
 
 
+@login_required
 def optimize_resume(request):
+    hero_content = {
+        'page_title': 'Optimize Your Resume',
+        'page_description': 'Upload your resume and job description to create an ATS-optimized version tailored to the position.'
+    }
+    
     if request.method == 'POST':
-        # Handle resume optimization
-        pass
-    return render(request, 'optimize.html')
+        resume_file = request.FILES.get('resume_file')
+        resume_text = request.POST.get('resume_text')
+        job_description = request.POST.get('job_description')
+        
+        try:
+            # Here you would add your resume optimization logic
+            optimized_resume = Resume.objects.create(
+                user=request.user,
+                original_content=resume_text or resume_file.read().decode('utf-8'),
+                job_description=job_description,
+                # Add optimized content after processing
+            )
+            return redirect('download_resume', resume_id=optimized_resume.id)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    
+    return render(request, 'resume_builder/optimize_resume.html', {'hero_content': hero_content})
 
 
 def download_resume(request, resume_id):
