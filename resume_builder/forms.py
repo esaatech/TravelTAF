@@ -19,7 +19,12 @@ class ResumeForm(forms.ModelForm):
 
     class Meta:
         model = Resume
-        fields = ['title']  # We'll handle the JSON fields separately
+        fields = [
+            'original_content',
+            'job_description',
+            # Remove 'title' if it's here
+            # Add only fields that exist in your Resume model
+        ]
 
     def clean(self):
         cleaned_data = super().clean()

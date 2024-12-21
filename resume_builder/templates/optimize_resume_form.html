@@ -113,9 +113,9 @@ document.getElementById('optimizeForm').addEventListener('submit', async functio
     e.preventDefault();
     
     const formData = new FormData(this);
+    const submitButton = this.querySelector('button[type="submit"]');
     
     try {
-        const submitButton = this.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         submitButton.innerHTML = `
             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -130,22 +130,22 @@ document.getElementById('optimizeForm').addEventListener('submit', async functio
             body: formData
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error('Optimization failed');
+            throw new Error(data.error || 'Optimization failed');
         }
 
-        const result = await response.json();
-        if (result.resume_id) {
-            window.location.href = `/resume/download/${result.resume_id}/`;
+        if (data.success) {
+            window.location.href = data.redirect_url;
         } else {
-            throw new Error('No resume ID in response');
+            throw new Error(data.error || 'Unknown error occurred');
         }
 
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to optimize resume. Please try again.');
+        alert(error.message || 'Failed to optimize resume. Please try again.');
     } finally {
-        const submitButton = this.querySelector('button[type="submit"]');
         submitButton.disabled = false;
         submitButton.innerHTML = 'Optimize Resume';
     }
@@ -195,11 +195,6 @@ function handleDrop(e) {
     handleFiles(files);
 }
 
-// Handle both dropped and selected files
-fileInput.addEventListener('change', function(e) {
-    handleFiles(this.files);
-});
-
 function handleFiles(files) {
     if (files.length > 0) {
         const file = files[0];
@@ -208,20 +203,21 @@ function handleFiles(files) {
         
         if (!allowedTypes.includes(fileExtension)) {
             alert('Please upload a PDF, DOC, or DOCX file');
-            fileInput.value = '';
             return;
         }
 
-        if (file.size > 10 * 1024 * 1024) { // 10MB
-            alert('File size must be less than 10MB');
-            fileInput.value = '';
-            return;
-        }
+        // Set the file in the file input
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
 
         // Show file info
         fileName.textContent = file.name;
         fileInfo.classList.remove('hidden');
         dropZone.classList.add('border-green-500', 'bg-green-50');
+
+        // Log for debugging
+        console.log('File added:', file.name);
     }
 }
 
