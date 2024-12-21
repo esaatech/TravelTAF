@@ -10,4 +10,6 @@ urlpatterns = [
     path('download/', views.download_resume, name='download_resume'),
     path('download-pdf/', views.download_pdf, name='download_pdf'),
     path('download-word/', views.download_word, name='download_word'),
+    path('save-resume/', views.save_resume, name='save_resume'),
+
 ]
