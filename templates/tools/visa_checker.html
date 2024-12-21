@@ -22,35 +22,53 @@
         <!-- Search Form -->
         <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
             {% csrf_token %}
-            <div class="grid md:grid-cols-[1fr,auto,1fr] gap-4 items-center">
+            <div class="grid md:grid-cols-[1fr,auto,1fr] gap-4">
                 <!-- From Country -->
-                <div class="relative">
+                <div>
                     <label for="fromCountry" class="block text-sm font-medium text-gray-700 mb-2">
                         Nationality
                     </label>
-                    <select id="fromCountry" 
-                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Select your nationality</option>
-                    </select>
+                    <div class="relative">
+                        <select id="fromCountry" 
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select your nationality</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Swap Button -->
-                <button id="swapCountries" 
-                        class="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#1980e6] text-[#1980e6] hover:bg-blue-50 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-                        <path d="M224.49,136.49l-32,32a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L175.51,104.49a12,12,0,0,1,17-17l32,32A12,12,0,0,1,224.49,136.49Z"></path>
-                    </svg>
-                </button>
+                <div class="flex items-end mb-2">
+                    <button id="swapCountries" 
+                            class="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#1980e6] text-[#1980e6] hover:bg-blue-50 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                            <path d="M224.49,136.49l-32,32a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L175.51,104.49a12,12,0,0,1,17-17l32,32A12,12,0,0,1,224.49,136.49Z"></path>
+                        </svg>
+                    </button>
+                </div>
 
                 <!-- To Country -->
-                <div class="relative">
+                <div>
                     <label for="toCountry" class="block text-sm font-medium text-gray-700 mb-2">
                         Destination
                     </label>
-                    <select id="toCountry" 
-                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Select destination country</option>
-                    </select>
+                    <div class="space-y-2">
+                        <select id="toCountry" 
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select destination country</option>
+                        </select>
+                        
+                        <!-- Checkboxes in a separate div below the select -->
+                        <div class="flex items-center space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" id="visaFreeCheck" class="form-checkbox text-[#1980e6] rounded">
+                                <span class="ml-2 text-sm text-gray-700">Show Visa Free Countries</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" id="etaCheck" class="form-checkbox text-[#1980e6] rounded">
+                                <span class="ml-2 text-sm text-gray-700">Show eTA/eVisa Countries</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 

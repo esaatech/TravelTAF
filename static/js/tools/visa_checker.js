@@ -348,35 +348,59 @@ countries.sort((a, b) => a.name.localeCompare(b.name));
 document.addEventListener('DOMContentLoaded', function() {
     const fromCountry = document.getElementById('fromCountry');
     const toCountry = document.getElementById('toCountry');
-    
-    // Populate dropdowns
-    function populateCountryDropdowns() {
-        const defaultOption = '<option value="">Select country</option>';
-        const countryOptions = countries.map(country => 
-            `<option value="${country.code}">${country.name}</option>`
-        ).join('');
+    const visaFreeCheck = document.getElementById('visaFreeCheck');
+    const etaCheck = document.getElementById('etaCheck');
+    const checkRequirements = document.getElementById('checkRequirements');
+
+    // Function to handle checkbox changes
+    function handleCheckboxChange() {
+        console.log('Checkbox change triggered'); // Debug log
+        const isEitherChecked = visaFreeCheck.checked || etaCheck.checked;
         
-        fromCountry.innerHTML = defaultOption + countryOptions;
-        toCountry.innerHTML = defaultOption + countryOptions;
+        if (isEitherChecked) {
+            toCountry.disabled = true;
+            toCountry.value = '';
+            toCountry.style.backgroundColor = '#F3F4F6';
+            toCountry.style.cursor = 'not-allowed';
+            toCountry.classList.add('opacity-50');
+        } else {
+            toCountry.disabled = false;
+            toCountry.style.backgroundColor = '';
+            toCountry.style.cursor = '';
+            toCountry.classList.remove('opacity-50');
+            
+            // Ensure the dropdown is properly re-initialized
+            if (!toCountry.options.length) {
+                populateCountryDropdowns();
+            }
+        }
+        console.log('Destination dropdown state:', {
+            disabled: toCountry.disabled,
+            value: toCountry.value,
+            optionsLength: toCountry.options.length
+        }); // Debug log
     }
 
-    // Initialize dropdowns
-    populateCountryDropdowns();
-
-    // Add swap functionality
-    document.getElementById('swapCountries').addEventListener('click', function() {
-        const temp = fromCountry.value;
-        fromCountry.value = toCountry.value;
-        toCountry.value = temp;
-    });
-
-    // Handle form submission
-    document.getElementById('checkRequirements').addEventListener('click', function() {
-        const fromCountry = document.getElementById('fromCountry').value;
-        const toCountry = document.getElementById('toCountry').value;
+    // Move the check requirements handler outside
+    function handleCheckRequirements() {
+        console.log('Check Requirements clicked'); // Debug log
+        const fromCountryValue = fromCountry.value;
+        const toCountryValue = toCountry.value;
         
-        if (!fromCountry || !toCountry) {
-            alert('Please select both countries');
+        console.log('Form values:', {
+            fromCountry: fromCountryValue,
+            toCountry: toCountryValue,
+            visaFreeChecked: visaFreeCheck.checked,
+            etaChecked: etaCheck.checked
+        }); // Debug log
+
+        if (!fromCountryValue) {
+            alert('Please select your nationality');
+            return;
+        }
+
+        if (!toCountryValue && !visaFreeCheck.checked && !etaCheck.checked) {
+            alert('Please select a destination country or search type');
             return;
         }
 
@@ -385,11 +409,20 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('loadingState').classList.remove('hidden');
         document.getElementById('resultsContent').classList.add('hidden');
 
-        // Send request to backend
+        // Prepare form data
         const formData = new FormData();
-        formData.append('fromCountry', fromCountry);
-        formData.append('toCountry', toCountry);
+        formData.append('fromCountry', fromCountryValue);
+        
+        if (visaFreeCheck.checked) {
+            formData.append('searchType', 'visa_free');
+        } else if (etaCheck.checked) {
+            formData.append('searchType', 'eta');
+        } else {
+            formData.append('searchType', 'specific');
+            formData.append('toCountry', toCountryValue);
+        }
 
+        // Make API call
         fetch('/tools/visa-checker/', {
             method: 'POST',
             body: formData,
@@ -397,62 +430,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 'X-CSRFToken': getCookie('csrftoken')
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
-            // Hide loading state
-            document.getElementById('loadingState').classList.add('hidden');
-            document.getElementById('resultsContent').classList.remove('hidden');
-
-            // Update visa status
-            const statusColors = {
-                'visa_required': 'bg-red-100 text-red-800',
-                'visa_free': 'bg-green-100 text-green-800',
-                'visa_on_arrival': 'bg-blue-100 text-blue-800',
-                'e_visa': 'bg-yellow-100 text-yellow-800'
-            };
-
-            const statusText = {
-                'visa_required': 'Visa Required',
-                'visa_free': 'Visa Free',
-                'visa_on_arrival': 'Visa on Arrival',
-                'e_visa': 'E-Visa Available'
-            };
-
-            document.getElementById('visaStatus').className = `p-4 rounded-lg text-center ${statusColors[data.status]}`;
-            document.getElementById('visaStatus').innerHTML = `
-                <h2 class="text-2xl font-bold">${statusText[data.status]}</h2>
-            `;
-
-            // Update detailed requirements
-            document.getElementById('detailedRequirements').innerHTML = `
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="font-bold mb-2">Processing Details</h3>
-                        <ul class="space-y-2">
-                            <li>Processing Time: ${data.details.processing_time}</li>
-                            <li>Validity: ${data.details.validity}</li>
-                            <li>Cost: ${data.details.cost}</li>
-                            <li>Maximum Stay: ${data.details.max_stay}</li>
-                            <li>Entry Type: ${data.details.entry_type}</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold mb-2">Required Documents</h3>
-                        <ul class="list-disc pl-4 space-y-1">
-                            ${data.details.requirements.map(req => `<li>${req}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-                <div class="mt-6">
-                    <h3 class="font-bold mb-2">Additional Information</h3>
-                    <ul class="list-disc pl-4 space-y-1">
-                        ${data.details.additional_info.map(info => `<li>${info}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
+            // Rest of your existing success handling code...
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error details:', error); // Detailed error logging
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('resultsContent').innerHTML = `
                 <div class="text-red-600 text-center">
@@ -461,21 +449,57 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             document.getElementById('resultsContent').classList.remove('hidden');
         });
+    }
+
+    // Add event listeners
+    visaFreeCheck?.addEventListener('change', function() {
+        if (this.checked) {
+            etaCheck.checked = false;
+        }
+        handleCheckboxChange();
     });
 
-    // Helper function to get CSRF token
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+    etaCheck?.addEventListener('change', function() {
+        if (this.checked) {
+            visaFreeCheck.checked = false;
+        }
+        handleCheckboxChange();
+    });
+
+    // Attach check requirements handler
+    checkRequirements.addEventListener('click', handleCheckRequirements);
+
+    // Initialize dropdowns
+    populateCountryDropdowns();
+});
+
+// Populate dropdowns function
+function populateCountryDropdowns() {
+    const defaultOption = '<option value="">Select country</option>';
+    const countryOptions = countries.map(country => 
+        `<option value="${country.code}">${country.name}</option>`
+    ).join('');
+    
+    fromCountry.innerHTML = defaultOption + countryOptions;
+    
+    // Only repopulate toCountry if it's not disabled
+    if (!toCountry.disabled) {
+        toCountry.innerHTML = defaultOption + countryOptions;
+    }
+}
+
+// Helper function to get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
     }
-});
+    return cookieValue;
+}

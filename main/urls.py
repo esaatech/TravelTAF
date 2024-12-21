@@ -22,6 +22,8 @@ urlpatterns = [
     # Compare Countries page
     path('compare-countries/', views.compare_countries, name='compare_countries'),  
     
+    path('api/contact', views.contact_submit, name='contact_submit'),
+    
     # urls.py
   path('api/compare', views.get_country_data, name='compare_countries_api'),
     # Contact page

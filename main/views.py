@@ -46,6 +46,31 @@ def contact(request):
 def services(request):
     return render(request, 'home/all-services.html')
 
+from django.http import JsonResponse
+
+def contact_submit(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        
+        try:
+            # Add your email sending logic here
+            # You might want to use Django's send_mail or a third-party service
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Thank you for your message. We will get back to you soon!'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Sorry, there was an error sending your message.'
+            }, status=500)
+    
+    return JsonResponse({'message': 'Invalid request method'}, status=400)
+
 def moving_abroad(request):
     context = {
         'page_title': 'Moving Abroad Guide',
@@ -620,6 +645,10 @@ def compare_countries(request):
         ]
     }
     return render(request, 'home/compare-countries.html', context)
+
+
+
+
 
 def get_country_data(request):
     # Sample data structure

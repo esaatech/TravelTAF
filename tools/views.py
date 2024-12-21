@@ -26,42 +26,71 @@ def visa_checker(request):
    
     if request.method == 'POST':
         from_country = request.POST.get('fromCountry')
-        to_country = request.POST.get('toCountry')
+        search_type = request.POST.get('searchType', 'specific')
         
-        if not from_country or not to_country:
+        if not from_country:
             return JsonResponse({
-                'error': 'Both countries are required'
+                'error': 'Nationality is required'
             }, status=400)
 
-        # Simulate API response
-        visa_statuses = ['visa_required', 'visa_free', 'visa_on_arrival', 'e_visa']
-        processing_times = ['5-7 business days', '10-15 business days', '3-4 weeks', '24-48 hours']
-        costs = ['$50', '$100', '$150', '$200', 'Free']
-        
-        response_data = {
-            'status': random.choice(visa_statuses),
-            'details': {
-                'processing_time': random.choice(processing_times),
-                'validity': f"{random.randint(1, 12)} months",
-                'cost': random.choice(costs),
-                'max_stay': f"{random.randint(30, 180)} days",
-                'entry_type': random.choice(['Single', 'Multiple']),
-                'requirements': [
-                    'Valid passport',
-                    'Passport-size photos',
-                    'Bank statements',
-                    'Travel insurance',
-                    'Hotel bookings',
-                    'Return ticket'
-                ],
-                'additional_info': [
-                    'Passport must be valid for at least 6 months',
-                    'Must have at least 2 blank pages in passport',
-                    'Proof of sufficient funds may be required'
-                ]
+        # Handle different search types
+        if search_type == 'specific':
+            to_country = request.POST.get('toCountry')
+            if not to_country:
+                return JsonResponse({
+                    'error': 'Destination country is required for specific search'
+                }, status=400)
+
+            # Your existing specific country logic
+            visa_statuses = ['visa_required', 'visa_free', 'visa_on_arrival', 'e_visa']
+            processing_times = ['5-7 business days', '10-15 business days', '3-4 weeks', '24-48 hours']
+            costs = ['$50', '$100', '$150', '$200', 'Free']
+            
+            response_data = {
+                'searchType': 'specific',
+                'status': random.choice(visa_statuses),
+                'details': {
+                    'processing_time': random.choice(processing_times),
+                    'validity': f"{random.randint(1, 12)} months",
+                    'cost': random.choice(costs),
+                    'max_stay': f"{random.randint(30, 180)} days",
+                    'entry_type': random.choice(['Single', 'Multiple']),
+                    'requirements': [
+                        'Valid passport',
+                        'Passport-size photos',
+                        'Bank statements',
+                        'Travel insurance',
+                        'Hotel bookings',
+                        'Return ticket'
+                    ],
+                    'additional_info': [
+                        'Passport must be valid for at least 6 months',
+                        'Must have at least 2 blank pages in passport',
+                        'Proof of sufficient funds may be required'
+                    ]
+                }
             }
-        }
         
+        else:
+            # Handle visa_free or eta searches
+            # For testing, return random countries
+            sample_countries = [
+                {'name': 'Canada', 'code': 'CA'},
+                {'name': 'Japan', 'code': 'JP'},
+                {'name': 'Singapore', 'code': 'SG'},
+                {'name': 'United Kingdom', 'code': 'GB'},
+                {'name': 'Australia', 'code': 'AU'},
+                {'name': 'New Zealand', 'code': 'NZ'}
+            ]
+            
+            # Randomly select 3-5 countries for demonstration
+            selected_countries = random.sample(sample_countries, random.randint(3, 5))
+            
+            response_data = {
+                'searchType': search_type,
+                'countries': selected_countries
+            }
+
         return JsonResponse(response_data)
         
     return render(request, 'tools/visa_checker.html')
