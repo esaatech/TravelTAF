@@ -16,7 +16,15 @@ import os
 import logging
 from dotenv import load_dotenv
 
+
 load_dotenv()
+
+# Get OpenAI API key from environment variables
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+# Validate that the key exists
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY not found in environment variables. Please check your .env file.")
 
 
 # Add this near the top of settings.py after imports

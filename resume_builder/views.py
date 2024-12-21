@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from .models import Resume
 from .forms import ResumeForm
 import json
@@ -9,6 +9,22 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 from pydantic import BaseModel, Field
 from typing import List
+import os
+import docx
+import PyPDF2
+import tempfile
+from django.conf import settings
+import logging
+logger = logging.getLogger(__name__)
+from dotenv import load_dotenv
+from django.urls import reverse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from io import BytesIO
+from docx import Document
+from docx.shared import Inches
+
+# Load environment variables from .env file
 
 class OptimizedResume(BaseModel):
     optimized_content: str = Field(description="The ATS-optimized resume content")
@@ -58,10 +74,6 @@ class ResumeOptimizer:
         response = self.llm.predict_messages(messages)
         return self.output_parser.parse(response.content)
 
-def resume_home(request):
-    return render(request, 'resume_builder/home.html')
-
-
 def create_resume(request):
     # Hero section content
     hero_content = {
@@ -85,34 +97,216 @@ def create_resume(request):
 
     return render(request, 'resume.html', context)
 
-
 @login_required
 def optimize_resume(request):
+    if request.method == 'POST':
+        try:
+            # Debug logging
+            logger.debug(f"Form data: {request.POST}")
+            logger.debug(f"Files: {request.FILES}")
+
+            resume_text = ""
+            resume_file = request.FILES.get('resume_file')
+            
+            if resume_file:
+                logger.info(f"Processing file: {resume_file.name}")
+                # Get file extension
+                file_extension = os.path.splitext(resume_file.name)[1].lower()
+                
+                # Create a temporary file to handle the upload
+                with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                    for chunk in resume_file.chunks():
+                        temp_file.write(chunk)
+                
+                try:
+                    # Process different file types
+                    if file_extension == '.pdf':
+                        logger.info("Processing PDF file")
+                        with open(temp_file.name, 'rb') as file:
+                            pdf_reader = PyPDF2.PdfReader(file)
+                            for page in pdf_reader.pages:
+                                resume_text += page.extract_text()
+                    elif file_extension in ['.doc', '.docx']:
+                        logger.info("Processing Word document")
+                        doc = docx.Document(temp_file.name)
+                        resume_text = '\n'.join([paragraph.text for paragraph in doc.paragraphs])
+                    else:
+                        raise ValueError(f"Unsupported file type: {file_extension}")
+                except Exception as e:
+                    logger.error(f"File processing error: {str(e)}")
+                    raise
+                finally:
+                    # Clean up the temporary file
+                    os.unlink(temp_file.name)
+            else:
+                logger.info("Using text input")
+                resume_text = request.POST.get('resume_text', '').strip()
+
+            if not resume_text:
+                logger.error("No resume content provided")
+                raise ValueError("Please provide either a resume file or paste resume text")
+
+            job_description = request.POST.get('job_description', '').strip()
+            if not job_description:
+                logger.error("No job description provided")
+                raise ValueError("Please provide a job description")
+
+            logger.info("Starting resume optimization")
+            optimizer = ResumeOptimizer(api_key=settings.OPENAI_API_KEY)
+            optimization_result = optimizer.optimize(resume_text, job_description)
+            logger.info("Resume optimization completed")
+
+            # Store optimization results in session
+            request.session['optimization_results'] = {
+                'original_content': resume_text,
+                'optimized_content': optimization_result.optimized_content,
+                'job_description': job_description,
+                'keyword_matches': optimization_result.keyword_matches,
+                'improvement_suggestions': optimization_result.improvement_suggestions,
+                'ats_score': optimization_result.ats_score
+            }
+
+            return JsonResponse({
+                'success': True,
+                'message': 'Resume optimized successfully',
+                'redirect_url': reverse('resume_builder:download_resume')  # Use reverse() with named URL
+            })
+
+        except ValueError as ve:
+            logger.warning(f"Validation error: {str(ve)}")
+            return JsonResponse({
+                'success': False,
+                'error': str(ve)
+            }, status=400)
+        except Exception as e:
+            logger.error(f"Unexpected error: {str(e)}", exc_info=True)
+            return JsonResponse({
+                'success': False,
+                'error': f"An error occurred: {str(e)}"
+            }, status=400)
+    
+    # GET request
     hero_content = {
         'page_title': 'Optimize Your Resume',
         'page_description': 'Upload your resume and job description to create an ATS-optimized version tailored to the position.'
     }
-    
-    if request.method == 'POST':
-        resume_file = request.FILES.get('resume_file')
-        resume_text = request.POST.get('resume_text')
-        job_description = request.POST.get('job_description')
-        
-        try:
-            # Here you would add your resume optimization logic
-            optimized_resume = Resume.objects.create(
-                user=request.user,
-                original_content=resume_text or resume_file.read().decode('utf-8'),
-                job_description=job_description,
-                # Add optimized content after processing
-            )
-            return redirect('download_resume', resume_id=optimized_resume.id)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-    
     return render(request, 'resume_builder/optimize_resume.html', {'hero_content': hero_content})
 
+@login_required
+def download_resume(request):
+    # Get optimization results from session
+    optimization_results = request.session.get('optimization_results')
+    
+    if not optimization_results:
+        return redirect('resume_builder:optimize_resume')
+    
+    context = {
+        'resume': optimization_results,
+        'hero_content': {
+            'page_title': 'Your Optimized Resume',
+            'page_description': f'ATS Score: {optimization_results["ats_score"]}/100'
+        }
+    }
+    
+    # Changed the template path to match your directory structure
+    return render(request, 'download_resume.html', context)
 
-def download_resume(request, resume_id):
-    # Handle resume download
-    pass
+def resume_home(request):
+    return render(request, 'resume_builder/home.html')
+
+@login_required
+def download_pdf(request):
+    if request.method == 'POST':
+        try:
+            # Get the content from the request
+            data = json.loads(request.body)
+            content = data.get('content', '')
+
+            # Create a file-like buffer to receive PDF data
+            buffer = BytesIO()
+
+            # Create the PDF object, using the buffer as its "file."
+            p = canvas.Canvas(buffer, pagesize=letter)
+
+            # Draw the content
+            y = 750  # Starting y position
+            for line in content.split('\n'):
+                if line.strip():  # Only process non-empty lines
+                    p.drawString(72, y, line.strip())
+                    y -= 15  # Move down by 15 points
+                    if y <= 50:  # Start a new page if we're near the bottom
+                        p.showPage()
+                        y = 750
+
+            # Close the PDF object cleanly
+            p.showPage()
+            p.save()
+
+            # Get the value of the BytesIO buffer and return it
+            buffer.seek(0)
+            return FileResponse(
+                buffer, 
+                as_attachment=True, 
+                filename='optimized_resume.pdf',
+                content_type='application/pdf'
+            )
+
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=400)
+
+    return JsonResponse({
+        'success': False,
+        'error': 'Only POST requests are allowed'
+    }, status=405)
+
+@login_required
+def download_word(request):
+    if request.method == 'POST':
+        try:
+            # Get the content from the request
+            data = json.loads(request.body)
+            content = data.get('content', '')
+
+            # Create a new Word document
+            doc = Document()
+            
+            # Add a title
+            doc.add_heading('Optimized Resume', 0)
+
+            # Add content with proper formatting
+            for paragraph in content.split('\n'):
+                if paragraph.strip():  # Only process non-empty lines
+                    doc.add_paragraph(paragraph.strip())
+
+            # Create a temporary file to save the document
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.docx') as temp_file:
+                doc.save(temp_file.name)
+                temp_file_path = temp_file.name
+
+            # Open the file and create the response
+            with open(temp_file_path, 'rb') as file:
+                response = FileResponse(
+                    file,
+                    as_attachment=True,
+                    filename='optimized_resume.docx',
+                    content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                )
+
+            # Clean up the temporary file after sending the response
+            os.unlink(temp_file_path)
+
+            return response
+
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=400)
+
+    return JsonResponse({
+        'success': False,
+        'error': 'Only POST requests are allowed'
+    }, status=405)
