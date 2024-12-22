@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-# Initialize the client
-client = OpenAI()  # Make sure OPENAI_API_KEY is set in your environment
+# Initialize the client without proxies
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))  # Updated initialization
 
 
 
