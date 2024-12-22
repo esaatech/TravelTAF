@@ -27,6 +27,8 @@ from django.core.files.base import ContentFile
 from google.cloud import storage
 from django.conf import settings
 import uuid
+from weasyprint import HTML, CSS
+from django.template.loader import render_to_string
 
 # Load environment variables from .env file
 
@@ -252,49 +254,36 @@ def resume_home(request):
 def download_pdf(request):
     if request.method == 'POST':
         try:
-            # Get the content from the request
             data = json.loads(request.body)
-            content = data.get('content', '')
+            content = data.get('content')
+            template_id = data.get('template_id')
 
-            # Create a file-like buffer to receive PDF data
-            buffer = BytesIO()
+            # Create PDF-specific CSS
+            pdf_styles = CSS(string='''
+                @page {
+                    size: letter;
+                    margin: 2.5cm;
+                }
+                .professional-template {
+                    max-width: 100%;
+                    margin: 0 auto;
+                }
+                /* Add more PDF-specific styles here */
+            ''')
 
-            # Create the PDF object, using the buffer as its "file."
-            p = canvas.Canvas(buffer, pagesize=letter)
+            # Create PDF
+            html = HTML(string=content)
+            pdf = html.write_pdf(stylesheets=[pdf_styles])
 
-            # Draw the content
-            y = 750  # Starting y position
-            for line in content.split('\n'):
-                if line.strip():  # Only process non-empty lines
-                    p.drawString(72, y, line.strip())
-                    y -= 15  # Move down by 15 points
-                    if y <= 50:  # Start a new page if we're near the bottom
-                        p.showPage()
-                        y = 750
-
-            # Close the PDF object cleanly
-            p.showPage()
-            p.save()
-
-            # Get the value of the BytesIO buffer and return it
-            buffer.seek(0)
-            return FileResponse(
-                buffer, 
-                as_attachment=True, 
-                filename='optimized_resume.pdf',
-                content_type='application/pdf'
-            )
+            # Create response
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="resume.pdf"'
+            return response
 
         except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'error': str(e)
-            }, status=400)
+            return JsonResponse({'error': str(e)}, status=500)
 
-    return JsonResponse({
-        'success': False,
-        'error': 'Only POST requests are allowed'
-    }, status=405)
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 @login_required
 def download_word(request):
