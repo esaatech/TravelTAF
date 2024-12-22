@@ -73,14 +73,14 @@
             <div class="border-t border-gray-200 p-6 bg-gray-50 rounded-b-lg">
                 <div class="flex justify-between items-center">
                     <div class="flex space-x-4">
-                        <button onclick="downloadAsPDF()" 
+                        <button id="pdfButton" 
                                 class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center space-x-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                             </svg>
                             <span>Download PDF</span>
                         </button>
-                        <button onclick="downloadAsWord()" 
+                        <button id="wordButton"
                                 class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center space-x-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -88,7 +88,7 @@
                             <span>Download Word</span>
                         </button>
                     </div>
-                    <button onclick="saveResume()" 
+                    <button id="saveButton"
                             class="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700 flex items-center space-x-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
@@ -100,6 +100,8 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
 // Add event listeners when the document is loaded
@@ -139,6 +141,128 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Failed to switch template');
             }
         });
+    });
+});
+
+async function downloadAsPDF() {
+    try {
+        const element = document.getElementById('resumeContent').children[0];
+
+        const options = {
+            margin: 10,
+            filename: 'resume.pdf',
+            html2canvas: { 
+                scale: 2,
+                useCORS: true,
+                logging: true,
+                letterRendering: true,
+                allowTaint: true,
+                scrollY: 0
+            },
+            jsPDF: { 
+                unit: 'mm', 
+                format: 'a4', 
+                orientation: 'portrait',
+                compress: true
+            }
+        };
+
+        // Generate PDF
+        await html2pdf()
+            .from(element)
+            .set(options)
+            .save();
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to download PDF. Please try again.');
+    }
+}
+
+async function downloadAsWord() {
+    try {
+        const content = document.getElementById('resumeContent').children[0];
+        
+        // Clone and style content for Word
+        const clonedContent = content.cloneNode(true);
+        const style = document.createElement('style');
+        style.textContent = `
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .text-center {
+                text-align: center;
+            }
+            /* Add more Word-specific styles */
+        `;
+        clonedContent.appendChild(style);
+
+        // Convert to Word document
+        const preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Resume</title></head><body>";
+        const postHtml = "</body></html>";
+        const html = preHtml + clonedContent.outerHTML + postHtml;
+
+        // Create blob and download
+        const blob = new Blob([html], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume.doc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to download Word document. Please try again.');
+    }
+}
+
+async function saveResume() {
+    try {
+        const content = document.getElementById('resumeContent').innerHTML;
+        
+        const response = await fetch("{% url 'resume_builder:save_resume' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                content: content,
+                template_id: '{{ active_template }}'
+            })
+        });
+
+        if (!response.ok) throw new Error('Failed to save resume');
+
+        const result = await response.json();
+        if (result.success) {
+            alert('Resume saved successfully!');
+        } else {
+            throw new Error(result.error || 'Failed to save resume');
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to save resume. Please try again.');
+    }
+}
+
+// Add event listeners when document is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers for download and save buttons
+    document.querySelector('[id="pdfButton"]').addEventListener('click', downloadAsPDF);
+    document.querySelector('[id="wordButton"]').addEventListener('click', downloadAsWord);
+    document.querySelector('[id="saveButton"]').addEventListener('click', saveResume);
+    
+    // Remove inline onclick attributes
+    document.querySelectorAll('button').forEach(button => {
+        button.removeAttribute('onclick');
     });
 });
 </script>
