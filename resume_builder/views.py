@@ -4,9 +4,9 @@ from django.http import JsonResponse, HttpResponse, FileResponse
 from .models import Resume
 from .forms import ResumeForm
 import json
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
-from langchain.output_parsers import PydanticOutputParser
+#from langchain.chat_models import ChatOpenAI
+#from langchain.prompts import ChatPromptTemplate
+#from langchain.output_parsers import PydanticOutputParser
 from pydantic import BaseModel, Field
 from typing import List
 import os
@@ -40,12 +40,11 @@ class OptimizedResume(BaseModel):
 
 class ResumeOptimizer:
     def __init__(self, api_key: str):
-        self.llm = ChatOpenAI(
-            temperature=0.1,
-            model_name="gpt-4",
-            openai_api_key=api_key
-        )
-        self.output_parser = PydanticOutputParser(pydantic_object=OptimizedResume)
+        self.llm = ""
+        # 
+        # 
+    
+        #self.output_parser = PydanticOutputParser(pydantic_object=OptimizedResume)
 
     def optimize(self, resume_text: str, job_description: str) -> OptimizedResume:
         template = """
@@ -68,8 +67,9 @@ class ResumeOptimizer:
 
         {format_instructions}
         """
-
-        prompt = ChatPromptTemplate.from_template(template)
+ 
+        prompt = ""
+        # #ChatPromptTemplate.from_template(template)
         
         messages = prompt.format_messages(
             resume_text=resume_text,
