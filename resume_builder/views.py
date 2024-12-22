@@ -10,24 +10,17 @@ import json
 from pydantic import BaseModel, Field
 from typing import List
 import os
-import docx
-import PyPDF2
 import tempfile
 from django.conf import settings
 import logging
 logger = logging.getLogger(__name__)
 from dotenv import load_dotenv
 from django.urls import reverse
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
 from io import BytesIO
-from docx import Document
-from docx.shared import Inches
 from django.core.files.base import ContentFile
 from google.cloud import storage
 from django.conf import settings
 import uuid
-from weasyprint import HTML, CSS
 from django.template.loader import render_to_string
 
 # Load environment variables from .env file
