@@ -16,15 +16,22 @@ import os
 import logging
 from dotenv import load_dotenv
 
-
-load_dotenv()
+# Load .env file only in development
+if os.getenv('ENVIRONMENT') != 'production':
+    load_dotenv()
 
 # Get OpenAI API key from environment variables
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
 # Validate that the key exists
 if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY not found in environment variables. Please check your .env file.")
+    # In production, log the error instead of raising an exception
+    if os.getenv('ENVIRONMENT') == 'production':
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error("OPENAI_API_KEY not found in environment variables")
+    else:
+        raise ValueError("OPENAI_API_KEY not found in environment variables. Please check your .env file.")
 
 
 # Add this near the top of settings.py after imports
