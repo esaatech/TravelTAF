@@ -31,7 +31,7 @@ from weasyprint import HTML, CSS
 from django.template.loader import render_to_string
 
 # Load environment variables from .env file
-
+load_dotenv()
 class OptimizedResume(BaseModel):
     optimized_content: str = Field(description="The ATS-optimized resume content")
     keyword_matches: List[str] = Field(description="List of important keywords matched from job description")
@@ -158,7 +158,7 @@ def optimize_resume(request):
                 raise ValueError("Please provide a job description")
 
             logger.info("Starting resume optimization")
-            optimizer = ResumeOptimizer(api_key=settings.OPENAI_API_KEY)
+            optimizer = ResumeOptimizer(api_key=os.getenv('OPENAI_API_KEY'))
             optimization_result = optimizer.optimize(resume_text, job_description)
             logger.info("Resume optimization completed")
 
