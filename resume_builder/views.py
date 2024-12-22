@@ -198,22 +198,52 @@ def optimize_resume(request):
 
 @login_required
 def download_resume(request):
-    # Get optimization results from session
-    optimization_results = request.session.get('optimization_results')
+    # Get resume data from session
+    resume_data = request.session.get('resume_data')
+    if not resume_data:
+        return redirect('resume_builder:create_resume')
     
-    if not optimization_results:
-        return redirect('resume_builder:optimize_resume')
+    # Available templates with descriptive IDs
+    templates = [
+        {'id': 'professional', 'name': 'Professional'},
+        {'id': 'modern', 'name': 'Modern'},
+        {'id': 'creative', 'name': 'Creative'},
+    ]
+    
+    # Get active template (default to professional)
+    active_template = request.session.get('active_template', 'professional')
     
     context = {
-        'resume': optimization_results,
-        'hero_content': {
-            'page_title': 'Your Optimized Resume',
-            'page_description': f'ATS Score: {optimization_results["ats_score"]}/100'
-        }
+        'resume_data': resume_data,
+        'templates': templates,
+        'active_template': active_template,
+        'selected_template': f'resume_templates/{active_template}.html'
     }
     
-    # Changed the template path to match your directory structure
     return render(request, 'download_resume.html', context)
+
+@login_required
+def switch_template(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            template_id = data.get('template_id')
+            
+            # Update valid template IDs
+            if template_id not in ['professional', 'modern', 'creative']:
+                raise ValueError('Invalid template ID')
+            
+            # Store selected template in session
+            request.session['active_template'] = template_id
+            
+            # Render the selected template with resume data
+            resume_data = request.session.get('resume_data')
+            return render(request, f'resume_templates/{template_id}.html', {'resume_data': resume_data})
+            
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 def resume_home(request):
     return render(request, 'resume_builder/home.html')
@@ -347,3 +377,55 @@ def download_word(request):
 
 def save_resume(request):
     return HttpResponse(r'saved')
+
+@login_required
+def create_resume_submit(request):
+    if request.method == 'POST':
+        try:
+            # Parse the JSON data from request
+            data = json.loads(request.body)
+            
+            # Store resume data in session for template rendering
+            request.session['resume_data'] = {
+                'personal_info': {
+                    'full_name': data.get('fullName'),
+                    'title': data.get('title'),
+                    'email': data.get('email'),
+                    'phone': data.get('phone'),
+                    'summary': data.get('summary')
+                },
+                'experience': data.get('experience', []),
+                'education': data.get('education', []),
+                'skills': {
+                    'technical': data.get('technicalSkills', '').split(','),
+                    'soft': data.get('softSkills', '').split(','),
+                    'languages': data.get('languages', '').split(',')
+                },
+                'additional': {
+                    'certifications': data.get('certifications'),
+                    'projects': data.get('projects')
+                }
+            }
+
+            return JsonResponse({
+                'success': True,
+                'message': 'Resume created successfully',
+                'redirect_url': reverse('resume_builder:download_resume')
+            })
+
+        except json.JSONDecodeError as e:
+            return JsonResponse({
+                'success': False,
+                'error': 'Invalid JSON data'
+            }, status=400)
+        except Exception as e:
+            logger.error(f"Resume creation error: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'error': 'Failed to create resume'
+            }, status=500)
+
+    return JsonResponse({
+        'success': False,
+        'error': 'Method not allowed'
+    }, status=405)
