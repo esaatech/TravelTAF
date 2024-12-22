@@ -333,11 +333,17 @@ def save_resume(request):
             pdf_file = request.FILES.get('pdf_file')
             template_id = request.POST.get('template_id')
             
-            # Save the PDF file
+            # Save the PDF file with default values for required fields
             resume = Resume.objects.create(
                 user=request.user,
                 pdf_file=pdf_file,
-                template_id=template_id
+                template_id=template_id,
+                original_content='',  # Add default values
+                optimized_content='',
+                job_description='',
+                ats_score=0,  # Default score
+                keyword_matches=[],  # Empty list for JSON field
+                improvement_suggestions=[]  # Empty list for JSON field
             )
             
             return JsonResponse({'success': True})
