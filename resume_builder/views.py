@@ -250,43 +250,6 @@ def switch_template(request):
 def resume_home(request):
     return render(request, 'resume_builder/home.html')
 
-@login_required
-def download_pdf(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            content = data.get('content')
-            template_id = data.get('template_id')
-
-            # Create PDF-specific CSS
-            pdf_styles = CSS(string='''
-                @page {
-                    size: letter;
-                    margin: 2.5cm;
-                }
-                .professional-template {
-                    max-width: 100%;
-                    margin: 0 auto;
-                }
-                /* Add more PDF-specific styles here */
-            ''')
-
-            # Create PDF
-            html = HTML(string=content)
-            pdf = html.write_pdf(stylesheets=[pdf_styles])
-
-            # Create response
-            response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="resume.pdf"'
-            return response
-
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-
-    return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-@login_required
-def download_word(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -365,7 +328,24 @@ def download_word(request):
 
 
 def save_resume(request):
-    return HttpResponse(r'saved')
+    if request.method == 'POST':
+        try:
+            pdf_file = request.FILES.get('pdf_file')
+            template_id = request.POST.get('template_id')
+            
+            # Save the PDF file
+            resume = Resume.objects.create(
+                user=request.user,
+                pdf_file=pdf_file,
+                template_id=template_id
+            )
+            
+            return JsonResponse({'success': True})
+            
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+            
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 @login_required
 def create_resume_submit(request):

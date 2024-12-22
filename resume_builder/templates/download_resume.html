@@ -80,21 +80,14 @@
                             </svg>
                             <span>Download PDF</span>
                         </button>
-                        <button id="wordButton"
-                                class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center space-x-2">
+                        <button id="saveButton"
+                                class="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700 flex items-center space-x-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
                             </svg>
-                            <span>Download Word</span>
+                            <span>Save Resume</span>
                         </button>
                     </div>
-                    <button id="saveButton"
-                            class="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700 flex items-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
-                        </svg>
-                        <span>Save Resume</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -102,6 +95,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.min.js"></script>
 
 <script>
 // Add event listeners when the document is loaded
@@ -181,36 +175,26 @@ async function downloadAsPDF() {
 
 async function downloadAsWord() {
     try {
-        const content = document.getElementById('resumeContent').children[0];
-        
-        // Clone and style content for Word
-        const clonedContent = content.cloneNode(true);
-        const style = document.createElement('style');
-        style.textContent = `
-            body {
-                font-family: Arial, sans-serif;
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-            .text-center {
-                text-align: center;
-            }
-            /* Add more Word-specific styles */
-        `;
-        clonedContent.appendChild(style);
+        // Ensure docx is available
+        const { Document, Packer, Paragraph, TextRun } = window.docx;
 
-        // Convert to Word document
-        const preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Resume</title></head><body>";
-        const postHtml = "</body></html>";
-        const html = preHtml + clonedContent.outerHTML + postHtml;
+        const element = document.getElementById('resumeContent').children[0];
+        const content = element.innerText.split('\n').filter(line => line.trim() !== '');
 
-        // Create blob and download
-        const blob = new Blob([html], { type: 'application/msword' });
+        const doc = new Document({
+            sections: [{
+                properties: {},
+                children: content.map(line => new Paragraph({
+                    children: [new TextRun(line)],
+                })),
+            }],
+        });
+
+        const blob = await Packer.toBlob(doc);
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'resume.doc';
+        a.download = 'resume.docx';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -224,18 +208,23 @@ async function downloadAsWord() {
 
 async function saveResume() {
     try {
-        const content = document.getElementById('resumeContent').innerHTML;
+        const element = document.getElementById('resumeContent').children[0];
         
+        // Generate PDF blob
+        const pdfBlob = await html2pdf().from(element).outputPdf('blob');
+        
+        // Create FormData
+        const formData = new FormData();
+        formData.append('pdf_file', new File([pdfBlob], 'resume.pdf', { type: 'application/pdf' }));
+        formData.append('template_id', '{{ active_template }}');
+
+        // Send to server
         const response = await fetch("{% url 'resume_builder:save_resume' %}", {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRFToken': '{{ csrf_token }}'
             },
-            body: JSON.stringify({
-                content: content,
-                template_id: '{{ active_template }}'
-            })
+            body: formData
         });
 
         if (!response.ok) throw new Error('Failed to save resume');
@@ -253,11 +242,55 @@ async function saveResume() {
     }
 }
 
+async function downloadAndSharePDF() {
+    try {
+        const element = document.getElementById('resumeContent').children[0];
+
+        // First generate the PDF blob
+        const pdf = await html2pdf().from(element).outputPdf('blob');
+        
+        // Create a File from the blob
+        const pdfFile = new File([pdf], 'resume.pdf', {
+            type: 'application/pdf',
+            lastModified: new Date().getTime()
+        });
+
+        // Check if file sharing is supported
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+            try {
+                await navigator.share({
+                    files: [pdfFile],
+                    title: 'My Resume',
+                    text: 'Check out my resume!'
+                });
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.log('Share cancelled');
+                    return;
+                }
+                throw error;
+            }
+        } else {
+            // Fallback for browsers that don't support file sharing
+            const url = URL.createObjectURL(pdf);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resume.pdf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to generate or share PDF. Please try again.');
+    }
+}
+
 // Add event listeners when document is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Add click handlers for download and save buttons
     document.querySelector('[id="pdfButton"]').addEventListener('click', downloadAsPDF);
-    document.querySelector('[id="wordButton"]').addEventListener('click', downloadAsWord);
     document.querySelector('[id="saveButton"]').addEventListener('click', saveResume);
     
     // Remove inline onclick attributes

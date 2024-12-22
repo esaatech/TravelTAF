@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 
 class Resume(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    pdf_file = models.FileField(upload_to='resumes/')
+    template_id = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
