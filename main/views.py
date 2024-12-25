@@ -7,8 +7,11 @@ from django.db.models import F
 from django.http import JsonResponse
 
 def home(request):
-    # Query the latest 3 news articles
-    latest_news = News.objects.filter(is_published=True).order_by('-published_date')[:3]
+    # Query the latest 3 news articles that are both published and approved
+    latest_news = News.objects.filter(
+        is_published=True,
+        status='APPROVED'
+    ).order_by('-published_date')[:3]
 
     context = {
         'title': 'Welcome to TravelTAF',
