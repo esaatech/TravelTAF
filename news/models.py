@@ -29,6 +29,12 @@ class NewsCategory(models.Model):
         super().save(*args, **kwargs)
 
 class News(models.Model):
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+    ]
+
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news')
@@ -48,6 +54,22 @@ class News(models.Model):
     content = CKEditor5Field('Content', config_name='default')
     source_name = models.CharField(max_length=100, blank=True)
     source_url = models.URLField(blank=True)
+
+    # Add new status management fields
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='PENDING'
+    )
+    approved_by = models.ForeignKey(
+        'auth.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='approved_news'
+    )
+    approved_at = models.DateTimeField(null=True, blank=True)
+    review_notes = models.TextField(blank=True, help_text="Feedback for rejected articles")
 
     class Meta:
         verbose_name_plural = "News Articles"
