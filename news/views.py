@@ -25,9 +25,27 @@ class NewsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = NewsCategory.objects.all()
+        context['is_user_authenticated'] = self.request.user.is_authenticated
+         
         return context
+    
 
 class NewsDetailView(DetailView):
     model = News
     template_name = 'news/news_detail.html'
     context_object_name = 'news'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Retrieve the dialog content associated with the news
+        dialog_content = getattr(self.object, 'dialog_content', None)
+        
+        # Print statements to verify the dialog content
+        if dialog_content:
+            print(f"Dialog Title: {dialog_content.title}")
+            print(f"Dialog Body: {dialog_content.body}")
+        else:
+            print("No dialog content found for this news article.")
+        
+        return context

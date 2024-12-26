@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import News, NewsCategory
+from .models import News, NewsCategory, DialogContent
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils import timezone
 from django.urls import reverse
@@ -47,6 +47,10 @@ class NewsAdmin(admin.ModelAdmin):
         }),
         ('Content', {
             'fields': ('summary', 'content')
+        }),
+        ('Dialog Content', {
+            'fields': ('dialog_title', 'dialog_body'),
+            'classes': ('collapse',)
         }),
         ('Publishing', {
             'fields': ('is_featured', 'is_published')
@@ -153,3 +157,11 @@ class NewsAdmin(admin.ModelAdmin):
             )
         }
         js = ('admin/js/content-blocks.js',)
+
+
+
+
+@admin.register(DialogContent)
+class DialogContentAdmin(admin.ModelAdmin):
+    list_display = ('news', 'title')
+    fields = ('news', 'title', 'body')
