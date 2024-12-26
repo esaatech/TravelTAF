@@ -127,6 +127,7 @@ INSTALLED_APPS = [
     'payments',
     'credits',
     'resume_builder',
+    'promotions',
 ]
 
 REST_FRAMEWORK = {
