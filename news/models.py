@@ -117,3 +117,11 @@ class News(models.Model):
 
     def get_absolute_url(self):
         return reverse('news:detail', kwargs={'slug': self.slug})
+
+class DialogContent(models.Model):
+    title = models.CharField(max_length=255, default="Stay Updated with Our Latest News")
+    body = models.TextField(default="Subscribe to our newsletter and never miss important updates!")
+    news = models.OneToOneField('News', on_delete=models.CASCADE, related_name='dialog_content')
+
+    def __str__(self):
+        return f"Dialog for {self.news.title}"

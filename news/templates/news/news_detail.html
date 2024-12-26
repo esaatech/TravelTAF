@@ -7,7 +7,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container mx-auto px-4 py-8" 
+     data-user-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+     data-dialog-title="{{ news.dialog_content.title }}" 
+     data-dialog-body="{{ news.dialog_content.body }}">
     <article>
         <!-- Article Header -->
         <header>
@@ -53,4 +56,18 @@
         </footer>
     </article>
 </div>
+<!-- Newsletter + Contact -->
+    {% include 'home/sections/newsletter.html' %}
+
+    <!-- Desktop Footer -->
+    {% include 'home/sections/footer.html' %}
+
+
+
+
+{% endblock %}
+{% block extra_scripts %}
+<script type="module" src="{% static 'js/utils/dialog.js' %}"></script>
+<script type="module" src="{% static 'js/news/news.js' %}"></script>
+
 {% endblock %}
