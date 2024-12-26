@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load promotion_tags %}
 {% block content %}
 <div class="container mx-auto px-4 py-8" data-user-logged-in="{{ is_user_authenticated|lower }}">
     <h1 class="text-3xl font-bold mb-8">Latest News</h1>
@@ -15,6 +16,9 @@
             {% endfor %}
         </div>
     </div>
+
+    <!-- Add the promotions carousel -->
+    {% show_promotions_carousel %}
 
     <!-- News Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
