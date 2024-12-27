@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load promotion_tags %}
+
+{% block extra_css %}
+<!-- Previous CSS remains the same -->
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 {% include 'tools/components/tools-hero-section.html' %}
@@ -80,6 +86,11 @@
 <!-- Results Section -->
 <section id="results-section" class="bg-gray-50 py-12 hidden">
     <div class="max-w-7xl mx-auto px-4">
+        <!-- Promotions Above Results -->
+        <div class="mb-8">
+            {% show_promotions_carousel %}
+        </div>
+
         <!-- Results Header -->
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-semibold">Search Results</h2>
