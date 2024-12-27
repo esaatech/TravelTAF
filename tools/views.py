@@ -9,6 +9,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from asgiref.sync import sync_to_async
 import asyncio
+from .models import School, Country, ProgramLevel, FieldOfStudy
 
 from .services.amadeus import AmadeusFlightService
 from .services.flight_interfaces import FlightSearchParams, FlightDestination
@@ -169,164 +170,27 @@ def job_search(request):
     }
     return render(request, 'tools/job_search.html', context)
 
-def get_filtered_schools(country, program_level, field_of_study, tuition_range):
-    """
-    Filter schools based on search criteria
-    """
-    sample_schools = {
-        'usa': [
-            {
-                'id': 'harvard',
-                'name': 'Harvard University',
-                'location': 'Harvard, Massachusetts, USA',
-                'logo': '/static/images/schools/harvard.png',
-                'tuition': 51925,
-                'programs': ['Undergraduate', 'Graduate', 'PhD'],
-                'scholarships_available': True,
-                'work_opportunities': True,
-                'housing_available': True,
-                'website': 'https://www.harvard.edu',
-                'fields_of_study': ['Business', 'Law', 'Medicine', 'Engineering'],
-                'ranking': '#1 in USA'
-            },
-            {
-                'id': 'berea',
-                'name': 'Berea College',
-                'location': 'Berea, Kentucky, USA',
-                'logo': '/static/images/schools/berea.png',
-                'tuition': 0,
-                'programs': ['Undergraduate'],
-                'scholarships_available': True,
-                'work_opportunities': True,
-                'housing_available': True,
-                'website': 'https://www.berea.edu',
-                'fields_of_study': ['Arts', 'Sciences', 'Business'],
-                'ranking': 'Top 50 Liberal Arts Colleges'
-            },
-            {
-                'id': 'community-college',
-                'name': 'Santa Monica College',
-                'location': 'Santa Monica, California, USA',
-                'logo': '/static/images/schools/smc.png',
-                'tuition': 8000,
-                'programs': ['Undergraduate'],
-                'scholarships_available': True,
-                'work_opportunities': True,
-                'housing_available': False,
-                'website': 'https://www.smc.edu',
-                'fields_of_study': ['Business', 'Arts', 'Computer Science'],
-                'ranking': 'Top Community College'
-            },
-            {
-                'id': 'state-university',
-                'name': 'University of Illinois',
-                'location': 'Urbana-Champaign, Illinois, USA',
-                'logo': '/static/images/schools/uiuc.png',
-                'tuition': 15000,
-                'programs': ['Undergraduate', 'Graduate', 'PhD'],
-                'scholarships_available': True,
-                'work_opportunities': True,
-                'housing_available': True,
-                'website': 'https://illinois.edu',
-                'fields_of_study': ['Engineering', 'Business', 'Sciences'],
-                'ranking': 'Top 50 National'
-            },
-            {
-                'id': 'private-university',
-                'name': 'Boston University',
-                'location': 'Boston, Massachusetts, USA',
-                'logo': '/static/images/schools/bu.png',
-                'tuition': 28000,
-                'programs': ['Undergraduate', 'Graduate', 'PhD'],
-                'scholarships_available': True,
-                'work_opportunities': True,
-                'housing_available': True,
-                'website': 'https://www.bu.edu',
-                'fields_of_study': ['Medicine', 'Law', 'Business', 'Arts'],
-                'ranking': 'Top 50 National'
-            }
-        ],
-        'uk': [
-            {
-                'id': 'oxford',
-                'name': 'University of Oxford',
-                'location': 'Oxford, UK',
-                'logo': '/static/images/schools/oxford.png',
-                'tuition': 39000,
-                'programs': ['Undergraduate', 'Graduate', 'PhD'],
-                'scholarships_available': True,
-                'work_opportunities': True,
-                'housing_available': True,
-                'website': 'https://www.ox.ac.uk',
-                'fields_of_study': ['Arts', 'Sciences', 'Medicine', 'Engineering'],
-                'ranking': '#1 in UK'
-            }
-        ],
-        'canada': [
-            {
-                'id': 'uoft',
-                'name': 'University of Toronto',
-                'location': 'Toronto, Canada',
-                'logo': '/static/images/schools/uoft.png',
-                'tuition': 45900,
-                'programs': ['Undergraduate', 'Graduate', 'PhD'],
-                'scholarships_available': True,
-                'work_opportunities': True,
-                'housing_available': True,
-                'website': 'https://www.utoronto.ca',
-                'fields_of_study': ['Business', 'Engineering', 'Medicine', 'Arts'],
-                'ranking': '#1 in Canada'
-            }
-        ]
-    }
-
-    # If no country selected, return empty list
-    if not country:
-        return []
-
-    # Get schools for selected country
-    schools = sample_schools.get(country.lower(), [])
-    filtered_schools = []
-
-    for school in schools:
-        # Apply filters if they are provided
-        if program_level and program_level.title() not in school['programs']:
-            continue
-            
-        if field_of_study and field_of_study.title() not in school['fields_of_study']:
-            continue
-            
-        if tuition_range:
-            tuition = school['tuition']
-            if tuition_range == '30000-plus':
-                if tuition < 30000:
-                    continue
-            else:
-                try:
-                    min_tuition, max_tuition = map(int, tuition_range.split('-'))
-                    if not (min_tuition <= tuition <= max_tuition):
-                        continue
-                except ValueError:
-                    # Skip invalid tuition range
-                    continue
-
-        filtered_schools.append(school)
-
-    return filtered_schools
-
 def school_finder(request):
     """
     Handle school finder page and search functionality
     """
     if request.method == 'POST':
         # Get filter parameters
-        country = request.POST.get('country', '')
+        country_code = request.POST.get('country', '')
         program_level = request.POST.get('program_level', '')
         field_of_study = request.POST.get('field_of_study', '')
         tuition_range = request.POST.get('tuition_range', '')
         
+        # Additional filters
+        scholarships = request.POST.get('scholarships_available') == 'true'
+        work_opportunities = request.POST.get('work_opportunities') == 'true'
+        housing_available = request.POST.get('housing_available') == 'true'
+        
         # Get filtered schools
-        filtered_schools = get_filtered_schools(country, program_level, field_of_study, tuition_range)
+        filtered_schools = get_filtered_schools(
+            country_code, program_level, field_of_study, 
+            tuition_range, scholarships, work_opportunities, housing_available
+        )
         
         # Return JSON response
         return JsonResponse({
@@ -341,27 +205,20 @@ def school_finder(request):
         'page_description': 'Find the perfect school matching your preferences, budget, and academic goals.',
         'filters': {
             'countries': [
-                {'value': 'usa', 'label': 'United States'},
-                {'value': 'uk', 'label': 'United Kingdom'},
-                {'value': 'canada', 'label': 'Canada'}
+                {'value': country.code, 'label': country.name}
+                for country in Country.objects.all()
             ],
             'program_levels': [
-                {'value': 'undergraduate', 'label': 'Undergraduate'},
-                {'value': 'graduate', 'label': 'Graduate'},
-                {'value': 'masters', 'label': 'Masters'},
-                {'value': 'phd', 'label': 'PhD'}
+                {'value': program.value, 'label': program.name}
+                for program in ProgramLevel.objects.all()
             ],
             'fields_of_study': [
-                {'value': 'business', 'label': 'Business'},
-                {'value': 'engineering', 'label': 'Engineering'},
-                {'value': 'medicine', 'label': 'Medicine'},
-                {'value': 'law', 'label': 'Law'},
-                {'value': 'computer_science', 'label': 'Computer Science'},
-                {'value': 'arts', 'label': 'Arts'},
-                {'value': 'sciences', 'label': 'Sciences'}
+                {'value': field.value, 'label': field.name}
+                for field in FieldOfStudy.objects.all()
             ],
             'tuition_ranges': [
-                {'value': '0-10000', 'label': '$0 - $10,000'},
+                {'value': 'free', 'label': 'Free Education'},
+                {'value': '0-10000', 'label': '$1 - $10,000'},
                 {'value': '10000-20000', 'label': '$10,000 - $20,000'},
                 {'value': '20000-30000', 'label': '$20,000 - $30,000'},
                 {'value': '30000-plus', 'label': '$30,000+'}
@@ -375,6 +232,66 @@ def school_finder(request):
     }
     
     return render(request, 'tools/school_finder.html', context)
+
+def get_filtered_schools(country_code, program_level, field_of_study, tuition_range, 
+                        scholarships=False, work_opportunities=False, housing_available=False):
+    """
+    Filter schools based on search criteria using database queries
+    """
+    # Start with all schools
+    schools = School.objects.all()
+
+    # Apply country filter
+    if country_code:
+        schools = schools.filter(country__code=country_code)
+
+    # Apply program level filter
+    if program_level:
+        schools = schools.filter(programs__value=program_level)
+
+    # Apply field of study filter
+    if field_of_study:
+        schools = schools.filter(fields_of_study__value=field_of_study)
+
+    # Apply tuition range filter
+    if tuition_range:
+        if tuition_range == 'free':
+            schools = schools.filter(tuition=0)
+        elif tuition_range == '30000-plus':
+            schools = schools.filter(tuition__gte=30000)
+        else:
+            try:
+                min_tuition, max_tuition = map(int, tuition_range.split('-'))
+                schools = schools.filter(tuition__gte=min_tuition, tuition__lte=max_tuition)
+            except ValueError:
+                pass
+
+    # Apply additional filters
+    if scholarships:
+        schools = schools.filter(scholarships_available=True)
+    if work_opportunities:
+        schools = schools.filter(work_opportunities=True)
+    if housing_available:
+        schools = schools.filter(housing_available=True)
+
+    # Convert queryset to list of dictionaries
+    return [
+        {
+            'id': school.id,
+            'name': school.name,
+            'location': school.location,
+            'logo': school.logo.url if school.logo else None,
+            'tuition': float(school.tuition),
+            'programs': [p.name for p in school.programs.all()],
+            'scholarships_available': school.scholarships_available,
+            'work_opportunities': school.work_opportunities,
+            'housing_available': school.housing_available,
+            'website': school.website,
+            'fields_of_study': [f.name for f in school.fields_of_study.all()],
+            'ranking': school.ranking
+        }
+        for school in schools.distinct()
+    ]
 
 import json
 from django.http import JsonResponse
