@@ -5,11 +5,14 @@ from django.utils import timezone
 
 gcs_storage = GoogleCloudStorage()
 
+def resume_pdf_path(instance, filename):
+    return f'resumes/{instance.user.id}/resume.pdf'
+
 class Resume(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='resumes')
     pdf_file = models.FileField(
-        upload_to=lambda instance, filename: f'resumes/{instance.user.id}/resume.pdf',
-        storage=gcs_storage,  # Force using GCS storage
+        upload_to=resume_pdf_path,
+        storage=gcs_storage,
         null=True,
         blank=True
     )
