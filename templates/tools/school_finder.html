@@ -55,20 +55,7 @@
         color: #1f2937;
     }
     
-    /* Mobile optimizations */
-    @media (max-width: 768px) {
-        .filter-container .choices__list--dropdown {
-            max-height: 60vh;
-        }
-        
-        .filter-container .choices__list--dropdown .choices__item {
-            padding: 1rem;
-        }
-        
-        .filter-container .choices__inner {
-            min-height: 54px;
-        }
-    }
+    
 
     /* Error state */
     .filter-container .choices.border-red-500 .choices__inner {
@@ -93,7 +80,20 @@
         padding: 0.875rem 1.25rem;
         font-size: 1.125rem;
     }
-
+/* Mobile optimizations */
+    @media (max-width: 768px) {
+        .filter-container .choices__list--dropdown {
+            max-height: 60vh;
+        }
+        
+        .filter-container .choices__list--dropdown .choices__item {
+            padding: 1rem;
+        }
+        
+        .filter-container .choices__inner {
+            min-height: 54px;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -104,7 +104,8 @@
 <!-- Search Filters -->
 <section class="bg-[#2B354E] py-12">
     <div class="max-w-7xl mx-auto px-4">
-        <form id="school-search-form" class="space-y-6">
+        <form id="school-search-form" class="space-y-8">
+            <!-- Filters Grid -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Country Filter -->
                 <div class="filter-container">
@@ -155,7 +156,7 @@
             </div>
 
             <!-- Additional Filters -->
-            <div class="flex flex-wrap gap-4 justify-center mt-6">
+            <div class="flex flex-wrap gap-4 justify-center">
                 {% for filter in filters.additional_filters %}
                     <label class="inline-flex items-center">
                         <input type="checkbox" 
@@ -165,6 +166,14 @@
                         <span class="ml-2 text-sm text-white">{{ filter.label }}</span>
                     </label>
                 {% endfor %}
+            </div>
+
+            <!-- Search Button -->
+            <div class="flex justify-center mt-8">
+                <button type="submit" 
+                        class="px-12 py-4 bg-[#1980e6] text-white text-lg font-semibold rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl">
+                    Search Schools
+                </button>
             </div>
         </form>
     </div>
