@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<!-- Add Choices.js CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<link rel="stylesheet" href="{% static 'css/choices-custom.css' %}" />
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-blue-50 to-white py-16">
@@ -17,29 +23,26 @@
 </section>
 
 <!-- Main Tool Section -->
-<section class="py-12 bg-white">
+<section class="bg-[#2B354E] py-12">
     <div class="max-w-4xl mx-auto px-4">
         <!-- Search Form -->
-        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+        <form id="visa-search-form" class="space-y-8">
             {% csrf_token %}
-            <div class="grid md:grid-cols-[1fr,auto,1fr] gap-4">
+            <div class="grid md:grid-cols-3 gap-4">
                 <!-- From Country -->
-                <div>
-                    <label for="fromCountry" class="block text-sm font-medium text-gray-700 mb-2">
+                <div class="filter-container">
+                    <label for="fromCountry" class="block text-sm font-medium text-white mb-2">
                         Nationality
                     </label>
-                    <div class="relative">
-                        <select id="fromCountry" 
-                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Select your nationality</option>
-                        </select>
-                    </div>
+                    <select id="fromCountry" name="fromCountry" class="form-select">
+                        <option value="">Select your nationality</option>
+                    </select>
                 </div>
 
                 <!-- Swap Button -->
-                <div class="flex items-end mb-2">
+                <div class="flex items-end justify-center mb-2">
                     <button id="swapCountries" 
-                            class="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#1980e6] text-[#1980e6] hover:bg-blue-50 transition-colors">
+                            class="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#1980e6] text-[#1980e6] bg-white hover:bg-blue-50 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
                             <path d="M224.49,136.49l-32,32a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L175.51,104.49a12,12,0,0,1,17-17l32,32A12,12,0,0,1,224.49,136.49Z"></path>
                         </svg>
@@ -47,63 +50,60 @@
                 </div>
 
                 <!-- To Country -->
-                <div>
-                    <label for="toCountry" class="block text-sm font-medium text-gray-700 mb-2">
+                <div class="filter-container">
+                    <label for="toCountry" class="block text-sm font-medium text-white mb-2">
                         Destination
                     </label>
-                    <div class="space-y-2">
-                        <select id="toCountry" 
-                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Select destination country</option>
-                        </select>
-                        
-                        <!-- Checkboxes in a separate div below the select -->
-                        <div class="flex items-center space-x-4">
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" id="visaFreeCheck" class="form-checkbox text-[#1980e6] rounded">
-                                <span class="ml-2 text-sm text-gray-700">Show Visa Free Countries</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" id="etaCheck" class="form-checkbox text-[#1980e6] rounded">
-                                <span class="ml-2 text-sm text-gray-700">Show eTA/eVisa Countries</span>
-                            </label>
-                        </div>
-                    </div>
+                    <select id="toCountry" name="toCountry" class="form-select">
+                        <option value="">Select destination country</option>
+                    </select>
                 </div>
+            </div>
+
+            <!-- Additional Filters -->
+            <div class="flex flex-wrap gap-4 justify-center">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="visaFreeCheck" class="rounded border-gray-300 text-blue-600 shadow-sm">
+                    <span class="ml-2 text-sm text-white">Show Visa Free Countries</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="etaCheck" class="rounded border-gray-300 text-blue-600 shadow-sm">
+                    <span class="ml-2 text-sm text-white">Show eTA/eVisa Countries</span>
+                </label>
             </div>
 
             <!-- Check Button -->
-            <div class="mt-8 text-center">
-                <button id="checkRequirements" 
-                        class="w-full md:w-auto px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors transform hover:scale-105">
+            <div class="flex justify-center mt-8">
+                <button id="checkRequirements" type="submit"
+                        class="px-12 py-4 bg-[#1980e6] text-white text-lg font-semibold rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl">
                     Check Requirements
                 </button>
             </div>
-        </div>
-
-        <!-- Results Section (Initially Hidden) -->
-        <div id="resultsSection" class="mt-8 hidden">
-            <!-- Loading State -->
-            <div id="loadingState" class="text-center py-12 hidden">
-                <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mx-auto"></div>
-                <p class="mt-4 text-gray-600">Checking requirements...</p>
-            </div>
-
-            <!-- Results Content -->
-            <div id="resultsContent" class="bg-white rounded-lg shadow-lg p-6 md:p-8 space-y-6">
-                <!-- Visa Status -->
-                <div id="visaStatus" class="p-4 rounded-lg text-center">
-                    <!-- Will be filled by JavaScript -->
-                </div>
-
-                <!-- Detailed Requirements -->
-                <div id="detailedRequirements" class="space-y-4">
-                    <!-- Will be filled by JavaScript -->
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 </section>
+
+<!-- Results Section (Initially Hidden) -->
+<div id="resultsSection" class="mt-8 hidden">
+    <!-- Loading State -->
+    <div id="loadingState" class="text-center py-12 hidden">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mx-auto"></div>
+        <p class="mt-4 text-gray-600">Checking requirements...</p>
+    </div>
+
+    <!-- Results Content -->
+    <div id="resultsContent" class="bg-white rounded-lg shadow-lg p-6 md:p-8 space-y-6">
+        <!-- Visa Status -->
+        <div id="visaStatus" class="p-4 rounded-lg text-center">
+            <!-- Will be filled by JavaScript -->
+        </div>
+
+        <!-- Detailed Requirements -->
+        <div id="detailedRequirements" class="space-y-4">
+            <!-- Will be filled by JavaScript -->
+        </div>
+    </div>
+</div>
 
 <!-- Additional Information -->
 <section class="py-12 bg-gray-50">
@@ -147,5 +147,39 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // First, fetch and populate the countries
+    fetch('/api/countries/')  // Adjust this URL to match your API endpoint
+        .then(response => response.json())
+        .then(countries => {
+            // Initialize Choices.js after populating options
+            const fromCountrySelect = document.getElementById('fromCountry');
+            const toCountrySelect = document.getElementById('toCountry');
+
+            // Populate options
+            countries.forEach(country => {
+                const option = new Option(country.name, country.code);
+                fromCountrySelect.add(option.cloneNode(true));
+                toCountrySelect.add(option);
+            });
+
+            // Initialize Choices.js
+            const selectElements = [fromCountrySelect, toCountrySelect];
+            selectElements.forEach(select => {
+                new Choices(select, {
+                    searchEnabled: true,
+                    itemSelectText: '',
+                    shouldSort: false,
+                    position: 'auto',
+                    placeholder: true,
+                    placeholderValue: select.getAttribute('placeholder') || 'Select an option'
+                });
+            });
+        })
+        .catch(error => console.error('Error fetching countries:', error));
+});
+</script>
 <script src="{% static 'js/tools/visa_checker.js' %}"></script>
 {% endblock %}
