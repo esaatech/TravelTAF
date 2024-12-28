@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<!-- Add Choices.js CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<link rel="stylesheet" href="{% static 'css/choices-custom.css' %}" />
+{% endblock %}
+
 {% block content %}
 <!-- Header Section -->
 <section class="bg-gradient-to-r from-blue-50 to-white py-16">
@@ -17,106 +23,96 @@
 </section>
 
 <!-- Main Form Section -->
-<section class="py-12">
+<section class="bg-[#2B354E] py-12">
     <div class="max-w-4xl mx-auto px-4">
         <form id="travelCostForm" class="space-y-8">
             {% csrf_token %}
             
             <!-- Destination Details -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-6">Trip Details</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Destination Country
-                        </label>
-                        <select name="destination" required
-                               class="w-full p-3 border border-gray-300 rounded-lg">
-                            <option value="">Select a country</option>
-                            <!-- Countries will be populated here -->
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Departure City
-                        </label>
-                        <input type="text" name="departure_city" required
-                               class="w-full p-3 border border-gray-300 rounded-lg">
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="filter-container">
+                    <label class="block text-sm font-medium text-white mb-2">
+                        Destination Country
+                    </label>
+                    <select name="destination" class="form-select" required>
+                        <option value="">Select a country</option>
+                        <!-- Countries will be populated here -->
+                    </select>
+                </div>
+                <div class="filter-container">
+                    <label class="block text-sm font-medium text-white mb-2">
+                        Departure City
+                    </label>
+                    <input type="text" name="departure_city" required
+                           class="w-full p-3 bg-white border-none rounded-lg">
                 </div>
             </div>
 
             <!-- Trip Parameters -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-6">Trip Parameters</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Travel Dates
-                        </label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="date" name="start_date" required
-                                   class="w-full p-3 border border-gray-300 rounded-lg">
-                            <input type="date" name="end_date" required
-                                   class="w-full p-3 border border-gray-300 rounded-lg">
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="filter-container">
+                    <label class="block text-sm font-medium text-white mb-2">
+                        Travel Dates
+                    </label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="date" name="start_date" required
+                               class="w-full p-3 bg-white border-none rounded-lg">
+                        <input type="date" name="end_date" required
+                               class="w-full p-3 bg-white border-none rounded-lg">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Number of Travelers
-                        </label>
-                        <input type="number" name="travelers" min="1" required
-                               class="w-full p-3 border border-gray-300 rounded-lg">
-                    </div>
+                </div>
+                <div class="filter-container">
+                    <label class="block text-sm font-medium text-white mb-2">
+                        Number of Travelers
+                    </label>
+                    <input type="number" name="travelers" min="1" required
+                           class="w-full p-3 bg-white border-none rounded-lg">
                 </div>
             </div>
 
             <!-- Travel Style -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-6">Travel Preferences</h2>
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Travel Style
+            <div class="space-y-6">
+                <div class="filter-container">
+                    <label class="block text-sm font-medium text-white mb-2">
+                        Travel Style
+                    </label>
+                    <div class="grid grid-cols-3 gap-4">
+                        <label class="flex items-center p-4 bg-white rounded-lg cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="travel_style" value="budget" required
+                                   class="form-radio text-blue-600">
+                            <span class="ml-2">Budget</span>
                         </label>
-                        <div class="grid grid-cols-3 gap-4">
-                            <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-blue-50">
-                                <input type="radio" name="travel_style" value="budget" required
-                                       class="form-radio text-blue-600">
-                                <span class="ml-2">Budget</span>
-                            </label>
-                            <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-blue-50">
-                                <input type="radio" name="travel_style" value="midrange" required
-                                       class="form-radio text-blue-600">
-                                <span class="ml-2">Mid-range</span>
-                            </label>
-                            <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-blue-50">
-                                <input type="radio" name="travel_style" value="luxury" required
-                                       class="form-radio text-blue-600">
-                                <span class="ml-2">Luxury</span>
-                            </label>
-                        </div>
+                        <label class="flex items-center p-4 bg-white rounded-lg cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="travel_style" value="midrange" required
+                                   class="form-radio text-blue-600">
+                            <span class="ml-2">Mid-range</span>
+                        </label>
+                        <label class="flex items-center p-4 bg-white rounded-lg cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="travel_style" value="luxury" required
+                                   class="form-radio text-blue-600">
+                            <span class="ml-2">Luxury</span>
+                        </label>
                     </div>
+                </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Accommodation Preference
-                        </label>
-                        <select name="accommodation" required
-                                class="w-full p-3 border border-gray-300 rounded-lg">
-                            <option value="hostel">Hostel</option>
-                            <option value="hotel">Hotel</option>
-                            <option value="airbnb">Airbnb</option>
-                            <option value="resort">Resort</option>
-                        </select>
-                    </div>
+                <div class="filter-container">
+                    <label class="block text-sm font-medium text-white mb-2">
+                        Accommodation Preference
+                    </label>
+                    <select name="accommodation" class="form-select" required>
+                        <option value="">Select accommodation type</option>
+                        <option value="hostel">Hostel</option>
+                        <option value="hotel">Hotel</option>
+                        <option value="airbnb">Airbnb</option>
+                        <option value="resort">Resort</option>
+                    </select>
                 </div>
             </div>
 
             <!-- Calculate Button -->
-            <div class="text-center">
+            <div class="flex justify-center mt-8">
                 <button type="submit" 
-                        class="bg-blue-600 text-white px-8 py-4 rounded-full hover:bg-blue-700 transition-colors">
+                        class="px-12 py-4 bg-[#1980e6] text-white text-lg font-semibold rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl">
                     Calculate Estimate
                 </button>
             </div>
@@ -127,10 +123,7 @@
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-xl font-bold mb-4">Cost Estimate</h2>
                 <div class="space-y-4">
-                    <!-- Cost breakdown will be inserted here -->
                     <div id="costBreakdown"></div>
-                    
-                    <!-- Total -->
                     <div class="border-t pt-4">
                         <div class="flex justify-between items-center text-xl font-bold">
                             <span>Estimated Total:</span>
@@ -145,5 +138,24 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="{% static 'js/tools/travel_cost_estimator.js' %}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Choices.js for all select elements
+    const selects = document.querySelectorAll('.form-select');
+    selects.forEach(select => {
+        new Choices(select, {
+            searchEnabled: true,
+            itemSelectText: '',
+            shouldSort: false,
+            position: 'auto',
+            placeholder: true,
+            placeholderValue: select.getAttribute('placeholder') || 'Select an option'
+        });
+    });
+});
+</script>
 <script src="{% static 'js/tools/travel_cost_estimator.js' %}"></script>
 {% endblock %}
