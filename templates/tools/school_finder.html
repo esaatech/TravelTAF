@@ -4,6 +4,97 @@
 
 {% block extra_css %}
 <!-- Previous CSS remains the same -->
+<!-- Add Choices.js CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<style>
+    /* Custom styles for Choices.js */
+    .filter-container .choices {
+        margin-bottom: 0;
+        width: 100%;
+    }
+    
+    .filter-container .choices__inner {
+        background-color: white;
+        border: none;
+        border-radius: 4px !important;
+        min-height: 60px;
+        padding: 0.875rem 1.25rem;
+        font-size: 1.125rem;
+    }
+    
+    .filter-container .choices__input {
+        background-color: transparent;
+        margin: 0;
+    }
+    
+    .filter-container .choices__list--dropdown {
+        border: none;
+        border-radius: 4px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .filter-container .choices__list--single {
+        padding: 8px 40px 8px 8px;
+        font-size: 1.125rem;
+    }
+    
+    .filter-container .choices[data-type*='select-one']:after {
+        border-width: 6px;
+        border-color: #6B7280 transparent transparent transparent;
+        right: 20px;
+        top: 50%;
+    }
+    
+    .filter-container .choices[data-type*='select-one'].is-open:after {
+        border-color: transparent transparent #6B7280 transparent;
+    }
+    
+    /* Active/Selected state */
+    .filter-container .choices__list--dropdown .choices__item--selectable.is-highlighted {
+        background-color: #f3f4f6;
+        color: #1f2937;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        .filter-container .choices__list--dropdown {
+            max-height: 60vh;
+        }
+        
+        .filter-container .choices__list--dropdown .choices__item {
+            padding: 1rem;
+        }
+        
+        .filter-container .choices__inner {
+            min-height: 54px;
+        }
+    }
+
+    /* Error state */
+    .filter-container .choices.border-red-500 .choices__inner {
+        border: 2px solid rgb(239, 68, 68);
+    }
+
+    /* Container spacing */
+    .filter-container {
+        margin-bottom: 1rem;
+    }
+    
+    /* Label styling */
+    .filter-container label {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .form-select {
+        width: 100%;
+        height: 60px;
+        padding: 0.875rem 1.25rem;
+        font-size: 1.125rem;
+    }
+
+</style>
 {% endblock %}
 
 {% block content %}
@@ -11,14 +102,17 @@
 {% include 'tools/components/tools-hero-section.html' %}
 
 <!-- Search Filters -->
-<section class="bg-white py-8 border-b">
+<section class="bg-[#2B354E] py-12">
     <div class="max-w-7xl mx-auto px-4">
         <form id="school-search-form" class="space-y-6">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Country Filter -->
-                <div class="space-y-2">
-                    <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-                    <select id="country" name="country" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <div class="filter-container">
+                    <label for="country" class="block text-sm font-medium text-white mb-2">
+                        Country
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <select id="country" name="country" class="form-select">
                         <option value="">Select Country</option>
                         {% for country in filters.countries %}
                             <option value="{{ country.value }}">{{ country.label }}</option>
@@ -27,9 +121,9 @@
                 </div>
 
                 <!-- Program Level -->
-                <div class="space-y-2">
-                    <label for="program_level" class="block text-sm font-medium text-gray-700">Program Level</label>
-                    <select id="program_level" name="program_level" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <div class="filter-container">
+                    <label for="program_level" class="block text-sm font-medium text-white mb-2">Program Level</label>
+                    <select id="program_level" name="program_level" class="form-select">
                         <option value="">Select Level</option>
                         {% for program in filters.program_levels %}
                             <option value="{{ program.value }}">{{ program.label }}</option>
@@ -38,9 +132,9 @@
                 </div>
 
                 <!-- Field of Study -->
-                <div class="space-y-2">
-                    <label for="field_of_study" class="block text-sm font-medium text-gray-700">Field of Study</label>
-                    <select id="field_of_study" name="field_of_study" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <div class="filter-container">
+                    <label for="field_of_study" class="block text-sm font-medium text-white mb-2">Field of Study</label>
+                    <select id="field_of_study" name="field_of_study" class="form-select">
                         <option value="">Select Field</option>
                         {% for field in filters.fields_of_study %}
                             <option value="{{ field.value }}">{{ field.label }}</option>
@@ -49,9 +143,9 @@
                 </div>
 
                 <!-- Tuition Range -->
-                <div class="space-y-2">
-                    <label for="tuition_range" class="block text-sm font-medium text-gray-700">Tuition Range</label>
-                    <select id="tuition_range" name="tuition_range" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <div class="filter-container">
+                    <label for="tuition_range" class="block text-sm font-medium text-white mb-2">Tuition Range</label>
+                    <select id="tuition_range" name="tuition_range" class="form-select">
                         <option value="">Select Range</option>
                         {% for range in filters.tuition_ranges %}
                             <option value="{{ range.value }}">{{ range.label }}</option>
@@ -61,23 +155,16 @@
             </div>
 
             <!-- Additional Filters -->
-            <div class="flex flex-wrap gap-4">
+            <div class="flex flex-wrap gap-4 justify-center mt-6">
                 {% for filter in filters.additional_filters %}
                     <label class="inline-flex items-center">
                         <input type="checkbox" 
                                id="{{ filter.id }}" 
                                name="{{ filter.id }}" 
                                class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <span class="ml-2 text-sm text-gray-600">{{ filter.label }}</span>
+                        <span class="ml-2 text-sm text-white">{{ filter.label }}</span>
                     </label>
                 {% endfor %}
-            </div>
-
-            <!-- Search Button -->
-            <div class="text-center">
-                <button type="submit" id="search-button" class="px-8 py-3 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors">
-                    Search Schools
-                </button>
             </div>
         </form>
     </div>
@@ -150,9 +237,11 @@
         </div>
     </div>
 </template>
+
+
 {% endblock %}
 
-{% block extra_js %}
+{% block extra_scripts %}
 
 
 {% endblock %}
