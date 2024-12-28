@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- School Info Section -->
+
+
+<!-- Application Options -->
+<section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Choose Your Application Path</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Select the support level that best fits your needs. From self-guided tools to full consultation services, we're here to help you succeed.
+            </p>
+        </div>
+
+        <!-- Service Plans -->
+        <div class="grid md:grid-cols-3 gap-8 mb-16">
+            {% for plan_id, plan in service_plans.items %}
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden {% if plan_id == 'premium' %}ring-2 ring-blue-500{% endif %}">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-4">{{ plan.name }}</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">${{ plan.price }}</span>
+                        {% if plan.price == 0 %}
+                        <span class="text-gray-600">/forever</span>
+                        {% else %}
+                        <span class="text-gray-600">/one-time</span>
+                        {% endif %}
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        {% for feature in plan.features %}
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            {{ feature }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="#" 
+                       class="block w-full py-3 px-6 text-center rounded-lg {% if plan_id == 'premium' %}bg-blue-600 text-white hover:bg-blue-700{% else %}border-2 border-blue-600 text-blue-600 hover:bg-blue-50{% endif %} transition-colors">
+                        {{ plan.button_text }}
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center">
+            <h3 class="text-2xl font-bold mb-4">Need Help Deciding?</h3>
+            <p class="text-gray-600 mb-6">Schedule a free 15-minute consultation with our admission experts</p>
+            <a href="#" 
+               class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Schedule Free Call
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

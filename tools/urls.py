@@ -25,4 +25,6 @@ urlpatterns = [
     path('resume-builder/', views.resume_builder, name='resume_builder'),
     path('resume-review/', views.resume_review, name='resume_review'),
     path('flight-search/', views.flight_search, name='flight_search'),
+ # School Details URL
+    path('school_detail/<int:school_id>/', views.SchoolDetailView.as_view(), name='school_detail'),
 ]

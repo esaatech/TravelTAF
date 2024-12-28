@@ -113,6 +113,11 @@
         <!-- Results Container -->
         <div id="schools-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Schools will be dynamically inserted here -->
+       
+        
+      
+       
+       
         </div>
 
         <!-- Pagination -->
@@ -122,47 +127,12 @@
     </div>
 </section>
 
-<!-- School Card Template -->
-<template id="school-card-template">
-    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-        <div class="p-6">
-            <div class="flex items-center mb-4">
-                <img class="school-logo w-12 h-12 object-contain mr-4" alt="University Logo">
-                <div>
-                    <h3 class="school-name text-lg font-semibold"></h3>
-                    <p class="school-location text-sm text-gray-600"></p>
-                </div>
-            </div>
-            <div class="space-y-3">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-600">Tuition Fee:</span>
-                    <span class="school-tuition font-medium"></span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-600">Programs:</span>
-                    <span class="school-programs font-medium"></span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-600">Scholarships:</span>
-                    <span class="school-scholarships font-medium text-green-600"></span>
-                </div>
-            </div>
-            <div class="mt-6 space-y-3">
-                <a class="school-details block text-center px-4 py-2 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors">
-                    View Details
-                </a>
-                <a class="school-website block text-center px-4 py-2 border border-[#1980e6] text-[#1980e6] rounded-full hover:bg-blue-50 transition-colors">
-                    Visit Website
-                </a>
-            </div>
-        </div>
-    </div>
-</template>
+
 
 
 {% endblock %}
 
 {% block extra_scripts %}
 
-
+<script src="{% static 'js/tools/school_finder.js' %}"></script>
 {% endblock %}

@@ -10,7 +10,11 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from asgiref.sync import sync_to_async
 import asyncio
 from .models import School, Country, ProgramLevel, FieldOfStudy
-
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_protect
+import os
+from openai import OpenAI
 from .services.amadeus import AmadeusFlightService
 from .services.flight_interfaces import FlightSearchParams, FlightDestination
 
@@ -293,13 +297,7 @@ def get_filtered_schools(country_code, program_level, field_of_study, tuition_ra
         for school in schools.distinct()
     ]
 
-import json
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_protect
-import openai
-import os
-from openai import OpenAI
+
 
 @require_http_methods(["GET", "POST"])
 def job_cover_letter(request):
@@ -564,3 +562,66 @@ def flight_search(request):
             })
     
     return render(request, 'tools/flight_search.html')
+
+from django.views.generic import DetailView
+from django.shortcuts import get_object_or_404
+
+class SchoolDetailView(DetailView):
+    model = School
+    template_name = 'tools/school_detail.html'
+    context_object_name = 'school'
+    pk_url_kwarg = 'school_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        school = self.get_object()
+
+        # Get service plans
+        context['service_plans'] = {
+            'self_service': {
+                'name': 'Free',
+                'price': 0,
+                'features': [
+                    'Basic application checklist',
+                    'Document requirements guide',
+                    'SOP templates',
+                    'Essay templates',
+                    
+                ],
+                'button_text': 'Start Free',
+                'button_url': 'tools:start_application',
+            },
+            'premium': {
+                'name': 'Premium Package',
+                'price': 299,
+                'features': [
+                    'Access to knowledge base',
+                    'Access to Tools',
+                    'Document review & feedback',
+                    'Custom SOP ',
+                    'Custom Essay',
+                    'Translation services',
+                    'Document certification',
+                    
+                ],
+                'button_text': 'Get Premium Support',
+                'button_url': 'tools:premium_service',
+            },
+            'consultation': {
+                'name': 'Full Consultation',
+                'price': 999,
+                'features': [
+                    'Dedicated admission consultant',
+                    'Complete application handling',
+                    'Custom study plan',
+                    'Visa application support',
+                    'Accommodation assistance',
+                    'Pre-departure guidance',
+                ],
+                'button_text': 'Schedule Consultation',
+                'button_url': 'tools:schedule_consultation',
+            }
+        }
+       
+
+        return context
