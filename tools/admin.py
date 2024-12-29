@@ -55,3 +55,43 @@ class SchoolAdmin(admin.ModelAdmin):
             housing_available=False
         )
     disable_all_features.short_description = "Disable all features for selected schools"
+
+
+
+
+from django.contrib import admin
+from .models import StudyServicePlan, StudyPlanFeature, StudyPlanService
+
+class StudyPlanFeatureInline(admin.TabularInline):
+    model = StudyPlanFeature
+    extra = 1
+    ordering = ['order']
+    fields = ['feature', 'is_highlighted', 'order']
+
+class StudyPlanServiceInline(admin.TabularInline):
+    model = StudyPlanService
+    extra = 1
+    ordering = ['order']
+    fields = ['service', 'is_highlighted', 'order']
+
+@admin.register(StudyServicePlan)
+class StudyServicePlanAdmin(admin.ModelAdmin):
+    list_display = ['name', 'plan_type', 'price', 'timeline', 'is_active', 'order']
+    list_editable = ['order', 'is_active']
+    list_filter = ['plan_type', 'is_active']
+    search_fields = ['name', 'description']
+    inlines = [StudyPlanFeatureInline, StudyPlanServiceInline]
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'plan_type', 'description')
+        }),
+        ('Pricing & Timeline', {
+            'fields': ('price', 'timeline')
+        }),
+        ('Button Configuration', {
+            'fields': ('button_text', 'button_url')
+        }),
+        ('Settings', {
+            'fields': ('is_active', 'order')
+        })
+    )
