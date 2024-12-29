@@ -60,26 +60,8 @@ class SubscriptionPlan(BaseModel):
     
     A plan can either grant access to specific features or have full access to everything.
     """
-    DURATION_TYPES = (
-        ('ONE_TIME', 'One Time'),
-        ('MONTHLY', 'Monthly'),
-        ('QUARTERLY', 'Quarterly'),
-        ('SEMI_ANNUAL', 'Semi-Annual'),
-        ('YEARLY', 'Yearly'),
-    )
-
     name = models.CharField(max_length=255)
     description = models.TextField()
-    duration_type = models.CharField(
-        max_length=20,
-        choices=DURATION_TYPES,
-        default='MONTHLY'
-    )
-    price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        help_text="Price in USD"
-    )
     has_full_access = models.BooleanField(
         default=False,
         help_text="If True, this plan has access to all features regardless of selection"
@@ -89,19 +71,15 @@ class SubscriptionPlan(BaseModel):
         blank=True,
         help_text="Features included in this plan (ignored if has_full_access is True)"
     )
-    stripe_price_id = models.CharField(
-        max_length=100,
-        blank=True,
-        help_text="Stripe Price ID for this plan"
-    )
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Subscription Plan"
         verbose_name_plural = "Subscription Plans"
-        ordering = ['price']
+        ordering = ['name']
 
     def __str__(self):
-        return f"{self.name} ({self.get_duration_type_display()})"
+        return self.name
 
     def clean(self):
         """Validate the subscription plan."""
@@ -118,6 +96,49 @@ class SubscriptionPlan(BaseModel):
                 raise ValidationError(
                     "Plan must either have full access or select specific features."
                 )
+
+
+class PlanDuration(BaseModel):
+    """
+    Defines available durations and prices for subscription plans.
+    """
+    DURATION_TYPES = (
+        ('ONE_TIME', 'One Time'),
+        ('MONTHLY', 'Monthly'),
+        ('QUARTERLY', 'Quarterly'),
+        ('SEMI_ANNUAL', 'Semi-Annual'),
+        ('YEARLY', 'Yearly'),
+    )
+
+    plan = models.ForeignKey(
+        SubscriptionPlan,
+        on_delete=models.CASCADE,
+        related_name='durations'
+    )
+    duration_type = models.CharField(
+        max_length=20,
+        choices=DURATION_TYPES
+    )
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Price in USD"
+    )
+    stripe_price_id = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Stripe Price ID for this duration"
+    )
+
+    class Meta:
+        verbose_name = "Plan Duration"
+        verbose_name_plural = "Plan Durations"
+        ordering = ['plan', 'duration_type']
+        unique_together = ['plan', 'duration_type']
+
+    def __str__(self):
+        """Generic string representation of duration and price."""
+        return f"{self.get_duration_type_display()} (${self.price})"
 
 
 class UserSubscription(BaseModel):
@@ -138,6 +159,11 @@ class UserSubscription(BaseModel):
     )
     plan = models.ForeignKey(
         SubscriptionPlan,
+        on_delete=models.PROTECT,
+        related_name='user_subscriptions'
+    )
+    plan_duration = models.ForeignKey(
+        PlanDuration,
         on_delete=models.PROTECT,
         related_name='user_subscriptions'
     )

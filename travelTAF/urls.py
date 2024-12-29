@@ -33,6 +33,7 @@ urlpatterns = [
     path('credits/', include('credits.urls')),
     path('payments/', include('payments.urls')),
     path('resume_builder/', include('resume_builder.urls')),
+    path('subscriptions/', include('subscriptions.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

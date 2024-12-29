@@ -17,6 +17,12 @@ import os
 from openai import OpenAI
 from .services.amadeus import AmadeusFlightService
 from .services.flight_interfaces import FlightSearchParams, FlightDestination
+from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic import View
+from subscriptions.models import SubscriptionPlan
 
 from .cover_letter import (
     generate_cover_letter_from_fields,
@@ -605,3 +611,54 @@ class SchoolDetailView(DetailView):
         }
 
         return context
+
+
+@method_decorator(login_required, name='dispatch')
+class StudyAbroadSubscriptionView(View):
+    """Handle Study Abroad subscription selection."""
+    
+    def get(self, request, *args, **kwargs):
+        # Get the Study Abroad subscription plan
+        plan = get_object_or_404(
+            SubscriptionPlan,
+            name='Study Abroad',
+            is_active=True
+        )
+        
+        # Redirect to subscription purchase with return URL
+        return_url = reverse('tools:study_abroad_success')
+        purchase_url = f"{reverse('subscriptions:plan_purchase', args=[plan.id])}?return_url={return_url}"
+        
+        return redirect(purchase_url)
+
+
+@method_decorator(login_required, name='dispatch')
+class StudyProgramSubscriptionView(View):
+    """Handle Study Program subscription selection."""
+    
+    def get(self, request, *args, **kwargs):
+        # Get the Study Program subscription plan
+        plan = get_object_or_404(
+            SubscriptionPlan,
+            name='Study Program',
+            is_active=True
+        )
+        
+        # Redirect to subscription purchase with return URL
+        return_url = reverse('tools:study_program_success')
+        purchase_url = f"{reverse('subscriptions:plan_purchase', args=[plan.id])}?return_url={return_url}"
+        
+        return redirect(purchase_url)        
+    
+
+# Success views for after subscription
+@login_required
+def study_abroad_success(request):
+    """Handle successful Study Abroad subscription."""
+    return render(request, 'tools/study_abroad_success.html')
+
+
+@login_required
+def study_program_success(request):
+    """Handle successful Study Program subscription."""
+    return render(request, 'tools/study_program_success.html')    
