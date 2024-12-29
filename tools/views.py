@@ -9,7 +9,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from asgiref.sync import sync_to_async
 import asyncio
-from .models import School, Country, ProgramLevel, FieldOfStudy
+from .models import School, Country, ProgramLevel, FieldOfStudy, StudyServicePlan
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect
@@ -574,96 +574,34 @@ class SchoolDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        school = self.get_object()
+        
+        # Get active service plans ordered by their defined order
+        service_plans = StudyServicePlan.objects.filter(
+            is_active=True
+        ).prefetch_related(
+            'features',
+            'included_services'
+        )
 
-        # Get service plans
+        # Format plans for template
         context['service_plans'] = {
-            'program_support': {
-                'name': 'Program Application Support',
-                'price': 199,
-                'description': 'Complete support for applying to your chosen program',
+            plan.plan_type: {
+                'name': plan.name,
+                'description': plan.description,
+                'price': plan.price,
+                'timeline': plan.timeline,
                 'features': [
-                    'Document preparation assistance',
-                    'Personal Statement/SOP writing',
-                    'Application form filling guidance',
-                    'Document review & verification',
-                    'Application submission support',
-                    'Interview preparation (if required)',
-                    'Admission status tracking',
-                    'Email templates for communication',
+                    feature.feature 
+                    for feature in plan.features.all().order_by('order')
                 ],
                 'included_services': [
-                    'One program application',
-                    '3 rounds of document review',
-                    '2 SOP/Essay revisions',
-                    '1 mock interview session',
+                    service.service 
+                    for service in plan.included_services.all().order_by('order')
                 ],
-                'timeline': '4-6 weeks',
-                'button_text': 'Start Application',
-                'button_url': 'tools:start_program_application',
-            },
-            'study_abroad': {
-                'name': 'Complete Study Abroad Service',
-                'price': 999,
-                'description': 'End-to-end support for your entire study abroad journey',
-                'features': [
-                    'All Program Application Support features',
-                    'Multiple program applications',
-                    'Visa application assistance',
-                    'Pre-departure guidance',
-                    'Accommodation search support',
-                    'Bank account setup assistance',
-                    'Travel insurance guidance',
-                    'Airport pickup arrangement',
-                ],
-                'included_services': [
-                    'Up to 3 program applications',
-                    'Unlimited document reviews',
-                    'Complete visa application support',
-                    'Accommodation shortlisting',
-                    '24/7 support until arrival',
-                    '3-month post-arrival support',
-                ],
-                'timeline': '3-6 months',
-                'button_text': 'Get Complete Support',
-                'button_url': 'tools:start_abroad_service',
+                'button_text': plan.button_text,
+                'button_url': plan.button_url,
             }
-        }
-
-        # Application requirements and process
-        context['requirements'] = {
-            'documents': [
-                {'name': 'Academic transcripts', 'required': True},
-                {'name': 'Language test scores', 'required': True},
-                {'name': 'Statement of purpose', 'required': True},
-                {'name': 'Letters of recommendation', 'required': True},
-                {'name': 'CV/Resume', 'required': False},
-                {'name': 'Portfolio (if applicable)', 'required': False},
-                {'name': 'Financial documents', 'required': True},
-                {'name': 'Passport', 'required': True},
-            ],
-            'process_steps': [
-                {
-                    'phase': 'Initial Consultation',
-                    'duration': '1 week',
-                    'description': 'Review your profile and requirements, plan application strategy'
-                },
-                {
-                    'phase': 'Document Preparation',
-                    'duration': '2-3 weeks',
-                    'description': 'Prepare and review all required documents'
-                },
-                {
-                    'phase': 'Application Submission',
-                    'duration': '1-2 weeks',
-                    'description': 'Submit application and track status'
-                },
-                {
-                    'phase': 'Post-Application Support',
-                    'duration': 'Ongoing',
-                    'description': 'Interview preparation and admission follow-up'
-                },
-            ]
+            for plan in service_plans
         }
 
         return context
