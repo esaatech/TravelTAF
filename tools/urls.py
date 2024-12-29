@@ -27,4 +27,27 @@ urlpatterns = [
     path('flight-search/', views.flight_search, name='flight_search'),
  # School Details URL
     path('school_detail/<int:school_id>/', views.SchoolDetailView.as_view(), name='school_detail'),
+    # Subscription routes
+    path(
+        'study-abroad-subscription/',
+        views.StudyAbroadSubscriptionView.as_view(),
+        name='study_abroad_subscription'
+    ),
+    path(
+        'study-program-subscription/',
+        views.StudyProgramSubscriptionView.as_view(),
+        name='study_program_subscription'
+    ),
+
+    # Success routes
+    path(
+        'study-abroad/success/',
+        views.study_abroad_success,
+        name='study_abroad_success'
+    ),
+    path(
+        'study-program/success/',
+        views.study_program_success,
+        name='study_program_success'
+    ),
 ]

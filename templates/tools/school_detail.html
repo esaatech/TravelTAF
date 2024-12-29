@@ -91,7 +91,7 @@
                     </div>
 
                     <!-- Action Button -->
-                    <a href="#" 
+                    <a href="{% if plan.button_url %}{% url plan.button_url %}{% endif %}" 
                        class="block w-full py-4 px-6 text-center rounded-lg bg-[#1980e6] text-white hover:bg-blue-700 transition-colors font-semibold">
                         {{ plan.button_text }}
                     </a>
