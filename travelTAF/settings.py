@@ -128,6 +128,8 @@ INSTALLED_APPS = [
     'credits',
     'resume_builder',
     'promotions',
+    'subscriptions',
+
 ]
 
 REST_FRAMEWORK = {
