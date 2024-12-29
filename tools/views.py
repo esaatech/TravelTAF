@@ -578,50 +578,92 @@ class SchoolDetailView(DetailView):
 
         # Get service plans
         context['service_plans'] = {
-            'self_service': {
-                'name': 'Free',
-                'price': 0,
+            'program_support': {
+                'name': 'Program Application Support',
+                'price': 199,
+                'description': 'Complete support for applying to your chosen program',
                 'features': [
-                    'Basic application checklist',
-                    'Document requirements guide',
-                    'SOP templates',
-                    'Essay templates',
-                    
+                    'Document preparation assistance',
+                    'Personal Statement/SOP writing',
+                    'Application form filling guidance',
+                    'Document review & verification',
+                    'Application submission support',
+                    'Interview preparation (if required)',
+                    'Admission status tracking',
+                    'Email templates for communication',
                 ],
-                'button_text': 'Start Free',
-                'button_url': 'tools:start_application',
-            },
-            'premium': {
-                'name': 'Premium Package',
-                'price': 299,
-                'features': [
-                    'Access to knowledge base',
-                    'Access to Tools',
-                    'Document review & feedback',
-                    'Custom SOP ',
-                    'Custom Essay',
-                    'Translation services',
-                    'Document certification',
-                    
+                'included_services': [
+                    'One program application',
+                    '3 rounds of document review',
+                    '2 SOP/Essay revisions',
+                    '1 mock interview session',
                 ],
-                'button_text': 'Get Premium Support',
-                'button_url': 'tools:premium_service',
+                'timeline': '4-6 weeks',
+                'button_text': 'Start Application',
+                'button_url': 'tools:start_program_application',
             },
-            'consultation': {
-                'name': 'Full Consultation',
+            'study_abroad': {
+                'name': 'Complete Study Abroad Service',
                 'price': 999,
+                'description': 'End-to-end support for your entire study abroad journey',
                 'features': [
-                    'Dedicated admission consultant',
-                    'Complete application handling',
-                    'Custom study plan',
-                    'Visa application support',
-                    'Accommodation assistance',
+                    'All Program Application Support features',
+                    'Multiple program applications',
+                    'Visa application assistance',
                     'Pre-departure guidance',
+                    'Accommodation search support',
+                    'Bank account setup assistance',
+                    'Travel insurance guidance',
+                    'Airport pickup arrangement',
                 ],
-                'button_text': 'Schedule Consultation',
-                'button_url': 'tools:schedule_consultation',
+                'included_services': [
+                    'Up to 3 program applications',
+                    'Unlimited document reviews',
+                    'Complete visa application support',
+                    'Accommodation shortlisting',
+                    '24/7 support until arrival',
+                    '3-month post-arrival support',
+                ],
+                'timeline': '3-6 months',
+                'button_text': 'Get Complete Support',
+                'button_url': 'tools:start_abroad_service',
             }
         }
-       
+
+        # Application requirements and process
+        context['requirements'] = {
+            'documents': [
+                {'name': 'Academic transcripts', 'required': True},
+                {'name': 'Language test scores', 'required': True},
+                {'name': 'Statement of purpose', 'required': True},
+                {'name': 'Letters of recommendation', 'required': True},
+                {'name': 'CV/Resume', 'required': False},
+                {'name': 'Portfolio (if applicable)', 'required': False},
+                {'name': 'Financial documents', 'required': True},
+                {'name': 'Passport', 'required': True},
+            ],
+            'process_steps': [
+                {
+                    'phase': 'Initial Consultation',
+                    'duration': '1 week',
+                    'description': 'Review your profile and requirements, plan application strategy'
+                },
+                {
+                    'phase': 'Document Preparation',
+                    'duration': '2-3 weeks',
+                    'description': 'Prepare and review all required documents'
+                },
+                {
+                    'phase': 'Application Submission',
+                    'duration': '1-2 weeks',
+                    'description': 'Submit application and track status'
+                },
+                {
+                    'phase': 'Post-Application Support',
+                    'duration': 'Ongoing',
+                    'description': 'Interview preparation and admission follow-up'
+                },
+            ]
+        }
 
         return context
