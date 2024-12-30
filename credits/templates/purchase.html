@@ -374,7 +374,10 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = true;
         spinner.classList.remove('hidden');
 
-        const cardholderName = document.getElementById('cardholder-name').value;
+        // Get first and last name instead of cardholder name
+        const firstName = document.getElementById('first-name').value;
+        const lastName = document.getElementById('last-name').value;
+        const cardholderName = `${firstName} ${lastName}`;
 
         try {
             const {paymentMethod, error} = await stripe.createPaymentMethod({

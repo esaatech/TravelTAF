@@ -52,6 +52,8 @@ class CreditTransaction(models.Model):
     payment = models.ForeignKey(CreditPayment, null=True, blank=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=255)
+    payment_intent_id = models.CharField(max_length=255, null=True, blank=True)
+    currency = models.CharField(max_length=3, default='USD')
 
     def __str__(self):
         return f"{self.user.email} - {self.transaction_type} - {self.amount}"

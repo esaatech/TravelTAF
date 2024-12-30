@@ -82,10 +82,13 @@ class UserCreditAdmin(admin.ModelAdmin):
 
 @admin.register(CreditTransaction)
 class CreditTransactionAdmin(admin.ModelAdmin):
-    list_display = ('user_email', 'amount', 'transaction_type', 'created_at', 'description')
-    list_filter = ('transaction_type', 'created_at')
-    search_fields = ('user__email', 'description')
-    readonly_fields = ('created_at',)
+    list_display = ['user', 'amount', 'transaction_type', 'currency', 'created_at']
+    list_filter = ['transaction_type', 'currency', 'created_at']
+    search_fields = ['user__username', 'payment_intent_id', 'description']
+    readonly_fields = ['payment_intent_id', 'created_at']
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user')
 
     def user_email(self, obj):
         return obj.user.email

@@ -14,12 +14,17 @@ import json
 from django.urls import reverse
 from .credit_calculator import CreditCalculator
 from .add_user_credit import add_credits_to_user
-stripe.api_key = settings.STRIPE_SECRET_KEY
+from dotenv import load_dotenv
+from django.utils import timezone
+import os
+load_dotenv()
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')  # Make sure this is the secret key
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 
 @login_required
 def purchase_credits(request):
     return render(request, 'purchase.html', {
-        'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY
+        'STRIPE_PUBLIC_KEY': STRIPE_PUBLIC_KEY
     })
 
 @login_required
@@ -35,7 +40,7 @@ def process_payment(request):
         # Calculate credits
         credit_result = CreditCalculator.calculate_credits(amount, currency)
 
-        # Create payment intent with metadata
+        # Create payment intent with return_url
         intent = stripe.PaymentIntent.create(
             payment_method=payment_method_id,
             amount=int(amount * 100),  # Convert to cents
@@ -48,7 +53,8 @@ def process_payment(request):
                 'currency': currency
             },
             confirmation_method='manual',
-            confirm=True
+            confirm=True,
+            return_url=request.build_absolute_uri(reverse('credits:payment_success'))
         )
 
         if intent.status == 'succeeded':
@@ -87,6 +93,12 @@ def process_payment(request):
         })
 
 @login_required
+def payment_success_general(request):
+    return render(request, 'payment_success.html', {
+        'success_message': 'Payment completed successfully!'
+    })
+
+@login_required
 def payment_success(request, payment_id):
     payment = get_object_or_404(CreditPayment, id=payment_id, user=request.user)
     
@@ -103,7 +115,7 @@ def payment_success(request, payment_id):
         
         messages.success(request, f'{credits_to_add} credits have been added to your account!')
     
-    return render(request, 'credits/payment_success.html', {
+    return render(request, 'payment_success.html', {
         'payment': payment
     })
 
@@ -114,5 +126,12 @@ def credit_balance(request):
     
     return render(request, 'balance.html', {
         'balance': user_credit.balance,
+        'transactions': transactions
+    })
+
+@login_required
+def transaction_history(request):
+    transactions = CreditTransaction.objects.filter(user=request.user).order_by('-created_at')[:10]
+    return render(request, 'transaction_history.html', {
         'transactions': transactions
     })
