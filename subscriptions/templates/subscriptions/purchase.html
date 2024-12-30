@@ -360,24 +360,32 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = true;
         spinner.classList.remove('hidden');
 
-        const cardholderName = document.getElementById('cardholder-name').value;
-
         try {
+            // Create payment method
             const {paymentMethod, error} = await stripe.createPaymentMethod({
                 type: 'card',
-                card: card,
+                card: cardNumber,
                 billing_details: {
-                    name: cardholderName,
+                    name: `${document.getElementById('first-name').value} ${document.getElementById('last-name').value}`,
+                    email: document.getElementById('email').value,
+                    address: {
+                        line1: document.getElementById('address').value,
+                        city: document.getElementById('city').value,
+                        state: document.getElementById('state').value,
+                        postal_code: document.getElementById('zip').value
+                    }
                 }
             });
 
             if (error) {
-                handleError(error);
-                return;
+                throw error;
             }
 
+            // Get plan ID from context
+            const planId = {{ plan_id }};
+            
             // Process payment
-            const response = await fetch(`/subscriptions/process-payment/{{ plan.id }}/${selectedDurationId}/`, {
+            const response = await fetch(`/subscriptions/process-payment/${planId}/${selectedDurationId}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -395,11 +403,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (result.success) {
                 window.location.href = result.redirect_url;
             } else {
-                handleError(new Error(result.error));
+                throw new Error(result.error);
             }
 
         } catch (error) {
-            handleError(error);
+            document.getElementById('card-errors').textContent = error.message;
+            submitButton.disabled = false;
+            spinner.classList.add('hidden');
         }
     });
 

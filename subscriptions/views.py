@@ -3,10 +3,17 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.conf import settings
-from .models import SubscriptionPlan, PlanDuration, UserSubscription
+from .models import SubscriptionPlan, PlanDuration, UserSubscription, UserProfile
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.urls import reverse
+import stripe
+import json
+import os
+from dotenv import load_dotenv
+load_dotenv()
+# Initialize Stripe with SECRET key (not publishable key)
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')  # Make sure this is the secret key
 
 class PlanPurchaseView(LoginRequiredMixin, DetailView):
     """
@@ -31,6 +38,9 @@ class PlanPurchaseView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         plan = self.get_object()
         
+        # Add plan ID to context
+        context['plan_id'] = plan.id
+        
         # Get active durations for this plan
         context['durations'] = plan.durations.filter(is_active=True)
         
@@ -44,8 +54,8 @@ class PlanPurchaseView(LoginRequiredMixin, DetailView):
             is_active=True
         )
         
-        # Add Stripe public key
-        context['STRIPE_PUBLIC_KEY'] = settings.STRIPE_PUBLIC_KEY
+        # Load Stripe publishable key directly
+        context['STRIPE_PUBLIC_KEY'] = os.getenv('STRIPE_PUBLISHABLE_KEY')
         
         # Add return_url if provided
         context['return_url'] = self.request.GET.get('return_url')
@@ -58,16 +68,40 @@ def process_payment(request, plan_id, duration_id):
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-    plan = get_object_or_404(SubscriptionPlan, id=plan_id, is_active=True)
-    duration = get_object_or_404(
-        PlanDuration, 
-        id=duration_id, 
-        plan=plan, 
-        is_active=True
-    )
-
     try:
-        # Create pending subscription first
+        # Get data from request
+        data = json.loads(request.body)
+        payment_method_id = data.get('payment_method_id')
+        save_card = data.get('save_card', False)
+        return_url = data.get('return_url')
+
+        # Get or create stripe profile
+        stripe_profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+        # Create or get Stripe customer
+        if not stripe_profile.stripe_customer_id:
+            customer = stripe.Customer.create(
+                email=request.user.email,
+                payment_method=payment_method_id if save_card else None,
+                metadata={'user_id': request.user.id}
+            )
+            stripe_profile.stripe_customer_id = customer.id
+            stripe_profile.save()
+        else:
+            customer = stripe.Customer.retrieve(stripe_profile.stripe_customer_id)
+            if save_card:
+                stripe.PaymentMethod.attach(payment_method_id, customer=customer.id)
+
+        # Get plan and duration
+        plan = get_object_or_404(SubscriptionPlan, id=plan_id, is_active=True)
+        duration = get_object_or_404(
+            PlanDuration, 
+            id=duration_id, 
+            plan=plan, 
+            is_active=True
+        )
+
+        # Create pending subscription
         subscription = UserSubscription.objects.create(
             user=request.user,
             plan=plan,
@@ -75,24 +109,52 @@ def process_payment(request, plan_id, duration_id):
             status='PENDING'
         )
 
-        # Process payment with Stripe
-        # TODO: Add Stripe payment processing here
-        
-        # Get return URL from request if provided
-        return_url = request.POST.get('return_url')
-        
-        if return_url:
-            success_url = return_url
+        # Create payment intent
+        payment_intent = stripe.PaymentIntent.create(
+            amount=int(duration.price * 100),  # Convert to cents
+            currency='usd',
+            customer=customer.id,
+            payment_method=payment_method_id,
+            off_session=False,
+            confirm=True,
+            metadata={
+                'subscription_id': subscription.id,
+                'plan_id': plan.id,
+                'duration_id': duration.id
+            }
+        )
+
+        # Handle the payment intent status
+        if payment_intent.status == 'succeeded':
+            subscription.status = 'ACTIVE'
+            subscription.stripe_payment_intent = payment_intent.id
+            subscription.save()
+
+            success_url = return_url or reverse('subscriptions:checkout_success', 
+                                              args=[subscription.id])
+            
+            return JsonResponse({
+                'success': True,
+                'redirect_url': success_url
+            })
         else:
-            success_url = reverse('subscriptions:checkout_success', 
-                                args=[subscription.id])
-        
+            subscription.delete()
+            return JsonResponse({
+                'success': False,
+                'error': 'Payment failed'
+            }, status=400)
+
+    except stripe.error.CardError as e:
+        # Handle card errors
+        if 'subscription' in locals():
+            subscription.delete()
         return JsonResponse({
-            'success': True,
-            'redirect_url': success_url
-        })
+            'success': False,
+            'error': e.user_message
+        }, status=400)
+
     except Exception as e:
-        # If anything fails, delete the subscription
+        # Handle other errors
         if 'subscription' in locals():
             subscription.delete()
         return JsonResponse({

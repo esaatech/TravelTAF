@@ -2,6 +2,10 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class BaseModel(models.Model):
     """
@@ -141,6 +145,11 @@ class PlanDuration(BaseModel):
         return f"{self.get_duration_type_display()} (${self.price})"
 
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='stripe_profile')
+    stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
+
+
 class UserSubscription(BaseModel):
     """
     Tracks user subscriptions and their status.
@@ -152,33 +161,14 @@ class UserSubscription(BaseModel):
         ('PENDING', 'Pending'),
     )
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='subscriptions'
-    )
-    plan = models.ForeignKey(
-        SubscriptionPlan,
-        on_delete=models.PROTECT,
-        related_name='user_subscriptions'
-    )
-    plan_duration = models.ForeignKey(
-        PlanDuration,
-        on_delete=models.PROTECT,
-        related_name='user_subscriptions'
-    )
-    status = models.CharField(
-        max_length=10,
-        choices=STATUS_CHOICES,
-        default='PENDING'
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    plan = models.ForeignKey('SubscriptionPlan', on_delete=models.PROTECT)
+    plan_duration = models.ForeignKey('PlanDuration', on_delete=models.PROTECT)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(null=True, blank=True)
-    stripe_subscription_id = models.CharField(
-        max_length=100,
-        blank=True,
-        help_text="Stripe Subscription ID for recurring subscriptions"
-    )
+    stripe_subscription_id = models.CharField(max_length=255, blank=True, null=True)
+    stripe_payment_intent = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         verbose_name = "User Subscription"
