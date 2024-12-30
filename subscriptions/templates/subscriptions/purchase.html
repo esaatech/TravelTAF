@@ -320,10 +320,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Update selected duration and price
             selectedDurationId = this.dataset.durationId;
-            const price = this.dataset.price;
+            const price = parseFloat(this.dataset.price);
+            const formattedPrice = `$${price.toFixed(2)}`;
             
+            // Update hidden input
             selectedDurationInput.value = selectedDurationId;
-            paymentAmount.textContent = `$${price}`;
+            
+            // Update both amount displays
+            paymentAmount.textContent = formattedPrice;
+            
+            // Update button text with amount
+            submitButton.innerHTML = `
+                <span id="spinner" class="hidden mr-2">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </span>
+                Pay ${formattedPrice}
+            `;
+            
+            // Enable submit button
             submitButton.disabled = false;
         });
     });
@@ -391,6 +408,41 @@ document.addEventListener('DOMContentLoaded', function() {
         errorElement.textContent = error.message;
         submitButton.disabled = false;
         spinner.classList.add('hidden');
+    }
+
+    // Handle duration selection and amount updates
+    function updateSelectedDuration(durationId, price) {
+        // Update selected duration
+        selectedDurationId = durationId;
+        
+        // Update visual selection
+        document.querySelectorAll('.duration-option').forEach(option => {
+            if (option.dataset.durationId === durationId) {
+                option.classList.add('border-[#1980e6]', 'border-2');
+                option.classList.remove('border-gray-200');
+            } else {
+                option.classList.remove('border-[#1980e6]', 'border-2');
+                option.classList.add('border-gray-200');
+            }
+        });
+
+        // Update amount displays
+        const formattedPrice = `$${price.toFixed(2)}`;
+        document.getElementById('payment-amount').textContent = formattedPrice;
+        
+        // Update button text with amount and spinner
+        document.querySelector('#submit-button').innerHTML = `
+            <span id="spinner" class="hidden mr-2">
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </span>
+            Pay ${formattedPrice}
+        `;
+
+        // Enable submit button
+        document.getElementById('submit-button').disabled = false;
     }
 });
 </script>
