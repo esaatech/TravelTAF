@@ -46,7 +46,7 @@ urlpatterns = [
         name='study_abroad_success'
     ),
     path(
-        'study-program/success/',
+        'subscribe/study-program/success/',
         views.study_program_success,
         name='study_program_success'
     ),
