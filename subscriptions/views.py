@@ -11,6 +11,7 @@ import stripe
 import json
 import os
 from dotenv import load_dotenv
+from django.utils import timezone
 load_dotenv()
 # Initialize Stripe with SECRET key (not publishable key)
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')  # Make sure this is the secret key
@@ -73,7 +74,23 @@ def process_payment(request, plan_id, duration_id):
         data = json.loads(request.body)
         payment_method_id = data.get('payment_method_id')
         save_card = data.get('save_card', False)
-        return_url = data.get('return_url')
+
+        # Get plan and duration first
+        plan = get_object_or_404(SubscriptionPlan, id=plan_id, is_active=True)
+        duration = get_object_or_404(PlanDuration, id=duration_id, plan=plan, is_active=True)
+
+        # Create pending subscription
+        subscription = UserSubscription.objects.create(
+            user=request.user,
+            plan=plan,
+            plan_duration=duration,
+            status='PENDING'
+        )
+
+        # Now we can build the success URL with the subscription ID
+        success_url = request.build_absolute_uri(
+            reverse('subscriptions:checkout_success', args=[subscription.id])
+        )
 
         # Get or create stripe profile
         stripe_profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -92,24 +109,7 @@ def process_payment(request, plan_id, duration_id):
             if save_card:
                 stripe.PaymentMethod.attach(payment_method_id, customer=customer.id)
 
-        # Get plan and duration
-        plan = get_object_or_404(SubscriptionPlan, id=plan_id, is_active=True)
-        duration = get_object_or_404(
-            PlanDuration, 
-            id=duration_id, 
-            plan=plan, 
-            is_active=True
-        )
-
-        # Create pending subscription
-        subscription = UserSubscription.objects.create(
-            user=request.user,
-            plan=plan,
-            plan_duration=duration,
-            status='PENDING'
-        )
-
-        # Create payment intent
+        # Create payment intent with absolute success URL
         payment_intent = stripe.PaymentIntent.create(
             amount=int(duration.price * 100),  # Convert to cents
             currency='usd',
@@ -117,6 +117,7 @@ def process_payment(request, plan_id, duration_id):
             payment_method=payment_method_id,
             off_session=False,
             confirm=True,
+            return_url=success_url,  # Using the absolute URL
             metadata={
                 'subscription_id': subscription.id,
                 'plan_id': plan.id,
@@ -129,9 +130,6 @@ def process_payment(request, plan_id, duration_id):
             subscription.status = 'ACTIVE'
             subscription.stripe_payment_intent = payment_intent.id
             subscription.save()
-
-            success_url = return_url or reverse('subscriptions:checkout_success', 
-                                              args=[subscription.id])
             
             return JsonResponse({
                 'success': True,
@@ -145,7 +143,6 @@ def process_payment(request, plan_id, duration_id):
             }, status=400)
 
     except stripe.error.CardError as e:
-        # Handle card errors
         if 'subscription' in locals():
             subscription.delete()
         return JsonResponse({
@@ -154,7 +151,6 @@ def process_payment(request, plan_id, duration_id):
         }, status=400)
 
     except Exception as e:
-        # Handle other errors
         if 'subscription' in locals():
             subscription.delete()
         return JsonResponse({
@@ -166,12 +162,32 @@ def process_payment(request, plan_id, duration_id):
 def checkout_success(request, subscription_id):
     """Generic success page for subscription checkout."""
     subscription = get_object_or_404(
-        UserSubscription,
+        UserSubscription.objects.select_related(
+            'plan',
+            'plan_duration',
+            'user'
+        ).prefetch_related(
+            'plan__features'
+        ),
         id=subscription_id,
         user=request.user
     )
-    return render(request, 'subscriptions/success.html', {
-        'subscription': subscription
-    })
+
+    context = {
+        'subscription': subscription,
+        'plan': subscription.plan,
+        'duration': subscription.plan_duration,
+        'features': subscription.plan.features.filter(is_active=True),
+        'amount': subscription.plan_duration.price,
+        'status': subscription.status,
+        # Add any return URLs from your specific implementation
+        'dashboard_url': reverse('main:dashboard'),  # Adjust this to your dashboard URL
+        'invoice_url': reverse('subscriptions:invoice', args=[subscription.id]) if hasattr(subscription, 'invoice') else None,
+        'next_billing_date': subscription.created_at + timezone.timedelta(
+            days=30 if subscription.plan_duration.duration_type == 'MONTHLY' else 90
+        ) if subscription.plan_duration.duration_type in ['MONTHLY', 'QUARTERLY'] else None
+    }
+
+    return render(request, 'subscriptions/success.html', context)
 
 # Create your views here.
