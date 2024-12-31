@@ -209,7 +209,7 @@ def school_finder(request):
             'schools': filtered_schools
         })
 
-    # GET request - render initial page
+    # GET request - render initial page, country, program level, field of study, tuition range, additional filters, are added in the admin
     context = {
         'page_title': 'School Finder',
         'page_description': 'Find the perfect school matching your preferences, budget, and academic goals.',

@@ -40,6 +40,8 @@ function initializeSubscriptionForms() {
                     messageDiv.className = 'mt-4 text-sm text-green-600';
                     if (data.status === 'success') {
                         this.reset();
+                        // Save subscription status in local storage
+                        localStorage.setItem('newsletter_subscribed', 'true');
                     }
                 } else {
                     messageDiv.textContent = data.message || 'An error occurred. Please try again.';
