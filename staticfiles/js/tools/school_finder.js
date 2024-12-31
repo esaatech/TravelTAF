@@ -207,9 +207,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                     <div class="mt-6 space-y-3">
-                        <a href="/tools/school-finder/details/${school.id}/" 
+                        <a href="/tools/school_detail/${school.id}/"
                            class="block text-center px-4 py-2 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors">
-                            View Details
+                            Apply Now
                         </a>
                         <a href="${school.website}" 
                            target="_blank"

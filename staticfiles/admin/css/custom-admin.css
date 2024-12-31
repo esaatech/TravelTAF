@@ -1,0 +1,56 @@
+/* Status colors */
+.status-pending {
+    color: #f0ad4e;  /* Orange */
+    font-weight: bold;
+}
+
+.status-approved {
+    color: #5cb85c;  /* Green */
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: #d9534f;  /* Red */
+    font-weight: bold;
+}
+
+/* Action buttons */
+.action-button {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.approve-button {
+    background-color: #28a745;
+    color: white !important;
+    border: 1px solid #218838;
+}
+
+.approve-button:hover {
+    background-color: #218838;
+}
+
+.reject-button {
+    background-color: #dc3545;
+    color: white !important;
+    border: 1px solid #c82333;
+}
+
+.reject-button:hover {
+    background-color: #c82333;
+}
+
+/* Status badge */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+}
