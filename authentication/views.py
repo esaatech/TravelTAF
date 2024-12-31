@@ -43,7 +43,7 @@ class CustomLoginView(View):
             if not remember_me:
                 request.session.set_expiry(0)
             
-            return redirect('main:dashboard')
+            return redirect('dashboard:dashboard')
         else:
             messages.error(request, "Invalid username/email or password.")
         
@@ -51,7 +51,7 @@ class CustomLoginView(View):
 
 class RegisterView(CreateView):
     
-    success_url = reverse_lazy('main:dashboard')
+    success_url = reverse_lazy('dashboard:dashboard')
     template_name = 'register.html'
     form_class = CustomUserCreationForm
     
@@ -67,7 +67,7 @@ class RegisterView(CreateView):
         return response
 
     def get_success_url(self):
-        return reverse_lazy('main:dashboard')
+        return reverse_lazy('dashboard:dashboard')
         
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:

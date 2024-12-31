@@ -43,6 +43,5 @@ urlpatterns = [
     path('learn-more/', views.learn_more, name='learn_more'),
     # About page
     path('about/', views.about, name='about'),
-    path('dashboard/', views.dashboard, name='dashboard'),
 
 ]
