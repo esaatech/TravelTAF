@@ -96,7 +96,8 @@
     <div class="max-w-7xl mx-auto px-4">
         <!-- Promotions Above Results -->
         <div class="mb-8">
-            {% show_promotions_carousel %}
+            {% show_promotions promotion_type='general' style='basic' %}
+
         </div>
 
         <!-- Results Header -->
@@ -113,11 +114,7 @@
         <!-- Results Container -->
         <div id="schools-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Schools will be dynamically inserted here -->
-       
-        
-      
-       
-       
+
         </div>
 
         <!-- Pagination -->
@@ -127,6 +124,13 @@
     </div>
 </section>
 
+<!-- Featured Schools Section (Always Visible) -->
+<section class="bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-2xl font-semibold mb-8">Featured Schools</h2>
+        {% show_promotions promotion_type='school' style='card' %}
+    </div>
+</section>
 
 
 
