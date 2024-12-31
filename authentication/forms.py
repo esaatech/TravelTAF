@@ -33,7 +33,13 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = ('username', 'email', 'password1', 'password2') 
+        fields = ('username', 'email', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Remove the default help text
+        for field in self.fields.values():
+            field.help_text = None
 
 class LoginForm(forms.Form):
     username_or_email = forms.CharField(label='Username or Email', max_length=150)

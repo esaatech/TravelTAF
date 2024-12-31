@@ -50,9 +50,10 @@ class CustomLoginView(View):
         return render(request, self.template_name)
 
 class RegisterView(CreateView):
+    
+    success_url = reverse_lazy('main:dashboard')
     template_name = 'register.html'
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('main:dashboard')
     
     def form_valid(self, form):
         # First save the form normally
