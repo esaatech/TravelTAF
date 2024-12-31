@@ -54,6 +54,17 @@ class RegisterView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('main:dashboard')
     
+    def form_valid(self, form):
+        # First save the form normally
+        response = super().form_valid(form)
+        # Get the username and password from the form
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password1']
+        # Authenticate and login the user
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return response
+
     def get_success_url(self):
         return reverse_lazy('main:dashboard')
         

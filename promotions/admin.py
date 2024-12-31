@@ -25,11 +25,11 @@ class PromotionAdmin(admin.ModelAdmin):
         ('Link Settings', {
             'fields': ('link_type', 'external_url', 'internal_name', 'cta_text'),
             'description': 'Configure link and call-to-action button'
-        }),
+        }), 
         ('Display Settings', {
             'fields': ('is_active', 'order', 'start_date', 'end_date'),
             'description': 'Control when and how the promotion appears'
-        })
+        }) 
     )
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

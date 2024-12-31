@@ -24,14 +24,28 @@ class Promotion(models.Model):
     image = models.ImageField(upload_to='promotions/', blank=True, null=True)
     
     # Link handling
-    link_type = models.CharField(max_length=10, choices=[
-        ('internal', 'Internal Link'),
-        ('external', 'External URL'),
-    ], default='internal')
-    external_url = models.URLField(blank=True, null=True, 
-                                 help_text="Use this for external links")
-    internal_name = models.CharField(max_length=100, blank=True, null=True,
-                                   help_text="Name of the internal URL pattern")
+    link_type = models.CharField(
+        max_length=10, 
+        choices=[
+            ('internal', 'Internal Link'),
+            ('external', 'External URL'),
+        ], 
+        default='internal'
+    )
+    external_url = models.URLField(
+        blank=True, 
+        null=True,
+        help_text="Use this for external links (e.g., https://example.com)"
+    )
+    internal_name = models.CharField(
+        max_length=100, 
+        blank=True, 
+        null=True,
+        help_text=(
+            "Name of the URL pattern (e.g., 'tools:school_finder', 'news:detail'). "
+            "You can find this in your urls.py files as the 'name' parameter."
+        )
+    )
     
     # Promotion type as ForeignKey
     promotion_type = models.ForeignKey(
