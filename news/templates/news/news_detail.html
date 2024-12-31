@@ -8,8 +8,6 @@
 {% endblock %}
 
 {% block content %}
- {% show_promotions_carousel %}
-
 <div class="container mx-auto px-4 py-8" 
      data-user-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
      data-dialog-title="{{ news.dialog_content.title }}" 
