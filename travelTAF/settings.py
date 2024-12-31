@@ -89,7 +89,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 LOGIN_URL = 'authentication:login'
-LOGIN_REDIRECT_URL = 'main:dashboard'
+LOGIN_REDIRECT_URL = 'dashboard:dashboard'
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -133,6 +133,8 @@ INSTALLED_APPS = [
     'resume_builder',
     'promotions',
     'subscriptions',
+    'dashboard',
+
 
 ]
 
