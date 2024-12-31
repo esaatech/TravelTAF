@@ -109,15 +109,15 @@ def process_payment(request, plan_id, duration_id):
             if save_card:
                 stripe.PaymentMethod.attach(payment_method_id, customer=customer.id)
 
-        # Create payment intent with absolute success URL
+        # Create payment intent
         payment_intent = stripe.PaymentIntent.create(
-            amount=int(duration.price * 100),  # Convert to cents
+            amount=int(duration.price * 100),
             currency='usd',
             customer=customer.id,
             payment_method=payment_method_id,
             off_session=False,
             confirm=True,
-            return_url=success_url,  # Using the absolute URL
+            return_url=success_url,
             metadata={
                 'subscription_id': subscription.id,
                 'plan_id': plan.id,
@@ -125,26 +125,94 @@ def process_payment(request, plan_id, duration_id):
             }
         )
 
-        # Handle the payment intent status
+        # Handle different payment states
         if payment_intent.status == 'succeeded':
+            # Create invoice for the subscription
+            invoice = stripe.Invoice.create(
+                customer=customer.id,
+                auto_advance=False,
+                collection_method='charge_automatically',
+                currency='usd',
+                pending_invoice_items_behavior='include',
+                metadata={
+                    'payment_intent_id': payment_intent.id,
+                    'subscription_id': subscription.id
+                }
+            )
+
+            # Add invoice item
+            stripe.InvoiceItem.create(
+                customer=customer.id,
+                invoice=invoice.id,
+                amount=int(duration.price * 100),
+                currency='usd',
+                description=f"Subscription to {plan.name} - {duration.get_duration_type_display()}"
+            )
+
+            # Finalize and pay invoice
+            finalized_invoice = stripe.Invoice.finalize_invoice(invoice.id)
+            paid_invoice = stripe.Invoice.pay(invoice.id, paid_out_of_band=True)
+
+            # Update subscription with invoice details
             subscription.status = 'ACTIVE'
             subscription.stripe_payment_intent = payment_intent.id
+            subscription.stripe_invoice_id = paid_invoice.id
+            subscription.invoice_url = paid_invoice.hosted_invoice_url
             subscription.save()
             
             return JsonResponse({
                 'success': True,
                 'redirect_url': success_url
             })
-        else:
-            subscription.delete()
+        elif payment_intent.status == 'requires_action':
+            # 3D Secure authentication needed
+            subscription.status = 'PENDING'
+            subscription.save()
+            return JsonResponse({
+                'requires_action': True,
+                'payment_intent_client_secret': payment_intent.client_secret,
+                'subscription_id': subscription.id
+            })
+            
+        elif payment_intent.status == 'requires_payment_method':
+            # The payment failed - request new payment method
+            subscription.status = 'FAILED'
+            subscription.save()
             return JsonResponse({
                 'success': False,
-                'error': 'Payment failed'
+                'error': 'Your card was declined. Please try a different payment method.'
+            }, status=400)
+            
+        elif payment_intent.status == 'processing':
+            # Payment is still processing
+            subscription.status = 'PENDING'
+            subscription.save()
+            return JsonResponse({
+                'success': False,
+                'error': 'Payment is processing. Please wait a moment and refresh the page.'
+            }, status=202)  # 202 Accepted
+            
+        elif payment_intent.status == 'canceled':
+            subscription.status = 'CANCELED'
+            subscription.save()
+            return JsonResponse({
+                'success': False,
+                'error': 'Payment was canceled. Please try again.'
+            }, status=400)
+            
+        else:
+            # Unknown or unexpected status
+            subscription.status = 'FAILED'
+            subscription.save()
+            return JsonResponse({
+                'success': False,
+                'error': f'Payment status: {payment_intent.status}. Please contact support.'
             }, status=400)
 
     except stripe.error.CardError as e:
         if 'subscription' in locals():
-            subscription.delete()
+            subscription.status = 'FAILED'
+            subscription.save()
         return JsonResponse({
             'success': False,
             'error': e.user_message
@@ -152,11 +220,12 @@ def process_payment(request, plan_id, duration_id):
 
     except Exception as e:
         if 'subscription' in locals():
-            subscription.delete()
+            subscription.status = 'FAILED'
+            subscription.save()
         return JsonResponse({
             'success': False,
             'error': str(e)
-        }, status=400)
+        }, status=500)
 
 @login_required
 def checkout_success(request, subscription_id):
