@@ -4,6 +4,7 @@ from django.conf import settings
 from payments.models import BasePayment
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth.models import User
 
 class CreditPayment(BasePayment):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -54,6 +55,8 @@ class CreditTransaction(models.Model):
     description = models.CharField(max_length=255)
     payment_intent_id = models.CharField(max_length=255, null=True, blank=True)
     currency = models.CharField(max_length=3, default='USD')
+    stripe_invoice_id = models.CharField(max_length=255, null=True, blank=True)
+    invoice_url = models.URLField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.email} - {self.transaction_type} - {self.amount}"
@@ -77,3 +80,12 @@ def create_user_credit_with_bonus(sender, instance, created, **kwargs):
             transaction_type='BONUS',
             description='Welcome bonus credits'
         )
+
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    stripe_customer_id = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.user.email

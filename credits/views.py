@@ -16,6 +16,8 @@ from .credit_calculator import CreditCalculator
 from .add_user_credit import add_credits_to_user
 from dotenv import load_dotenv
 from django.utils import timezone
+from subscriptions.models import UserProfile  # Updated import path
+
 import os
 load_dotenv()
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')  # Make sure this is the secret key
@@ -37,11 +39,32 @@ def process_payment(request):
         amount = float(data.get('amount'))
         currency = data.get('currency', 'USD')
 
+        # Get or update Stripe customer
+        try:
+            # Get existing profile
+            user_profile = UserProfile.objects.get(user=request.user)
+            if not user_profile.stripe_customer_id:
+                # Create Stripe customer if ID doesn't exist
+                customer = stripe.Customer.create(
+                    email=request.user.email,
+                    name=f"{request.user.first_name} {request.user.last_name}",
+                    metadata={
+                        'user_id': request.user.id
+                    }
+                )
+                user_profile.stripe_customer_id = customer.id
+                user_profile.save()
+            customer_id = user_profile.stripe_customer_id
+        except UserProfile.DoesNotExist:
+            # This shouldn't happen because of signals, but just in case
+            raise Exception("User profile not found. Please contact support.")
+
         # Calculate credits
         credit_result = CreditCalculator.calculate_credits(amount, currency)
 
         # Create payment intent
         intent = stripe.PaymentIntent.create(
+            customer=customer_id,  # Use the customer ID here
             payment_method=payment_method_id,
             amount=int(amount * 100),
             currency=currency.lower(),
@@ -57,23 +80,56 @@ def process_payment(request):
             return_url=request.build_absolute_uri(reverse('credits:payment_success'))
         )
 
-        # Handle different payment states
         if intent.status == 'succeeded':
-            # Payment successful - add credits and create transaction
+            user_profile = UserProfile.objects.get(user=request.user)
+            
+            # Create a PaymentIntent first
+            payment = stripe.PaymentIntent.retrieve(intent.id)
+            
+            # Create invoice using the same currency as the payment
+            invoice = stripe.Invoice.create(
+                customer=user_profile.stripe_customer_id,
+                auto_advance=False,
+                collection_method='charge_automatically',
+                currency=currency.lower(),  # Explicitly set invoice currency
+                pending_invoice_items_behavior='include',
+                metadata={
+                    'payment_intent_id': intent.id,
+                }
+            )
+
+            # Create invoice item with matching currency
+            stripe.InvoiceItem.create(
+                customer=user_profile.stripe_customer_id,
+                invoice=invoice.id,
+                amount=payment.amount,
+                currency=currency.lower(),  # Make sure currency matches
+                description=f"Purchase of {credit_result.total_credits} credits ({credit_result.base_credits} base + {credit_result.bonus_credits} bonus)"
+            )
+
+            # Finalize and pay invoice
+            finalized_invoice = stripe.Invoice.finalize_invoice(invoice.id)
+            paid_invoice = stripe.Invoice.pay(invoice.id, paid_out_of_band=True)
+            
+            # Add credits and create transaction record
             add_credits_to_user(request.user, credit_result.total_credits)
-            CreditTransaction.objects.create(
+            
+            transaction = CreditTransaction.objects.create(
                 user=request.user,
                 amount=credit_result.total_credits,
                 transaction_type='PURCHASE',
                 payment_intent_id=intent.id,
                 currency=currency,
-                description=f"Purchased {credit_result.base_credits} credits + {credit_result.bonus_credits} bonus credits"
+                description=f"Purchased {credit_result.base_credits} credits + {credit_result.bonus_credits} bonus credits",
+                stripe_invoice_id=paid_invoice.id,
+                invoice_url=paid_invoice.hosted_invoice_url
             )
+
             return JsonResponse({
                 'success': True,
-                'redirect_url': reverse('credits:payment_success')
+                'redirect_url': reverse('credits:payment_success_with_id', kwargs={'transaction_id': transaction.id})
             })
-            
+
         elif intent.status == 'requires_action':
             # 3D Secure authentication needed
             return JsonResponse({
@@ -120,25 +176,24 @@ def payment_success_general(request):
     })
 
 @login_required
-def payment_success(request, payment_id):
-    payment = get_object_or_404(CreditPayment, id=payment_id, user=request.user)
+def payment_success(request, transaction_id=None):
+    context = {}
+    if transaction_id:
+        try:
+            transaction = CreditTransaction.objects.get(
+                id=transaction_id,
+                user=request.user
+            )
+            context['payment'] = {
+                'amount': transaction.amount,
+                'currency': transaction.currency,
+                'credits_amount': transaction.amount,
+                'invoice_url': transaction.invoice_url
+            }
+        except CreditTransaction.DoesNotExist:
+            pass
     
-    if payment.status == 'confirmed' and not payment.extra_data.get('credits_added'):
-        # Calculate credits from the payment amount
-        credits_to_add = payment.total  # Or use your CreditCalculator here
-        
-        # Add credits to user
-        add_credits_to_user(request.user, credits_to_add)
-        
-        # Mark credits as added to prevent double-crediting
-        payment.extra_data = {'credits_added': True}
-        payment.save()
-        
-        messages.success(request, f'{credits_to_add} credits have been added to your account!')
-    
-    return render(request, 'payment_success.html', {
-        'payment': payment
-    })
+    return render(request, 'payment_success.html', context)
 
 @login_required
 def credit_balance(request):

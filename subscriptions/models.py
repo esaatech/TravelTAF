@@ -169,6 +169,8 @@ class UserSubscription(BaseModel):
     end_date = models.DateTimeField(null=True, blank=True)
     stripe_subscription_id = models.CharField(max_length=255, blank=True, null=True)
     stripe_payment_intent = models.CharField(max_length=255, blank=True, null=True)
+    stripe_invoice_id = models.CharField(max_length=255, null=True, blank=True)
+    invoice_url = models.URLField(max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name = "User Subscription"

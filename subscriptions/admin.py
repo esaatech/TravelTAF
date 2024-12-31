@@ -177,6 +177,21 @@ class SubscriptionAdminSite(admin.AdminSite):
     site_title = 'Subscription Admin'
     index_title = 'Subscription Administration'
 
+
+
+from django.contrib import admin
+from .models import UserProfile
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'stripe_customer_id']
+    search_fields = ['user__email', 'user__username', 'stripe_customer_id']
+    raw_id_fields = ['user']
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user')
+
+
 # subscription_admin_site = SubscriptionAdminSite(name='subscription_admin')
 # subscription_admin_site.register(FeatureCatalog, FeatureCatalogAdmin)
 # subscription_admin_site.register(SubscriptionPlan, SubscriptionPlanAdmin)
