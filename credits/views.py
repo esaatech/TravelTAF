@@ -35,15 +35,15 @@ def process_payment(request):
         data = json.loads(request.body)
         payment_method_id = data.get('payment_method_id')
         amount = float(data.get('amount'))
-        currency = data.get('currency', 'USD')  # Default to USD if not specified
+        currency = data.get('currency', 'USD')
 
         # Calculate credits
         credit_result = CreditCalculator.calculate_credits(amount, currency)
 
-        # Create payment intent with return_url
+        # Create payment intent
         intent = stripe.PaymentIntent.create(
             payment_method=payment_method_id,
-            amount=int(amount * 100),  # Convert to cents
+            amount=int(amount * 100),
             currency=currency.lower(),
             metadata={
                 'user_id': request.user.id,
@@ -57,11 +57,10 @@ def process_payment(request):
             return_url=request.build_absolute_uri(reverse('credits:payment_success'))
         )
 
+        # Handle different payment states
         if intent.status == 'succeeded':
-            # Add credits to user account
+            # Payment successful - add credits and create transaction
             add_credits_to_user(request.user, credit_result.total_credits)
-            
-            # Create transaction record
             CreditTransaction.objects.create(
                 user=request.user,
                 amount=credit_result.total_credits,
@@ -70,15 +69,37 @@ def process_payment(request):
                 currency=currency,
                 description=f"Purchased {credit_result.base_credits} credits + {credit_result.bonus_credits} bonus credits"
             )
-
             return JsonResponse({
                 'success': True,
                 'redirect_url': reverse('credits:payment_success')
             })
-        else:
+            
+        elif intent.status == 'requires_action':
+            # 3D Secure authentication needed
+            return JsonResponse({
+                'requires_action': True,
+                'payment_intent_client_secret': intent.client_secret
+            })
+            
+        elif intent.status == 'requires_payment_method':
+            # The payment failed - request new payment method
             return JsonResponse({
                 'success': False,
-                'error': 'Payment failed'
+                'error': 'Your card was declined. Please try a different payment method.'
+            })
+            
+        elif intent.status == 'processing':
+            # Payment is still processing
+            return JsonResponse({
+                'success': False,
+                'error': 'Payment is processing. Please wait a moment and refresh the page.'
+            })
+            
+        else:
+            # Handle other states (canceled, failed)
+            return JsonResponse({
+                'success': False,
+                'error': f'Payment {intent.status}. Please try again.'
             })
 
     except stripe.error.CardError as e:
