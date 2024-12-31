@@ -80,12 +80,16 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 
+# ... existing settings ...
 
 
 
 
 
 
+
+LOGIN_URL = 'authentication:login'
+LOGIN_REDIRECT_URL = 'main:dashboard'
 
 ALLOWED_HOSTS = [
     'localhost',
