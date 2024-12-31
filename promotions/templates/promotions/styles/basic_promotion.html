@@ -1,0 +1,8 @@
+<!-- Basic promotion - Just title and link -->
+<div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 p-4">
+    <h3 class="text-lg font-semibold">{{ promo.title }}</h3>
+    <a href="{{ promo.get_absolute_url }}" 
+       class="text-blue-600 hover:text-blue-800">
+        {{ promo.cta_text }} →
+    </a>
+</div> 
