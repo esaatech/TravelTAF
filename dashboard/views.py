@@ -8,6 +8,7 @@ from subscriptions.models import UserProfile
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.urls import reverse
+from django.contrib.auth import update_session_auth_hash
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/dashboard.html'
@@ -81,20 +82,56 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         }
 
     def get_profile_data(self):
-        """Data for the profile section - using UserProfile model"""
-        user_profile = UserProfile.objects.get(user=self.request.user)
-        return {
-            # Basic user info still comes from User model
-            'username': self.request.user.username,
-            'email': self.request.user.email,
-            
-            # Profile specific data comes from UserProfile
-            'phone': user_profile.phone,
-            'address': user_profile.address,
-            'preferred_currency': user_profile.preferred_currency,
-            'preferred_language': user_profile.preferred_language,
-            'notification_preferences': user_profile.notification_preferences,
-        }
+        """Get user profile data"""
+        try:
+            profile = UserProfile.objects.get(user=self.request.user)
+            return {
+                'user': self.request.user,
+                'profile': profile
+            }
+        except UserProfile.DoesNotExist:
+            messages.error(self.request, 'Profile not found.')
+            return {'user': self.request.user}
+
+    def update_profile(self, request):
+        """Update user and profile information"""
+        user = request.user
+        profile = user.profile
+
+        # Update user info
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.email = request.POST.get('email', '')
+        user.save()
+
+        # Update profile info
+        profile.phone = request.POST.get('phone', '')
+        profile.address = request.POST.get('address', '')
+        profile.email_notifications = request.POST.get('email_notifications') == 'on'
+        profile.save()
+
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('dashboard:dashboard') + '?section=profile'
+
+    def change_password(self, request):
+        """Change user password"""
+        user = request.user
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+        elif new_password != confirm_password:
+            messages.error(request, 'New passwords do not match.')
+        else:
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(request, user)  # Keep user logged in
+            messages.success(request, 'Password changed successfully.')
+
+        return redirect('dashboard:dashboard') + '?section=profile'
+
     def get_flights_data(self):
         return {
             'current_flights': self.get_current_flights(),
@@ -251,3 +288,42 @@ class SavePassengerView(LoginRequiredMixin, View):
             messages.error(request, f'Error saving passenger details: {str(e)}')
 
         return redirect(reverse('dashboard:dashboard') + '?section=passengers')
+
+class UpdateProfileView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        profile = user.profile
+
+        # Update user info
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.email = request.POST.get('email', '')
+        user.save()
+
+        # Update profile info
+        profile.phone = request.POST.get('phone', '')
+        profile.address = request.POST.get('address', '')
+        profile.email_notifications = request.POST.get('email_notifications') == 'on'
+        profile.save()
+
+        messages.success(request, 'Profile updated successfully.')
+        return redirect(reverse('dashboard:dashboard') + '?section=profile')
+
+class ChangePasswordView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+        elif new_password != confirm_password:
+            messages.error(request, 'New passwords do not match.')
+        else:
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(request, user)  # Keep user logged in
+            messages.success(request, 'Password changed successfully.')
+
+        return redirect(reverse('dashboard:dashboard') + '?section=profile')
