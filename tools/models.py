@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from storages.backends.gcloud import GoogleCloudStorage
+import uuid
 
 gcs_storage = GoogleCloudStorage()
 
