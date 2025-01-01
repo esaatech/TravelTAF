@@ -193,6 +193,23 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             'total_flights': bookings.count()
         }
 
+    def get_flight_detail_data(self):
+        booking_reference = self.request.GET.get('flight')
+        if booking_reference:
+            try:
+                booking = FlightBooking.objects.select_related(
+                    'flight'
+                ).prefetch_related(
+                    'bookingpassenger_set__passenger'
+                ).get(
+                    booking_reference=booking_reference,
+                    user=self.request.user
+                )
+                return {'booking': booking}
+            except FlightBooking.DoesNotExist:
+                return {'error': 'Booking not found'}
+        return {}
+
 class SavePassengerView(LoginRequiredMixin, View):
     def post(self, request):
         passport_number = request.POST.get('passport_number')
