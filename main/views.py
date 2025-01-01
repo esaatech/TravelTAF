@@ -686,6 +686,9 @@ def get_country_data(request):
 
 
 
+
+
+
 @api_view(['POST'])
 def search_study_programs(request):
     """Search and return matching schools based on student preferences"""
