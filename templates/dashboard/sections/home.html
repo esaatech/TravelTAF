@@ -1,0 +1,65 @@
+<!-- Welcome Section -->
+<div class="mb-8">
+    <h1 class="text-2xl font-semibold text-gray-900">Welcome back, {{ display_name }}!</h1>
+</div>
+
+<!-- Quick Overview Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Recent Bookings Card -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Recent Bookings</h3>
+            <p class="text-gray-500">No recent bookings</p>
+        </div>
+    </div>
+
+    <!-- Upcoming Flights Card -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Upcoming Flights</h3>
+            <p class="text-gray-500">No upcoming flights</p>
+        </div>
+    </div>
+
+    <!-- Recent Activity Card -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Recent Activity</h3>
+            <div class="flow-root">
+                <ul class="-my-4 divide-y divide-gray-200">
+                    {% for transaction in recent_transactions %}
+                    <li class="py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate">
+                                    {{ transaction.description }}
+                                </p>
+                                <p class="text-sm text-gray-500">
+                                    {{ transaction.created_at|date:"M d, Y" }}
+                                </p>
+                            </div>
+                            <div>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium
+                                    {% if transaction.transaction_type == 'PURCHASE' %}
+                                    text-green-800 bg-green-100
+                                    {% else %}
+                                    text-blue-800 bg-blue-100
+                                    {% endif %}">
+                                    {% if transaction.transaction_type == 'PURCHASE' %}+{% endif %}
+                                    {{ transaction.amount }} Credits
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="py-4">
+                        <div class="text-center text-gray-500">
+                            No recent activity
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> 
