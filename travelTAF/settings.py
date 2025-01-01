@@ -134,6 +134,7 @@ INSTALLED_APPS = [
     'promotions',
     'subscriptions',
     'dashboard',
+    'flights',
 
 
 ]
