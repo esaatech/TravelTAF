@@ -5,6 +5,11 @@ from credits.models import CreditTransaction, UserCredit
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from tools.models import School
+import json
+import random
 
 def home(request):
     # Query the latest 3 news articles that are both published and approved
@@ -678,3 +683,77 @@ def get_country_data(request):
         'country1': country_data.get(country1),
         'country2': country_data.get(country2)
     })
+
+
+
+@api_view(['POST'])
+def search_study_programs(request):
+    """Search and return matching schools based on student preferences"""
+    student_data = request.data
+    
+    # Start with all schools
+    schools_query = School.objects.all()
+
+    # Filter by country if provided
+    if student_data.get('target_countries'):
+        schools_query = schools_query.filter(
+            country__in=student_data['target_countries']
+        )
+
+    # Filter by program level if provided
+    if student_data.get('program_level'):
+        schools_query = schools_query.filter(
+            programs__name=student_data['program_level']
+        )
+
+    # Filter by field of study if provided
+    if student_data.get('preferred_field'):
+        schools_query = schools_query.filter(
+            fields_of_study__name=student_data['preferred_field']
+        )
+
+    # Filter by budget range if provided
+    if student_data.get('budget_range'):
+        budget_range = student_data['budget_range'].split('-')
+        if len(budget_range) == 2:
+            min_budget = float(budget_range[0].replace('$', '').replace(',', ''))
+            max_budget = float(budget_range[1].replace('$', '').replace(',', ''))
+            schools_query = schools_query.filter(
+                tuition__gte=min_budget,
+                tuition__lte=max_budget
+            )
+
+    # Get top 3 matches
+    matching_schools = schools_query[:3]
+    
+    # Transform data for preview (excluding specific school names)
+    preview_data = [
+        {
+            'program_type': ', '.join([p.name for p in school.programs.all()]),
+            'location': school.country.name,
+            'tuition_range': f"${school.tuition:,.2f}/year",
+            'key_benefits': [
+                'Work opportunities available' if school.work_opportunities else None,
+                'Scholarships available' if school.scholarships_available else None,
+                'Housing available' if school.housing_available else None
+            ],
+            'ranking': school.ranking,
+            'badge': get_school_badge(school)  # You'll need to implement this function
+        }
+        for school in matching_schools
+    ]
+    
+    return Response({
+        'preview_programs': preview_data,
+        'total_matches': schools_query.count(),
+        'viewing_count': random.randint(8, 15)  # Simulated active viewers
+    })
+
+def get_school_badge(school):
+    """Determine the badge to show for a school based on its features"""
+    if school.scholarships_available:
+        return {'type': 'Scholarship', 'class': 'bg-purple-100 text-purple-800'}
+    elif school.work_opportunities:
+        return {'type': 'Work Available', 'class': 'bg-green-100 text-green-800'}
+    else:
+        return {'type': 'Featured', 'class': 'bg-blue-100 text-blue-800'}
