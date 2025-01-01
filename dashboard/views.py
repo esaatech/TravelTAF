@@ -84,13 +84,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_profile_data(self):
         """Get user profile data"""
         try:
-            profile = UserProfile.objects.get(user=self.request.user)
+            profile, created = UserProfile.objects.get_or_create(user=self.request.user)
             return {
                 'user': self.request.user,
                 'profile': profile
             }
-        except UserProfile.DoesNotExist:
-            messages.error(self.request, 'Profile not found.')
+        except Exception as e:
+            messages.error(self.request, f'Error loading profile: {str(e)}')
             return {'user': self.request.user}
 
     def update_profile(self, request):
@@ -292,21 +292,26 @@ class SavePassengerView(LoginRequiredMixin, View):
 class UpdateProfileView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         user = request.user
-        profile = user.profile
+        try:
+            # Get or create profile
+            profile, created = UserProfile.objects.get_or_create(user=user)
 
-        # Update user info
-        user.first_name = request.POST.get('first_name', '')
-        user.last_name = request.POST.get('last_name', '')
-        user.email = request.POST.get('email', '')
-        user.save()
+            # Update user info
+            user.first_name = request.POST.get('first_name', '')
+            user.last_name = request.POST.get('last_name', '')
+            user.email = request.POST.get('email', '')
+            user.save()
 
-        # Update profile info
-        profile.phone = request.POST.get('phone', '')
-        profile.address = request.POST.get('address', '')
-        profile.email_notifications = request.POST.get('email_notifications') == 'on'
-        profile.save()
+            # Update profile info
+            profile.phone = request.POST.get('phone', '')
+            profile.address = request.POST.get('address', '')
+            profile.email_notifications = request.POST.get('email_notifications') == 'on'
+            profile.save()
 
-        messages.success(request, 'Profile updated successfully.')
+            messages.success(request, 'Profile updated successfully.')
+        except Exception as e:
+            messages.error(request, f'Error updating profile: {str(e)}')
+
         return redirect(reverse('dashboard:dashboard') + '?section=profile')
 
 class ChangePasswordView(LoginRequiredMixin, View):
