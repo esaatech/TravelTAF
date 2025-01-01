@@ -1,0 +1,11 @@
+<nav class="bg-white border-b border-gray-200 px-4 py-3">
+    <div class="flex items-center text-gray-500 text-sm">
+        <a href="{% url 'dashboard:dashboard' %}" class="hover:text-gray-700">Dashboard</a>
+        {% if current_section %}
+            <svg class="h-5 w-5 mx-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-900">{{ current_section }}</span>
+        {% endif %}
+    </div>
+</nav> 
