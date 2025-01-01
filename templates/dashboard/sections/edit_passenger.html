@@ -1,0 +1,150 @@
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-gray-900">
+            {% if passenger %}Edit{% else %}Add New{% endif %} Passenger
+        </h1>
+        <p class="mt-2 text-sm text-gray-700">
+            {% if passenger %}Update{% else %}Enter{% endif %} passenger information
+        </p>
+    </div>
+
+    <!-- Passenger Form -->
+    <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <form method="post" action="{% url 'dashboard:save_passenger' %}" class="space-y-6">
+                {% csrf_token %}
+                {% if passenger %}
+                    <input type="hidden" name="passport_number" value="{{ passenger.passport_number }}">
+                {% endif %}
+
+                <!-- Personal Information -->
+                <div class="bg-gray-50 px-4 py-5 sm:rounded-lg sm:p-6">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Personal Information</h3>
+                            <p class="mt-1 text-sm text-gray-500">Basic passenger details</p>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                            <div class="grid grid-cols-6 gap-6">
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">First Name</label>
+                                    <input type="text" name="first_name" required
+                                           value="{{ passenger.first_name|default:'' }}"
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Last Name</label>
+                                    <input type="text" name="last_name" required
+                                           value="{{ passenger.last_name|default:'' }}"
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                                    <input type="date" name="date_of_birth" required
+                                           value="{{ passenger.date_of_birth|date:'Y-m-d'|default:'' }}"
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Passenger Type</label>
+                                    <select name="passenger_type" required
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="ADULT" {% if passenger.passenger_type == 'ADULT' %}selected{% endif %}>Adult</option>
+                                        <option value="CHILD" {% if passenger.passenger_type == 'CHILD' %}selected{% endif %}>Child</option>
+                                        <option value="INFANT" {% if passenger.passenger_type == 'INFANT' %}selected{% endif %}>Infant</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Travel Documents -->
+                <div class="bg-gray-50 px-4 py-5 sm:rounded-lg sm:p-6">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Travel Documents</h3>
+                            <p class="mt-1 text-sm text-gray-500">Passport and nationality information</p>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                            <div class="grid grid-cols-6 gap-6">
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Passport Number</label>
+                                    <input type="text" name="passport_number" required
+                                           {% if passenger %}readonly{% endif %}
+                                           value="{{ passenger.passport_number|default:'' }}"
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 {% if passenger %}bg-gray-50{% endif %}">
+                                </div>
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Passport Expiry Date</label>
+                                    <input type="date" name="passport_expiry" required
+                                           value="{{ passenger.passport_expiry|date:'Y-m-d'|default:'' }}"
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Nationality</label>
+                                    <select name="nationality" required
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                        {% include "includes/country_options.html" with selected=passenger.nationality %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="bg-gray-50 px-4 py-5 sm:rounded-lg sm:p-6">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Contact Information</h3>
+                            <p class="mt-1 text-sm text-gray-500">How to reach the passenger</p>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                            <div class="grid grid-cols-6 gap-6">
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" name="email"
+                                           value="{{ passenger.email|default:'' }}"
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Phone</label>
+                                    <input type="tel" name="phone"
+                                           value="{{ passenger.phone|default:'' }}"
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Special Requirements -->
+                <div class="bg-gray-50 px-4 py-5 sm:rounded-lg sm:p-6">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Special Requirements</h3>
+                            <p class="mt-1 text-sm text-gray-500">Any additional needs or requests</p>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                            <textarea name="special_requirements" rows="3"
+                                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">{{ passenger.special_requirements|default:'' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="history.back()"
+                            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        {% if passenger %}Update{% else %}Save{% endif %} Passenger
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

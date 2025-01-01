@@ -1,0 +1,52 @@
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-gray-900">Recent Flights</h1>
+        <p class="mt-2 text-sm text-gray-700">View your recently completed flights</p>
+    </div>
+
+    <!-- Recent Flights List -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        {% if recent_flights %}
+            <div class="divide-y divide-gray-200">
+                {% for booking in recent_flights %}
+                <div class="p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3">
+                                <svg class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900">
+                                        {{ booking.flight.origin }} → {{ booking.flight.destination }}
+                                    </h3>
+                                    <div class="mt-1 text-sm text-gray-500">
+                                        <p>Flight: {{ booking.flight.flight_number }}</p>
+                                        <p>Departed: {{ booking.flight.departure_time|date:"M d, Y H:i" }}</p>
+                                        <p>Arrived: {{ booking.flight.arrival_time|date:"M d, Y H:i" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ml-6">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Completed
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Booking Details -->
+                    <div class="mt-4 text-sm text-gray-500">
+                        <p>Booking Reference: {{ booking.booking_reference }}</p>
+                        <p>Total Price: {{ booking.total_price }} {{ booking.currency }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-6 text-center text-gray-500">
+                No recent flights found
+            </div>
+        {% endif %}
+    </div>
+</div> 
