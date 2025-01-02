@@ -50,7 +50,7 @@
                         <!-- Dropdown Menu -->
                         <div class="absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                             <div class="p-4 space-y-3">
-                                <!-- Travel & Tours-->
+                                <!-- Travel & Tours  
                                 <a href="{% url 'main:travel_tours' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition-colors">
                                     <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#22C55E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -63,7 +63,7 @@
                                         <div class="text-sm text-gray-500">Destinations & holiday packages</div>
                                     </div>
                                 </a>
-
+                            -->
                                 <!-- Study Abroad -->
                                 <a href="{% url 'main:study_abroad' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition-colors">
                                     <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
@@ -91,7 +91,7 @@
                                     </div>
                                 </a>
 
-                                <!-- View All Services -->
+                                <!-- View All Services 
                                 <div class="pt-2 mt-2 border-t">
                                     <a href="{% url 'main:services' %}" class="flex items-center justify-between p-2 text-[#22C55E] hover:bg-blue-50 rounded-lg transition-colors">
                                         <span class="font-medium">View All Services</span>
@@ -100,6 +100,7 @@
                                         </svg>
                                     </a>
                                 </div>
+                                -->
                             </div>
                         </div>
                     </div>
@@ -276,27 +277,34 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                   d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                         </svg>
-                        <span>Travel & Tours</span>
+                        <span>Moving Abroad</span>
                     </a>
+                  
+                    
+                    <a href="{% url 'main:study_abroad' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#22C55E] py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#22C55E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span>Study Abroad</span>
+                    </a>
+
+                  
+                    <!--
                     <a href="{% url 'main:travel_tours' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#22C55E] py-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#22C55E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M12 14l9-5-9-5-9 5 9 5z" />
                             <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                         </svg>
-                        <span>Study Abroad</span>
+                        <span>Travel & Tours</span>
                     </a>
-                    <a href="{% url 'main:work_visas' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#22C55E] py-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#22C55E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>Work Visas</span>
-                    </a>
-                    <a href="{% url 'main:moving_abroad' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#22C55E] py-2">
+                  
+                    <a href="{% url 'main:services' %}" class="flex items-center space-x-3 text-gray-700 hover:text-[#22C55E] py-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#22C55E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                         <span>View All Services</span>
                     </a>
+                    -->
                 </div>
             </div>
             <div class="block px-3 py-2 text-gray-700 hover:bg-blue-50 rounded-lg">
