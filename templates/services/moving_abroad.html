@@ -3,114 +3,575 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="bg-gradient-to-r from-blue-50 to-white py-20">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center">
-            <h1 class="text-4xl font-bold mb-4">Moving Abroad Guide</h1>
-            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-                Discover different pathways and options available for moving abroad. Get expert guidance for your journey.
+<section class="relative bg-gradient-to-r from-blue-50 to-white py-20">
+    <div class="max-w-full mx-auto px-4">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4">Plan Your Move Abroad</h1>
+            <p class="text-gray-600 text-lg">Let us help you find the best relocation opportunities tailored to you</p>
+        </div>
+        
+        <!-- Multi-step Form -->
+        <div class="max-w-full mx-auto bg-[#2B354E] rounded-xl p-8">
+            <form id="moving-abroad-form" class="space-y-8">
+                <!-- Progress Indicator -->
+                <div class="flex justify-between items-center mb-8">
+                    <div class="step-dots flex space-x-2">
+                        <!-- Will be populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Step 1: Personal Information -->
+                <div class="step" data-step="1">
+                    <h3 class="text-xl text-white font-semibold mb-6">Personal Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Full Name <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="full_name" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Email <span class="text-red-500">*</span>
+                            </label>
+                            <input type="email" name="email" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Age <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" name="age" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Marital Status <span class="text-red-500">*</span>
+                            </label>
+                            <select name="marital_status" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                                <option value="">Select Status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="divorced">Divorced</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Language & Education -->
+                <div class="step hidden" data-step="2">
+                    <h3 class="text-xl text-white font-semibold mb-6">Language & Education</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Primary Language <span class="text-red-500">*</span>
+                            </label>
+                            <select name="primary_language" class="w-full px-4 py-2 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Select Primary Language</option>
+                                <option value="english">English</option>
+                                <option value="french">French</option>
+                                <option value="spanish">Spanish</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Show this if "Other" is selected -->
+                        <div id="otherLanguageField" class="hidden">
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Please Specify Your Primary Language
+                            </label>
+                            <input type="text" 
+                                   name="other_language" 
+                                   class="w-full px-4 py-2 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Additional Languages
+                            </label>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="additional_languages[]" value="english" class="mr-2">
+                                    <label class="text-white">English</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="additional_languages[]" value="french" class="mr-2">
+                                    <label class="text-white">French</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="additional_languages[]" value="spanish" class="mr-2">
+                                    <label class="text-white">Spanish</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                English Proficiency Level
+                            </label>
+                            <select name="english_level" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                                <option value="">Select Level</option>
+                                <option value="none">None</option>
+                                <option value="basic">Basic</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                                <option value="native">Native</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Highest Education Level <span class="text-red-500">*</span>
+                            </label>
+                            <select name="education_level" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                                <option value="">Select Education Level</option>
+                                <option value="high_school">High School</option>
+                                <option value="diploma">Diploma</option>
+                                <option value="bachelors">Bachelor's Degree</option>
+                                <option value="masters">Master's Degree</option>
+                                <option value="phd">PhD</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Professional Background -->
+                <div class="step hidden" data-step="3">
+                    <h3 class="text-xl text-white font-semibold mb-6">Professional Background</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Current Occupation
+                            </label>
+                            <input type="text" name="occupation" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Years of Experience
+                            </label>
+                            <select name="experience_years" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                                <option value="">Select Experience</option>
+                                <option value="0-2">0-2 years</option>
+                                <option value="3-5">3-5 years</option>
+                                <option value="5-10">5-10 years</option>
+                                <option value="10+">10+ years</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Industry Sector
+                            </label>
+                            <select name="industry" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                                <option value="">Select Industry</option>
+                                <option value="technology">Technology</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="finance">Finance</option>
+                                <option value="education">Education</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Relocation Preferences -->
+                <div class="step hidden" data-step="4">
+                    <h3 class="text-xl text-white font-semibold mb-6">Relocation Preferences</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Target Countries (Select up to 4)
+                            </label>
+                            <select name="target_countries" multiple class="w-full px-4 py-2 rounded-lg border-gray-300">
+                                <option value="canada">Canada</option>
+                                <option value="usa">USA</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="australia">Australia</option>
+                                <option value="new_zealand">New Zealand</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Preferred Timeline
+                            </label>
+                            <select name="timeline" class="w-full px-4 py-2 rounded-lg border-gray-300">
+                                <option value="">Select Timeline</option>
+                                <option value="immediate">Immediate</option>
+                                <option value="6months">Within 6 months</option>
+                                <option value="1year">Within 1 year</option>
+                                <option value="2years">2+ years</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">
+                                Additional Comments
+                            </label>
+                            <textarea name="comments" rows="3" class="w-full px-4 py-2 rounded-lg border-gray-300"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-center mt-8 space-x-4">
+                    <button type="button" class="prev-step hidden px-6 py-2 border-2 border-white text-white rounded-full hover:bg-blue-600">
+                        Previous
+                    </button>
+                    <button type="button" class="next-step px-6 py-2 bg-white text-[#2B354E] rounded-full hover:bg-gray-100">
+                        Next
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Results Section (Initially Hidden) -->
+<section id="results-section" class="py-16 hidden">
+    <!-- Loading State -->
+    <div id="loading-state" class="max-w-7xl mx-auto px-4 text-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+        <p class="text-lg">Analyzing your profile and finding the best opportunities...</p>
+    </div>
+
+    <!-- Results Content -->
+    <div id="results-content" class="max-w-7xl mx-auto px-4 hidden">
+        <!-- Match Summary -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">We Found <span class="text-[#1980e6] program-count">8</span> Matching Opportunities</h2>
+            <p class="text-gray-600">Based on your profile, here are some options that match your criteria</p>
+        </div>
+
+        <!-- Preview Results Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <!-- Result cards will be dynamically populated -->
+        </div>
+
+        <!-- CTA Section -->
+        <div class="bg-[#2B354E] text-white rounded-xl p-8 text-center">
+            <h3 class="text-2xl font-bold mb-4">Want to Explore Your Options?</h3>
+            <p class="mb-6">Book a free 15-minute consultation to discuss your relocation plan</p>
+            <button class="book-consultation px-8 py-3 bg-white text-[#2B354E] rounded-full hover:bg-gray-100 transition-colors">
+                Book Free 15-Min Consultation
+            </button>
+            <p class="text-sm mt-4">
+                <span class="text-yellow-400">🔥</span> 
+                <span class="font-semibold viewing-count">7</span> other people are viewing these opportunities
             </p>
         </div>
     </div>
 </section>
 
-<!-- Pathways Section -->
+<!-- Success Stories Section -->
 <section class="py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">Pathways to Move Abroad</h2>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for key, pathway in pathways.items %}
-            {% if key == 'humanitarian' %}
-            <div class="bg-white rounded-xl border hover:shadow-lg transition-shadow p-6">
-                <div class="w-12 h-12 bg-rose-100 rounded-lg mb-6 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ pathway.icon }}" />
-                    </svg>
+        <h2 class="text-3xl font-bold text-center mb-12">Success Stories</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Story 1 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <div class="flex items-center mb-4">
+                    <img src="{% static 'images/testimonial1.jpg' %}" alt="Profile" class="w-12 h-12 rounded-full object-cover">
+                    <div class="ml-4">
+                        <h4 class="font-bold">Sarah Johnson</h4>
+                        <p class="text-gray-600">Relocated to Canada</p>
+                    </div>
                 </div>
-                <h3 class="text-xl font-semibold mb-4">{{ pathway.title }}</h3>
-                <ul class="space-y-3">
-                    {% for option in pathway.options %}
-                    <li>
-                        <h4 class="font-medium text-gray-900">{{ option.name }}</h4>
-                        <p class="text-sm text-gray-600">{{ option.description }}</p>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% if pathway.note %}
-                <div class="mt-4 p-3 bg-rose-50 rounded-lg">
-                    <p class="text-sm text-rose-700">{{ pathway.note }}</p>
-                </div>
-                {% endif %}
-                <div class="mt-4">
-                    <a href="https://www.unhcr.org" target="_blank" rel="noopener noreferrer" 
-                       class="text-rose-600 hover:underline text-sm flex items-center">
-                        Learn more at UNHCR
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                    </a>
-                </div>
+                <p class="text-gray-600">"The relocation guidance was invaluable. From visa application to finding accommodation, everything was smooth and well-planned."</p>
             </div>
-            {% else %}
-            <div class="bg-white rounded-xl border hover:shadow-lg transition-shadow p-6">
-                <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ pathway.icon }}" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold mb-4">{{ pathway.title }}</h3>
-                <ul class="space-y-3">
-                    {% for option in pathway.options %}
-                    <li>
-                        <h4 class="font-medium text-gray-900">{{ option.name }}</h4>
-                        <p class="text-sm text-gray-600">{{ option.description }}</p>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-</section>
 
-<!-- Premium Services Section -->
-<section class="bg-gray-50 py-16">
-    <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">Expert Guidance Services</h2>
-        
-        <div class="grid md:grid-cols-3 gap-8">
-            {% for key, service in consultation_services.items %}
-            <div class="bg-white rounded-xl border hover:shadow-lg transition-shadow p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">{{ service.title }}</h3>
-                    <span class="text-[#1980e6] font-medium">{{ service.credits }} Credits</span>
+            <!-- Story 2 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <div class="flex items-center mb-4">
+                    <img src="{% static 'images/testimonial2.jpg' %}" alt="Profile" class="w-12 h-12 rounded-full object-cover">
+                    <div class="ml-4">
+                        <h4 class="font-bold">Michael Chen</h4>
+                        <p class="text-gray-600">Moved to Australia</p>
+                    </div>
                 </div>
-                <p class="text-gray-600 mb-6">{{ service.description }}</p>
-                <a href="#" 
-                   class="block text-center bg-[#1980e6] text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                    Book Now
-                </a>
+                <p class="text-gray-600">"From job search to settling in, the support made my transition to Australia seamless. Now thriving in my new home!"</p>
             </div>
-            {% endfor %}
+
+            <!-- Story 3 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <div class="flex items-center mb-4">
+                    <img src="{% static 'images/testimonial3.jpg' %}" alt="Profile" class="w-12 h-12 rounded-full object-cover">
+                    <div class="ml-4">
+                        <h4 class="font-bold">Emma Wilson</h4>
+                        <p class="text-gray-600">Relocated to UK</p>
+                    </div>
+                </div>
+                <p class="text-gray-600">"The detailed guidance on healthcare, banking, and housing made my move to London much less stressful than expected."</p>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- FAQ Section -->
-<section class="py-16">
+<section class="bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
-        
-        <div class="max-w-3xl mx-auto space-y-6">
-            <!-- Add FAQ items here -->
-            <div class="border rounded-lg p-4">
-                <h3 class="font-semibold mb-2">How do I choose the right pathway?</h3>
-                <p class="text-gray-600">The best pathway depends on your qualifications, circumstances, and goals. Our pathway assessment service can help you identify the most suitable options for your situation.</p>
+        <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+        <div class="max-w-3xl mx-auto space-y-4">
+            <!-- FAQ 1 -->
+            <div class="bg-white rounded-lg p-4">
+                <button class="flex justify-between items-center w-full" onclick="toggleFAQ(this)">
+                    <span class="font-medium">How long does the relocation process typically take?</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div class="mt-4 text-gray-600 hidden">
+                    The timeline varies depending on the destination country and visa type, but typically ranges from 3-8 months. We'll provide a detailed timeline based on your specific situation during consultation.
+                </div>
             </div>
-            <!-- Add more FAQ items as needed -->
+
+            <!-- FAQ 2 -->
+            <div class="bg-white rounded-lg p-4">
+                <button class="flex justify-between items-center w-full" onclick="toggleFAQ(this)">
+                    <span class="font-medium">What support do you provide after arrival?</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div class="mt-4 text-gray-600 hidden">
+                    We offer comprehensive post-arrival support including housing assistance, bank account setup, healthcare registration, and local community integration guidance.
+                </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="bg-white rounded-lg p-4">
+                <button class="flex justify-between items-center w-full" onclick="toggleFAQ(this)">
+                    <span class="font-medium">Do you help with job search in the new country?</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div class="mt-4 text-gray-600 hidden">
+                    Yes, we provide job search assistance including CV optimization, interview preparation, and connections with local recruiters in your industry.
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- Final CTA Section -->
+<section class="bg-[#1980e6] text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
+        <p class="mb-8">Let us help you make your international relocation smooth and successful</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button class="px-8 py-4 bg-white text-[#1980e6] rounded-full hover:bg-gray-100 transition-colors">
+                Book Free Consultation
+            </button>
+            <button class="px-8 py-4 border-2 border-white text-white rounded-full hover:bg-blue-600 transition-colors">
+                Download Moving Guide
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Add this script at the end of your template -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('moving-abroad-form');
+    const steps = form.querySelectorAll('.step');
+    const nextButtons = form.querySelectorAll('.next-step');
+    const prevButtons = form.querySelectorAll('.prev-step');
+    const stepDots = document.querySelector('.step-dots');
+    let currentStep = 1;
+
+    // Create step dots
+    steps.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = `w-3 h-3 rounded-full ${index === 0 ? 'bg-white' : 'bg-gray-400'}`;
+        stepDots.appendChild(dot);
+    });
+
+    // Update dots when changing steps
+    function updateStepDots() {
+        const dots = stepDots.querySelectorAll('div');
+        dots.forEach((dot, index) => {
+            dot.className = `w-3 h-3 rounded-full ${index + 1 <= currentStep ? 'bg-white' : 'bg-gray-400'}`;
+        });
+    }
+
+    // Show/hide steps
+    function showStep(stepNumber) {
+        steps.forEach((step, index) => {
+            step.classList.add('hidden');
+            if (index + 1 === stepNumber) {
+                step.classList.remove('hidden');
+            }
+        });
+
+        // Show/hide prev button
+        const prevButton = form.querySelector('.prev-step');
+        if (stepNumber === 1) {
+            prevButton.classList.add('hidden');
+        } else {
+            prevButton.classList.remove('hidden');
+        }
+
+        // Update next button text on last step
+        const nextButton = form.querySelector('.next-step');
+        if (stepNumber === steps.length) {
+            nextButton.textContent = 'Submit';
+        } else {
+            nextButton.textContent = 'Next';
+        }
+
+        updateStepDots();
+    }
+
+    // Next button click handler
+    nextButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            if (currentStep < steps.length) {
+                currentStep++;
+                showStep(currentStep);
+            } else {
+                // Start processing simulation
+                form.closest('section').classList.add('hidden');
+                simulateProcessing();
+            }
+        });
+    });
+
+    // Previous button click handler
+    prevButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+    });
+
+    // Initialize first step
+    showStep(1);
+
+    // Handle "Other" language selection
+    const primaryLanguageSelect = document.querySelector('select[name="primary_language"]');
+    const otherLanguageField = document.getElementById('otherLanguageField');
+
+    primaryLanguageSelect.addEventListener('change', function() {
+        if (this.value === 'other') {
+            otherLanguageField.classList.remove('hidden');
+        } else {
+            otherLanguageField.classList.add('hidden');
+        }
+    });
+});
+
+// FAQ toggle function
+function toggleFAQ(button) {
+    const answer = button.nextElementSibling;
+    const icon = button.querySelector('svg');
+    answer.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180');
+}
+
+function simulateProcessing() {
+    const loadingStates = [
+        { message: "Analyzing your profile...", duration: 1500 },
+        { message: "Checking visa requirements for selected countries...", duration: 2000 },
+        { message: "Evaluating language requirements...", duration: 1800 },
+        { message: "Finding matching relocation programs...", duration: 2200 },
+        { message: "Calculating cost estimates...", duration: 1700 },
+        { message: "Preparing personalized recommendations...", duration: 2000 }
+    ];
+
+    const resultsSection = document.getElementById('results-section');
+    const loadingState = document.getElementById('loading-state');
+    const resultsContent = document.getElementById('results-content');
+    const loadingText = loadingState.querySelector('p');
+    
+    resultsSection.classList.remove('hidden');
+    loadingState.classList.remove('hidden');
+    resultsContent.classList.add('hidden');
+
+    let currentState = 0;
+    
+    function updateLoadingState() {
+        if (currentState < loadingStates.length) {
+            loadingText.textContent = loadingStates[currentState].message;
+            currentState++;
+            
+            setTimeout(updateLoadingState, loadingStates[currentState - 1].duration);
+        } else {
+            // Show results after all states complete
+            setTimeout(() => {
+                loadingState.classList.add('hidden');
+                resultsContent.classList.remove('hidden');
+                populateResults();
+            }, 1000);
+        }
+    }
+
+    updateLoadingState();
+}
+
+function populateResults() {
+    // Simulate matching results
+    const sampleResults = [
+        {
+            country: "Canada",
+            program: "Express Entry",
+            matchScore: 92,
+            details: [
+                "Skilled Worker Program",
+                "Processing time: 6-8 months",
+                "Language requirement: IELTS 7.0",
+                "Estimated cost: $2,300 CAD"
+            ]
+        },
+        {
+            country: "Australia",
+            program: "Skilled Independent Visa",
+            matchScore: 88,
+            details: [
+                "Subclass 189",
+                "Processing time: 8-10 months",
+                "Language requirement: IELTS 7.0",
+                "Estimated cost: $4,045 AUD"
+            ]
+        },
+        {
+            country: "UK",
+            program: "Skilled Worker Visa",
+            matchScore: 85,
+            details: [
+                "Points-based system",
+                "Processing time: 3-4 months",
+                "Language requirement: B1 level",
+                "Estimated cost: £1,408"
+            ]
+        }
+    ];
+
+    const resultsGrid = document.querySelector('#results-content .grid');
+    resultsGrid.innerHTML = ''; // Clear existing content
+
+    sampleResults.forEach(result => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-xl shadow-sm p-6';
+        card.innerHTML = `
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-xl font-bold">${result.country}</h3>
+                    <p class="text-gray-600">${result.program}</p>
+                </div>
+                <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                    ${result.matchScore}% Match
+                </div>
+            </div>
+            <ul class="text-gray-600 space-y-2">
+                ${result.details.map(detail => `<li>• ${detail}</li>`).join('')}
+            </ul>
+            <button class="mt-4 w-full px-4 py-2 bg-[#1980e6] text-white rounded-lg hover:bg-blue-600 transition-colors">
+                View Details
+            </button>
+        `;
+        resultsGrid.appendChild(card);
+    });
+
+    // Update viewing count
+    const viewingCount = document.querySelector('.viewing-count');
+    viewingCount.textContent = Math.floor(Math.random() * 10) + 5;
+}
+</script>
 {% endblock %}
