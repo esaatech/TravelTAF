@@ -686,7 +686,8 @@ def get_country_data(request):
 
 
 
-
+def travel_tours(request):
+    return render(request, 'services/travel_tours.html')
 
 
 @api_view(['POST'])
