@@ -2,7 +2,17 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .services.email_service import EmailManager
 from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 import json
+import os
+from dotenv import load_dotenv
+import logging
+from .models import WhatsAppConversation, WhatsAppMessage
+
+# Load environment variables
+load_dotenv()
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -79,3 +89,60 @@ def register_user(request):
             'status': 'error',
             'message': str(e)
         }, status=400)
+    
+
+
+
+ 
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def whatsapp_webhook(request):
+    if request.method == 'GET':
+        # Handle WhatsApp verification
+        verify_token = os.getenv('WHATSAPP_VERIFY_TOKEN')
+        token = request.GET.get('hub.verify_token')
+        
+        if token == verify_token:
+            return HttpResponse(request.GET.get('hub.challenge'))
+        return HttpResponse('Invalid verification token')
+        
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            logger.info(f"Received WhatsApp webhook: {data}")
+            
+            # Extract message data
+            entry = data['entry'][0]
+            changes = entry['changes'][0]
+            value = changes['value']
+            message = value['messages'][0]
+            
+            # Get or create conversation
+            conversation, created = WhatsAppConversation.objects.get_or_create(
+                customer_id=message['from'],
+                defaults={
+                    'customer_phone': message['from'],
+                    'status': 'active'
+                }
+            )
+            
+            # Save message
+            WhatsAppMessage.objects.create(
+                conversation=conversation,
+                message_id=message['id'],
+                direction='incoming',
+                content=message.get('text', {}).get('body', ''),
+                media_url=message.get('media', {}).get('url', ''),
+                media_type=message.get('type', 'text'),
+                status='received'
+            )
+            
+            logger.info(f"Saved WhatsApp message from {message['from']}")
+            return HttpResponse('OK')
+            
+        except KeyError as e:
+            logger.error(f"Invalid webhook data structure: {str(e)}")
+            return HttpResponse('Invalid webhook data', status=400)
+        except Exception as e:
+            logger.error(f"Error processing WhatsApp webhook: {str(e)}")
+            return HttpResponse('Error processing webhook', status=500)   
