@@ -261,62 +261,237 @@
         <p class="text-lg">Analyzing your academic profile...</p>
     </div>
 
-    <!-- Your existing results content div should be wrapped in this: -->
+    <!-- Updated results content -->
     <div id="results-content" class="hidden">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold">We Found <span class="text-[#1980e6]">50</span> Matching Programs</h2>
-                <p class="text-gray-600 mt-2">Here's a preview of your best matches</p>
+                <p class="text-gray-600 mt-2">Based on your profile, we've identified these top matches for you</p>
             </div>
 
-            <!-- Preview Results -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <!-- Preview Card 1 -->
+            <!-- Initial Program Results Grid - Always visible -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Sample Result Cards - These will be static -->
                 <div class="bg-white rounded-xl shadow-sm p-6">
                     <div class="mb-4">
                         <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Best Match</span>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">Business Program</h3>
-                    <ul class="text-gray-600 space-y-2 mb-4">
+                    <h3 class="font-bold text-lg mb-2">Business Administration</h3>
+                    <ul class="text-gray-600 space-y-2">
                         <li>• 2 Year Program</li>
                         <li>• Post-Graduation Work Permit</li>
-                        <li>• Tuition Range: $15-20K/year</li>
+                        <li>• Tuition: $15-20K/year</li>
                         <li>• Co-op Available</li>
+                        <li>• English Requirement: No</li>
                     </ul>
                 </div>
 
-                <!-- Preview Card 2 -->
                 <div class="bg-white rounded-xl shadow-sm p-6">
                     <div class="mb-4">
                         <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">High Employment Rate</span>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">Technology Program</h3>
-                    <ul class="text-gray-600 space-y-2 mb-4">
-                        <li>• 16 Month Program</li>
+                    <h3 class="font-bold text-lg mb-2">Computer Science</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• 4 Year Program</li>
                         <li>• Industry Partnerships</li>
-                        <li>• Tuition Range: $18-22K/year</li>
+                        <li>• Tuition: $18-22K/year</li>
                         <li>• Internship Included</li>
+                        <li>• English Requirement: Yes</li>
                     </ul>
                 </div>
 
-                <!-- Preview Card 3 -->
                 <div class="bg-white rounded-xl shadow-sm p-6">
                     <div class="mb-4">
                         <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Scholarship Available</span>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">Healthcare Program</h3>
-                    <ul class="text-gray-600 space-y-2 mb-4">
+                    <h3 class="font-bold text-lg mb-2">Engineering</h3>
+                    <ul class="text-gray-600 space-y-2">
                         <li>• 3 Year Program</li>
-                        <li>• Professional Certification</li>
-                        <li>• Tuition Range: $20-25K/year</li>
-                        <li>• Clinical Placement</li>
+                        <li>• Research Opportunities</li>
+                        <li>• Tuition: $20-25K/year</li>
+                        <li>• Merit Scholarships</li>
+                        <li>• English Requirement: No</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Updated CTA Section -->
+            <!-- Get Full Report Section -->
+            <div class="border rounded-xl mb-8">
+                <button id="toggle-report-details" class="w-full flex items-center justify-between p-6 bg-gradient-to-r from-[#1980e6] to-[#2B354E] text-white rounded-xl hover:from-[#1666b8] hover:to-[#232b40] transition-all">
+                    <div class="flex items-center">
+                        <div>
+                            <span class="text-xl font-bold">Get Detailed Program Analysis Report</span>
+                            <p class="text-sm text-gray-200 mt-1">Comprehensive insights for all 50 matching programs</p>
+                        </div>
+                        <span class="ml-6 px-4 py-2 bg-white text-[#1980e6] rounded-full font-bold">$50</span>
+                    </div>
+                    <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <div id="report-details" class="hidden p-6 border-t">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Program Analysis</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Detailed admission requirements for all 50 matching programs
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Program-specific GPA requirements and acceptance rates
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Required standardized test scores (IELTS, TOEFL, GRE, etc.)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Course curriculum and specialization options
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Program duration and intake dates
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Financial Analysis</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Detailed tuition and fee breakdown
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Living cost estimates by city/region
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Available scholarships and financial aid options
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Part-time work opportunities and regulations
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        ROI analysis and cost comparison between programs
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Career Prospects</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Employment rates by program and university
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Average starting salaries by region
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Top employers and industry connections
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Career support services and resources
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Alumni network and success stories
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Additional Benefits</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Post-graduation work permit details
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Immigration pathways and requirements
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Housing and accommodation options
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Campus facilities and student life
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Health insurance and support services
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <button class="px-8 py-4 bg-gradient-to-r from-[#1980e6] to-[#2B354E] text-white rounded-full hover:from-[#1666b8] hover:to-[#232b40] transition-all font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            Get Full Report Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consultation CTA -->
             <div class="bg-[#2B354E] text-white rounded-xl p-8 text-center">
-                <h3 class="text-2xl font-bold mb-4">Want to Explore Your Options?</h3>
+                <h3 class="text-2xl font-bold mb-4">Want Personalized Guidance?</h3>
                 <p class="mb-6">Book a free 15-minute consultation to discuss your perfect study abroad path</p>
                 <button class="book-consultation px-8 py-3 bg-white text-[#2B354E] rounded-full hover:bg-gray-100 transition-colors">
                     Book Free 15-Min Consultation
@@ -513,6 +688,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize first step
     showStep(1);
+
+    // Add click handler for viewing results
+    const viewResultsBtn = document.getElementById('view-results-btn');
+    const detailedResults = document.getElementById('detailed-results');
+
+    viewResultsBtn.addEventListener('click', function() {
+        detailedResults.classList.remove('hidden');
+        viewResultsBtn.classList.add('hidden');
+        populateResults(); // Only populate results when user clicks to view them
+    });
 });
 
 function simulateProcessing() {
@@ -556,41 +741,40 @@ function simulateProcessing() {
 }
 
 function populateResults() {
-    // Simulate matching results
     const sampleResults = [
         {
             type: "Best Match",
             program: "Business Administration",
-            university: "University of Toronto",
             details: [
                 "2 Year Program",
                 "Post-Graduation Work Permit",
                 "Tuition: $15-20K/year",
-                "Co-op Available"
+                "Co-op Available",
+                "English Requirement: No"
             ],
             badge: { text: "Best Match", color: "blue" }
         },
         {
             type: "High Employment Rate",
             program: "Computer Science",
-            university: "University of British Columbia",
             details: [
                 "4 Year Program",
                 "Industry Partnerships",
                 "Tuition: $18-22K/year",
-                "Internship Included"
+                "Internship Included",
+                "English Requirement: Yes"
             ],
             badge: { text: "High Employment Rate", color: "green" }
         },
         {
             type: "Scholarship Available",
             program: "Engineering",
-            university: "University of Melbourne",
             details: [
                 "3 Year Program",
                 "Research Opportunities",
                 "Tuition: $20-25K/year",
-                "Merit Scholarships"
+                "Merit Scholarships",
+                "English Requirement: No"
             ],
             badge: { text: "Scholarship Available", color: "purple" }
         }
@@ -609,21 +793,21 @@ function populateResults() {
                 </span>
             </div>
             <h3 class="font-bold text-lg mb-2">${result.program}</h3>
-            <p class="text-gray-600 mb-2">${result.university}</p>
-            <ul class="text-gray-600 space-y-2 mb-4">
+            <ul class="text-gray-600 space-y-2">
                 ${result.details.map(detail => `<li>• ${detail}</li>`).join('')}
             </ul>
-            <button class="w-full px-4 py-2 bg-[#1980e6] text-white rounded-lg hover:bg-blue-600 transition-colors">
-                Learn More
-            </button>
         `;
         resultsGrid.appendChild(card);
     });
-
-    // Update viewing count
-    const viewingCount = document.querySelector('.viewing-count');
-    viewingCount.textContent = Math.floor(Math.random() * 10) + 5;
 }
+
+// Add this to your existing DOMContentLoaded event listener
+document.getElementById('toggle-report-details').addEventListener('click', function() {
+    const details = document.getElementById('report-details');
+    const arrow = this.querySelector('svg');
+    details.classList.toggle('hidden');
+    arrow.classList.toggle('rotate-180');
+});
 </script>
 
 {% endblock %}

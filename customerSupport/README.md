@@ -1,3 +1,10 @@
+
+
+So all the emails that will be sent from here are like do not reply emails
+tHE IDEA OF THIS IS TO SEND THE EMAILS TO THE USERS WHEN THEY REGISTER FOR DIFFERENT SERVICES TOOLS PAYMENTS ETC.
+CUSTOMER SUPPORT EMAILS WIL NOT BE SENT FROM HERE.
+
+
 graph TD
     A[User Registration Form] --> B[Django Auth System]
     B --> C[User.objects.create_user]
