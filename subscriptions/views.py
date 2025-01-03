@@ -250,7 +250,7 @@ def checkout_success(request, subscription_id):
         'amount': subscription.plan_duration.price,
         'status': subscription.status,
         # Add any return URLs from your specific implementation
-        'dashboard_url': reverse('main:dashboard'),  # Adjust this to your dashboard URL
+        'dashboard_url': reverse('dashboard:dashboard'),  # Change this line
         'invoice_url': reverse('subscriptions:invoice', args=[subscription.id]) if hasattr(subscription, 'invoice') else None,
         'next_billing_date': subscription.created_at + timezone.timedelta(
             days=30 if subscription.plan_duration.duration_type == 'MONTHLY' else 90
