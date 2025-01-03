@@ -316,175 +316,257 @@
             </div>
 
             <!-- Get Full Report Section -->
-            <div class="border rounded-xl mb-8">
-                <button id="toggle-report-details" class="w-full flex items-center justify-between p-6 bg-gradient-to-r from-[#1980e6] to-[#2B354E] text-white rounded-xl hover:from-[#1666b8] hover:to-[#232b40] transition-all">
-                    <div class="flex items-center">
-                        <div>
-                            <span class="text-xl font-bold">Get Detailed Program Analysis Report</span>
-                            <p class="text-sm text-gray-200 mt-1">Comprehensive insights for all 50 matching programs</p>
-                        </div>
-                        <span class="ml-6 px-4 py-2 bg-white text-[#1980e6] rounded-full font-bold">$50</span>
-                    </div>
-                    <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-
-                <div id="report-details" class="hidden p-6 border-t">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="space-y-6">
-                            <div>
-                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Program Analysis</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Detailed admission requirements for all 50 matching programs
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Program-specific GPA requirements and acceptance rates
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Required standardized test scores (IELTS, TOEFL, GRE, etc.)
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Course curriculum and specialization options
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Program duration and intake dates
-                                    </li>
-                                </ul>
+            <div class="space-y-6 mb-8">
+                <!-- Basic Report Option -->
+                <div class="border rounded-xl">
+                    <div class="w-full flex items-center justify-between p-6 bg-gradient-to-r from-[#1980e6] to-[#2B354E] text-white rounded-xl">
+                        <div class="flex items-center justify-between w-full">
+                            <div class="flex items-center">
+                                <div>
+                                    <span class="text-xl font-bold">Basic Report</span>
+                                    <p class="text-sm text-gray-200 mt-1">Detailed program analysis for all 50 matching programs</p>
+                                </div>
+                                <a href="#" 
+                                   class="ml-6 px-4 py-2 bg-white text-[#1980e6] rounded-full font-bold hover:bg-gray-100 transform hover:-translate-y-0.5 transition-all">
+                                    $50
+                                </a>
                             </div>
-
-                            <div>
-                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Financial Analysis</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Detailed tuition and fee breakdown
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Living cost estimates by city/region
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Available scholarships and financial aid options
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Part-time work opportunities and regulations
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        ROI analysis and cost comparison between programs
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="space-y-6">
-                            <div>
-                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Career Prospects</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Employment rates by program and university
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Average starting salaries by region
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Top employers and industry connections
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Career support services and resources
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Alumni network and success stories
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div>
-                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Additional Benefits</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Post-graduation work permit details
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Immigration pathways and requirements
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Housing and accommodation options
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Campus facilities and student life
-                                    </li>
-                                    <li class="flex items-start">
-                                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Health insurance and support services
-                                    </li>
-                                </ul>
-                            </div>
+                            <button id="toggle-report-details" class="flex items-center">
+                                <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="mt-8 text-center">
-                        <button class="px-8 py-4 bg-gradient-to-r from-[#1980e6] to-[#2B354E] text-white rounded-full hover:from-[#1666b8] hover:to-[#232b40] transition-all font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                            Get Full Report Now
-                        </button>
+                    <div id="report-details" class="hidden p-6 border-t">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Program Analysis</h4>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Detailed admission requirements for all 50 matching programs
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Program-specific GPA requirements and acceptance rates
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Required standardized test scores (IELTS, TOEFL, GRE, etc.)
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Course curriculum and specialization options
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Program duration and intake dates
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Financial Analysis</h4>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Detailed tuition and fee breakdown
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Living cost estimates by city/region
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Available scholarships and financial aid options
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Part-time work opportunities and regulations
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            ROI analysis and cost comparison between programs
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Career Prospects</h4>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Employment rates by program and university
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Average starting salaries by region
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Top employers and industry connections
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Career support services and resources
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Alumni network and success stories
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Additional Benefits</h4>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Post-graduation work permit details
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Immigration pathways and requirements
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Housing and accommodation options
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Campus facilities and student life
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Health insurance and support services
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 text-center">
+                            <button class="px-8 py-4 bg-gradient-to-r from-[#1980e6] to-[#2B354E] text-white rounded-full hover:from-[#1666b8] hover:to-[#232b40] transition-all font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                Get Full Report Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Report Option -->
+                <div class="border rounded-xl">
+                    <div class="w-full flex items-center justify-between p-6 bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9] text-white rounded-xl">
+                        <div class="flex items-center justify-between w-full">
+                            <div class="flex items-center">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xl font-bold">Premium Report</span>
+                                        <span class="bg-yellow-400 text-yellow-900 text-xs px-2 py-1 rounded-full font-medium">POPULAR</span>
+                                    </div>
+                                    <p class="text-sm text-gray-200 mt-1">Basic report + personalized application strategy</p>
+                                </div>
+                                <a href="#" 
+                                   class="ml-6 px-4 py-2 bg-white text-[#6D28D9] rounded-full font-bold hover:bg-gray-100 transform hover:-translate-y-0.5 transition-all">
+                                    $199
+                                </a>
+                            </div>
+                            <button id="toggle-premium-details" class="flex items-center">
+                                <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="premium-details" class="hidden p-6 border-t">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-4 text-[#2B354E]">Everything in Basic Report, Plus:</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-purple-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Personalized application strategy
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-purple-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Document checklist customized to your programs
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-purple-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Application timeline planning
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-purple-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        30-minute consultation with an advisor
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-purple-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Email support for 30 days
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 text-center">
+                            <button class="px-8 py-4 bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9] text-white rounded-full hover:from-[#7C3AED] hover:to-[#5B21B6] transition-all font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                Get Premium Report
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -804,6 +886,13 @@ function populateResults() {
 // Add this to your existing DOMContentLoaded event listener
 document.getElementById('toggle-report-details').addEventListener('click', function() {
     const details = document.getElementById('report-details');
+    const arrow = this.querySelector('svg');
+    details.classList.toggle('hidden');
+    arrow.classList.toggle('rotate-180');
+});
+
+document.getElementById('toggle-premium-details').addEventListener('click', function() {
+    const details = document.getElementById('premium-details');
     const arrow = this.querySelector('svg');
     details.classList.toggle('hidden');
     arrow.classList.toggle('rotate-180');
