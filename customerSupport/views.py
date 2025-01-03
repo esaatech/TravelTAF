@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from .services.email_service import EmailManager
 from django.views.decorators.http import require_http_methods
 import json
-from .services.email import EmailService
 
 # Create your views here.
 
@@ -14,7 +13,7 @@ def submit_study_abroad_form(request):
         form_data['target_countries'] = request.POST.getlist('target_countries[]')
         
         # Send emails
-        success, message = EmailService.send_form_submission_email(
+        success, message = EmailManager.send_form_submission_email(
             form_data,
             'study_abroad'
         )
@@ -37,7 +36,7 @@ def submit_moving_abroad_form(request):
         form_data = request.POST.dict()
         form_data['target_countries'] = request.POST.getlist('target_countries[]')
         
-        success, message = EmailService.send_form_submission_email(
+        success, message = EmailManager.send_form_submission_email(
             form_data,
             'moving_abroad'
         )
@@ -59,7 +58,6 @@ def submit_moving_abroad_form(request):
 def register_user(request):
     try:
         data = json.loads(request.body)
-        # Your user registration logic here
         
         # Send welcome email
         email_manager = EmailManager()
@@ -69,7 +67,6 @@ def register_user(request):
         })
         
         if not success:
-            # Log the error but don't stop registration
             print(f"Warning: Welcome email failed - {message}")
             
         return JsonResponse({
