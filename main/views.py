@@ -10,6 +10,12 @@ from rest_framework.response import Response
 from tools.models import School
 import json
 import random
+from django.views.generic import View
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.shortcuts import redirect
+from subscriptions.models import SubscriptionPlan
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def home(request):
     # Query the latest 3 news articles that are both published and approved
@@ -761,3 +767,44 @@ def get_school_badge(school):
         return {'type': 'Work Available', 'class': 'bg-green-100 text-green-800'}
     else:
         return {'type': 'Featured', 'class': 'bg-blue-100 text-blue-800'}
+    
+
+
+
+
+class StudyAbroadBasicReportView(LoginRequiredMixin, View):
+    def get(self, request):
+        plan = get_object_or_404(
+            SubscriptionPlan,
+            name='Study Abroad Basic Report',
+            is_active=True
+        )
+        
+        # Add the namespace 'main:' to the reverse call
+        return_url = reverse('main:study_abroad_basic_success')
+        purchase_url = f"{reverse('subscriptions:plan_purchase', args=[plan.id])}?return_url={return_url}"
+        
+        return redirect(purchase_url)
+
+class StudyAbroadPremiumReportView(LoginRequiredMixin, View):
+    def get(self, request):
+        plan = get_object_or_404(
+            SubscriptionPlan,
+            name='Study Abroad Premium Report',
+            is_active=True
+        )
+        
+        # Redirect to subscription purchase with return URL
+        return_url = reverse('main:study_abroad_premium_success')
+        purchase_url = f"{reverse('subscriptions:plan_purchase', args=[plan.id])}?return_url={return_url}"
+        
+        return redirect(purchase_url)    
+    
+
+@login_required
+def study_abroad_basic_success(request):
+    return render(request, 'main/study_abroad_basic_success.html')
+
+@login_required
+def study_abroad_premium_success(request):
+    return render(request, 'tools/study_abroad_premium_success.html')    

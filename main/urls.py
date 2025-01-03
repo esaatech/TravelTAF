@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/contact', views.contact_submit, name='contact_submit'),
     
     # urls.py
-  path('api/compare', views.get_country_data, name='compare_countries_api'),
+   path('api/compare', views.get_country_data, name='compare_countries_api'),
     # Contact page
     path('contact/', views.contact, name='contact'),
     
@@ -44,4 +44,28 @@ urlpatterns = [
     # About page
     path('about/', views.about, name='about'),
     path('travel-tours/', views.travel_tours, name='travel_tours'),
+# Add these to your existing urlpatterns
+path(
+    'study-abroad-basic-report/',
+    views.StudyAbroadBasicReportView.as_view(),
+    name='study_abroad_basic_report'
+),
+path(
+    'study-abroad-premium-report/',
+    views.StudyAbroadPremiumReportView.as_view(),
+    name='study_abroad_premium_report'
+),
+path(
+    'study-abroad/basic/success/',
+    views.study_abroad_basic_success,
+    name='study_abroad_basic_success'
+),
+path(
+    'study-abroad/premium/success/',
+    views.study_abroad_premium_success,
+    name='study_abroad_premium_success'
+),
+
+
+
 ]
