@@ -12,13 +12,9 @@ class AmadeusFlightService(FlightSearchService):
     def __init__(self):
         # Get credentials from environment variables or settings
         self.client_id = os.getenv('AMADEUS_CLIENT_ID')
-        #'ldVOG4IqYVNgHM2fLkH5dvqxQbs7LtOV'
-        #os.getenv('AMADEUS_CLIENT_ID', settings.AMADEUS_CLIENT_ID)
+       
         self.client_secret = os.getenv('AMADEUS_CLIENT_SECRET')
-        #os.getenv('AMADEUS_CLIENT_SECRET')
-        #'EMTXJAqssGmfvOK7'
-        #os.getenv('AMADEUS_CLIENT_SECRET', settings.AMADEUS_CLIENT_SECRET)
-        
+      
         
         if not self.client_id or not self.client_secret:
             raise ValueError("Amadeus API credentials not configured")
