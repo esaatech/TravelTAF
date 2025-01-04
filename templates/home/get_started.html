@@ -18,6 +18,26 @@
     <div class="max-w-7xl mx-auto px-4">
         <h2 class="text-3xl font-bold mb-12 text-center">Our Services</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Travel and Tours -->
+            <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4">Travel and Tours</h3>
+                <p class="text-gray-600 mb-4">Discover exciting destinations with our curated travel packages, guided tours, and customized holiday experiences.</p>
+               
+                <a href="{% url 'service_offerings:travel_tours' %}" class="inline-flex items-center text-[#1980e6] hover:underline">
+                    Explore Tours
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+
             <!-- Immigration Consulting -->
             <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
@@ -27,7 +47,7 @@
                 </div>
                 <h3 class="text-xl font-semibold mb-4">Moving Abroad</h3>
                 <p class="text-gray-600 mb-4">Complete relocation guidance, settling-in tips, and country-specific information.</p>
-                <a href="{% url 'main:moving_abroad' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
+                <a href="{% url 'service_offerings:moving_abroad' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
             </div>
 
             <!-- Study Abroad -->
@@ -40,7 +60,7 @@
                 </div>
                 <h3 class="text-xl font-semibold mb-4">Study Abroad</h3>
                 <p class="text-gray-600 mb-4">University admissions, student visas, and educational planning assistance.</p>
-                <a href="{% url 'main:study_abroad' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
+                <a href="{% url 'service_offerings:study_abroad' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
             </div>
 
             <!-- Work Visas -->
@@ -52,20 +72,10 @@
                 </div>
                 <h3 class="text-xl font-semibold mb-4">Work Visas</h3>
                 <p class="text-gray-600 mb-4">Employment visa processing and career relocation support.</p>
-                <a href="{% url 'main:work_visas' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
+                <a href="{% url 'service_offerings:work_visas' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
             </div>
 
-            <!-- Permanent Residency -->
-            <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
-                <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold mb-4">Permanent Residency</h3>
-                <p class="text-gray-600 mb-4">Complete PR application assistance and settlement guidance.</p>
-                <a href="{% url 'main:permanent_residency' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
-            </div>
+           
 
             <!-- Family Sponsorship -->
             <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
@@ -76,7 +86,7 @@
                 </div>
                 <h3 class="text-xl font-semibold mb-4">Family Sponsorship</h3>
                 <p class="text-gray-600 mb-4">Family reunion and sponsorship application support.</p>
-                <a href="{% url 'main:family_sponsorship' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
+                <a href="{% url 'service_offerings:family_sponsorship' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
             </div>
 
             <!-- Travel Planning -->
@@ -88,7 +98,7 @@
                 </div>
                 <h3 class="text-xl font-semibold mb-4">Travel Planning</h3>
                 <p class="text-gray-600 mb-4">Comprehensive travel arrangements and visa assistance.</p>
-                <a href="{% url 'main:travel_planning' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
+                <a href="{% url 'service_offerings:travel_planning' %}" class="text-[#1980e6] hover:underline">Learn More →</a>
             </div>
         </div>
     </div>
@@ -197,5 +207,18 @@
             </div>
         </div>
     </div>
+
+ <!-- Newsletter + Contact -->
+    {% include 'home/sections/newsletter.html' %}
+
+    <!-- Desktop Footer -->
+    {% include 'home/sections/footer.html' %}
+
+
+
+
+
+
+
 </section>
 {% endblock %}
