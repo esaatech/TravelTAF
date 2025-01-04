@@ -4,74 +4,36 @@
         
         <!-- Testimonials Grid -->
         <div class="grid md:grid-cols-3 gap-8">
-            <!-- Canada Success Story -->
+            {% for testimonial in testimonials %}
             <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="w-12 h-12 bg-[#1980e6]/10 rounded-full flex items-center justify-center">
-                        <span class="text-[#1980e6] font-bold">JD</span>
+                        <span class="text-[#1980e6] font-bold">{{ testimonial.initials }}</span>
                     </div>
                     <div>
-                        <h4 class="font-semibold">John Davis</h4>
-                        <p class="text-gray-600">Relocated to Canada</p>
+                        <h4 class="font-semibold">{{ testimonial.name }}</h4>
+                        <p class="text-gray-600">{{ testimonial.location }}</p>
                     </div>
                 </div>
                 <div class="mb-4">
                     <div class="flex text-yellow-400 mb-2">
-                        ★★★★★
+                        {% for i in ""|ljust:testimonial.rating %}★{% endfor %}
                     </div>
-                    <p class="text-gray-600 italic">"TravelTAF's expert guidance made my Express Entry journey smooth and successful. From documentation to final approval, they were there every step of the way."</p>
+                    <p class="text-gray-600 italic">"{{ testimonial.testimonial_text }}"</p>
                 </div>
-                <p class="text-sm text-gray-500">Express Entry PR • 6 months</p>
+                <p class="text-sm text-gray-500">{{ testimonial.testimonial_type }} • {{ testimonial.duration }}</p>
             </div>
- 
-            <!-- Australia Success Story -->
-            <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 bg-[#1980e6]/10 rounded-full flex items-center justify-center">
-                        <span class="text-[#1980e6] font-bold">SP</span>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold">Sarah Parker</h4>
-                        <p class="text-gray-600">Studying in Australia</p>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <div class="flex text-yellow-400 mb-2">
-                        ★★★★★
-                    </div>
-                    <p class="text-gray-600 italic">"Their university admission support and student visa guidance was exceptional. Now I'm living my dream of studying in Melbourne!"</p>
-                </div>
-                <p class="text-sm text-gray-500">Student Visa • 3 months</p>
-            </div>
- 
-            <!-- UK Success Story -->
-            <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 bg-[#1980e6]/10 rounded-full flex items-center justify-center">
-                        <span class="text-[#1980e6] font-bold">MR</span>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold">Michael Ross</h4>
-                        <p class="text-gray-600">Working in UK</p>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <div class="flex text-yellow-400 mb-2">
-                        ★★★★★
-                    </div>
-                    <p class="text-gray-600 italic">"Secured my Skilled Worker visa with their assistance. Their knowledge of UK immigration laws and process was invaluable."</p>
-                </div>
-                <p class="text-sm text-gray-500">Skilled Worker Visa • 4 months</p>
-            </div>
+            {% endfor %}
         </div>
- 
+
         <!-- View More Button -->
         <div class="text-center mt-12">
-            <button class="px-8 py-4 border-2 border-[#1980e6] text-[#1980e6] rounded-full hover:bg-blue-50 transition-colors">
+            <a href="{% url 'testimonials:testimonial_list' %}" 
+               class="px-8 py-4 border-2 border-[#1980e6] text-[#1980e6] rounded-full hover:bg-blue-50 transition-colors">
                 View More Success Stories
-            </button>
+            </a>
         </div>
- 
+
         <!-- Success Metrics -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
             <div class="text-center">
@@ -92,4 +54,4 @@
             </div>
         </div>
     </div>
- </section>
+</section>

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Share Your Experience - TravelTAF{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen py-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Share Your Success Story</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Your journey can inspire others. Tell us about your experience with TravelTAF and help future clients make informed decisions.
+            </p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <form method="post" class="space-y-8">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="rounded-md bg-red-50 p-4 mb-6">
+                    <div class="text-sm text-red-700">
+                        {{ form.non_field_errors }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Name Field -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="{{ form.name.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Your Name
+                        </label>
+                        <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}"
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#1980e6] focus:border-[#1980e6] shadow-sm"
+                               placeholder="Enter your name">
+                        {% if form.name.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Location Field -->
+                    <div>
+                        <label for="{{ form.location.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Location
+                        </label>
+                        <input type="text" name="{{ form.location.name }}" id="{{ form.location.id_for_label }}"
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#1980e6] focus:border-[#1980e6] shadow-sm"
+                               placeholder="e.g., Relocated to Canada">
+                        {% if form.location.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.location.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Service Type Field -->
+                <div>
+                    <label for="{{ form.testimonial_type.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Type of Service
+                    </label>
+                    <select name="{{ form.testimonial_type.name }}" id="{{ form.testimonial_type.id_for_label }}"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#1980e6] focus:border-[#1980e6] shadow-sm">
+                        <option value="">Select service type</option>
+                        {% for value, label in service_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if form.testimonial_type.errors %}
+                    <p class="mt-2 text-sm text-red-600">{{ form.testimonial_type.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Rating Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">
+                        How would you rate your experience?
+                    </label>
+                    <div class="flex items-center gap-6">
+                        {% for value, label in rating_choices %}
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="{{ form.rating.name }}" value="{{ value }}"
+                                   class="sr-only peer">
+                            <div class="w-16 h-16 flex items-center justify-center rounded-lg border-2 border-gray-200 
+                                      peer-checked:border-[#1980e6] peer-checked:bg-blue-50 transition-all">
+                                <span class="text-2xl font-bold text-gray-700 peer-checked:text-[#1980e6]">
+                                    {{ value }}★
+                                </span>
+                            </div>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    {% if form.rating.errors %}
+                    <p class="mt-2 text-sm text-red-600">{{ form.rating.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Testimonial Text Field -->
+                <div>
+                    <label for="{{ form.testimonial_text.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Share Your Experience
+                    </label>
+                    <textarea name="{{ form.testimonial_text.name }}" id="{{ form.testimonial_text.id_for_label }}" rows="6"
+                              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#1980e6] focus:border-[#1980e6] shadow-sm"
+                              placeholder="Tell us about your journey with TravelTAF..."></textarea>
+                    {% if form.testimonial_text.errors %}
+                    <p class="mt-2 text-sm text-red-600">{{ form.testimonial_text.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-center pt-4">
+                    <button type="submit" 
+                            class="px-8 py-4 bg-[#1980e6] text-white rounded-full font-medium text-lg hover:bg-[#1666b8] 
+                                   transform transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 
+                                   focus:ring-offset-2 focus:ring-[#1980e6] shadow-lg">
+                        Submit Your Story
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add some animation -->
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .form-field {
+        transition: all 0.3s ease;
+    }
+    
+    .form-field:focus-within {
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %} 

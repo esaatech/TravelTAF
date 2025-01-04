@@ -136,6 +136,9 @@ INSTALLED_APPS = [
     'dashboard',
     'flights',
     'customerSupport',
+    'faqs',
+    'testimonials',
+    'service_offerings',
      
 
 
