@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} FAQs - TravelTAF{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ category.name }}</h1>
+            <div class="flex justify-center space-x-4">
+                {% for cat in categories %}
+                <a href="{% url 'faqs:category_detail' cat.slug %}" 
+                   class="px-4 py-2 rounded-full {% if cat == category %}bg-[#1980e6] text-white{% else %}bg-white text-gray-600 hover:bg-gray-50{% endif %}">
+                    {{ cat.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- FAQs Accordion -->
+        <div class="max-w-3xl mx-auto">
+            {% for faq in faqs %}
+            <div class="mb-4">
+                <button class="w-full text-left bg-white px-6 py-4 rounded-lg shadow-sm hover:shadow-md transition-all"
+                        onclick="toggleFAQ(this)"
+                        aria-expanded="false">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-medium text-gray-900">{{ faq.question }}</h3>
+                        <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                    <div class="answer hidden mt-4 text-gray-600">
+                        {{ faq.answer|linebreaks }}
+                    </div>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleFAQ(element) {
+    const answer = element.querySelector('.answer');
+    const arrow = element.querySelector('svg');
+    const isExpanded = element.getAttribute('aria-expanded') === 'true';
+    
+    element.setAttribute('aria-expanded', !isExpanded);
+    answer.classList.toggle('hidden');
+    arrow.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+</script>
+{% endblock %} 

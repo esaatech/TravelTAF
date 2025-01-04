@@ -3,7 +3,7 @@ from . import views
 
 app_name = 'faqs'
 
-urlpatterns = [  # Make sure this list exists and is named exactly 'urlpatterns'
+urlpatterns = [
     path('', views.FAQListView.as_view(), name='faq_list'),
-    # ... other URL patterns ...
+    path('category/<slug:slug>/', views.CategoryFAQView.as_view(), name='category_detail'),
 ]

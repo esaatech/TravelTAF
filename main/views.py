@@ -17,6 +17,7 @@ from django.shortcuts import redirect
 from subscriptions.models import SubscriptionPlan
 from django.contrib.auth.mixins import LoginRequiredMixin
 from testimonials.models import Testimonial  # Add this import
+from faqs.models import Category, FAQ  # Add this import
 
 def home(request):
     # Query the latest 3 news articles that are both published and approved
@@ -29,6 +30,12 @@ def home(request):
     testimonials = Testimonial.objects.filter(
         is_active=True
     ).order_by('?')[:3]  # Random selection of 3 testimonials
+
+    # Get FAQs for the home page
+    featured_faqs = FAQ.objects.filter(
+        is_active=True,
+        category__is_active=True
+    ).select_related('category').order_by('?')[:5]  # Random 5 FAQs
 
     context = {
         'title': 'Welcome to TravelTAF',
@@ -51,7 +58,8 @@ def home(request):
             },
         ],
         'latest_news': latest_news,
-        'testimonials': testimonials  # Add testimonials to context
+        'testimonials': testimonials,
+        'featured_faqs': featured_faqs,  # Add FAQs to context
     }
     return render(request, 'home/home.html', context)
 
