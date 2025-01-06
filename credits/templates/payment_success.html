@@ -70,7 +70,7 @@
 
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="{% url 'main:dashboard' %}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[#1980e6] hover:bg-[#1980e6]/90">
+            <a href="{% url 'dashboard:dashboard' %}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[#1980e6] hover:bg-[#1980e6]/90">
                 Go to Dashboard
             </a>
             {% if payment.invoice_url %}
