@@ -3,6 +3,9 @@ import json
 from typing import Optional, Dict, Any
 from django.conf import settings
 from ..config.settings import BASE_URL, ENDPOINTS
+import logging
+
+logger = logging.getLogger(__name__)
 
 class DocumentService:
     """Service for handling document operations with the RAG Chatbot API."""
@@ -58,54 +61,28 @@ class DocumentService:
     def query_document(cls, key: str, query: str, config: dict = None) -> dict:
         """
         Query a document using its key.
-        
-        Args:
-            key: The document's API key
-            query: The user's question
-            config: Optional configuration for response formatting
-            
-        Returns:
-            dict containing the response and any additional metadata
         """
         try:
-            # Construct the endpoint URL
-            endpoint = BASE_URL + ENDPOINTS['query'].format(key=key)
+            # Only log critical information
+            logger.info(f"Querying document: {key}")
             
-            # Prepare the payload
-            payload = {
-                "query": query
-            }
+            base_url = cls.BASE_URL.rstrip('/')
+            endpoint = f"{base_url}/documents/{key}/query"
             
-            # Add configuration if provided
-            if config:
-                payload.update(config)
-            
-            # Make the API request
             response = requests.post(
                 endpoint,
-                json=payload
+                json={"query": query},
+                headers={'Content-Type': 'application/json'},
+                timeout=10
             )
             
-            # Check for successful response
+            # Only log errors (minimal overhead during normal operation)
+            if not response.ok:
+                logger.error(f"API error: Status={response.status_code}, Response={response.text[:200]}")
+            
             response.raise_for_status()
+            return response.json()
             
-            # Parse and return the response
-            data = response.json()
-            
-            if 'response' in data:
-                return {
-                    "response": data['response'],
-                    "confidence": data.get('confidence', 1.0)
-                }
-            
-            return {
-                "response": "No relevant information found for your query.",
-                "confidence": 0
-            }
-            
-        except requests.exceptions.RequestException as e:
-            print(f"API request error: {str(e)}")
-            raise Exception(f"Error querying document: {str(e)}")
         except Exception as e:
-            print(f"General error: {str(e)}")
-            raise Exception(f"Error processing query: {str(e)}")
+            logger.error(f"Error querying document {key}: {str(e)}", exc_info=True)
+            raise
