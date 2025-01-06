@@ -637,7 +637,7 @@ class StudyAbroadBasicReportView(LoginRequiredMixin, View):
         )
         
         # Add the namespace 'main:' to the reverse call
-        return_url = reverse('main:study_abroad_basic_success')
+        return_url = reverse('service_offerings:study_abroad_basic_success')
         purchase_url = f"{reverse('subscriptions:plan_purchase', args=[plan.id])}?return_url={return_url}"
         
         return redirect(purchase_url)
@@ -651,7 +651,7 @@ class StudyAbroadPremiumReportView(LoginRequiredMixin, View):
         )
         
         # Redirect to subscription purchase with return URL
-        return_url = reverse('main:study_abroad_premium_success')
+        return_url = reverse('service_offerings:study_abroad_premium_success')
         purchase_url = f"{reverse('subscriptions:plan_purchase', args=[plan.id])}?return_url={return_url}"
         
         return redirect(purchase_url)    
@@ -659,7 +659,7 @@ class StudyAbroadPremiumReportView(LoginRequiredMixin, View):
 
 @login_required
 def study_abroad_basic_success(request):
-    return render(request, 'main/study_abroad_basic_success.html')
+    return render(request, 'service_offerings/study_abroad_basic_success.html')
 
 @login_required
 def study_abroad_premium_success(request):
