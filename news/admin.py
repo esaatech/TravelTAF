@@ -48,10 +48,6 @@ class NewsAdmin(admin.ModelAdmin):
         ('Content', {
             'fields': ('summary', 'content')
         }),
-        ('Dialog Content', {
-            'fields': ('dialog_title', 'dialog_body'),
-            'classes': ('collapse',)
-        }),
         ('Publishing', {
             'fields': ('is_featured', 'is_published')
         }),
