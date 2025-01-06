@@ -1,6 +1,6 @@
 {
   "about-us.txt": {
-    "key": "8a47ea13-c4ad-4564-a409-d72d6ce56a16",
+    "key": "091b1cb5-4116-484a-9ad7-47e9773d798b",
     "prompt_config": {
       "company_name": "TravelTaf",
       "response_style": "Ensure to always return concise and shortest possible answer as defined in the document, also provide your response in Markdown syntax. Use appropriate headings (#, ##, ###), lists (-, *, or 1.), and bold or italic text (** or _). Structure the response neatly and ensure it adheres to Markdown formatting standards. Do not use HTML or any other formatting style."
