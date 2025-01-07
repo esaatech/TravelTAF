@@ -11,6 +11,8 @@
     <link href="{% static 'css/index.css' %}" rel="stylesheet">
     <link href="{% static 'css/point_calculator.css' %}" rel="stylesheet">
     <link href="{% static 'css/cover_letter.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+   
     {% block extra_head %}
     {% endblock %}
     <style>
@@ -133,6 +135,13 @@
         smartLists: true,
         smartypants: true
     });
+
+
+{% block extra_scripts %}
+{% endblock %}
+
+
+
 </script>
     <script src="{% static 'js/home/index.js' %}"></script>
     <script src="{% static 'js/home/chat.js' %}"></script>
@@ -142,8 +151,11 @@
     <script src="{% static 'js/subscribers/subscribe.js' %}"></script>
     <!-- Add this in the head section -->
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+   
 
-   {% block extra_scripts %}
-{% endblock %}
+
+
+
 </body>
 </html>
