@@ -2,22 +2,22 @@
 {% load static %}
 
 {% block content %}
-<header class="hero-section h-screen bg-cover bg-center flex items-center justify-center text-white text-center relative" style="background-image: url('{% static 'images/services/travel-and-tour-hero.png' %}');">
+<header class="hero-section min-h-screen bg-cover bg-center flex items-center justify-center text-white text-center relative" style="background-image: url('{% static 'images/services/travel-and-tour-hero.png' %}');">
     <div class="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
     <div class="z-10">
         <h1 class="text-4xl md:text-6xl font-bold">Your Gateway to Incredible Adventures</h1>
         <p class="mt-4 text-lg md:text-xl">From solo trips to family vacations, explore the world with ease.</p>
         <div class="mt-6">
-            <a href="#services" class="cta-button bg-gradient-to-r from-blue-500 to-teal-400 hover:from-teal-400 hover:to-blue-500 text-white py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 m-2 inline-block">Explore Destinations</a>
+            <a href="#destinations" class="cta-button bg-gradient-to-r from-blue-500 to-teal-400 hover:from-teal-400 hover:to-blue-500 text-white py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 m-2 inline-block">Explore Destinations</a>
             <a href="#services" class="cta-button bg-gradient-to-r from-blue-500 to-teal-400 hover:from-teal-400 hover:to-blue-500 text-white py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 m-2 inline-block">Plan Your Trip</a>
         </div>
     </div>
 </header>
 
-<section id="services" class="min-h-[600px] bg-white py-16">
+<section id="services" class="min-h-screen bg-white py-8">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">Our Services</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <h2 class="text-3xl font-bold mb-8 text-center">Trip Planner</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Flight Bookings -->
             <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
@@ -49,9 +49,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20z"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl font-semibold mb-4">Visa Assistance</h3>
+                <h3 class="text-xl font-semibold mb-4">Visa Lookup</h3>
                 <p class="text-gray-600 mb-4">Get help with your visa applications and requirements.</p>
-                <a href="#" class="text-[#1980e6] hover:underline">Talk to an Agent →</a>
+                <a href="tools:visa_checker" class="text-[#1980e6] hover:underline">Check Visa Requirements →</a>
             </div>
             <!-- Hotel Bookings -->
             <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
@@ -76,46 +76,160 @@
                 <p class="text-gray-600 mb-4">Create custom itineraries tailored to your preferences.</p>
                 <a href="#" class="text-[#1980e6] hover:underline">Talk to an Agent →</a>
             </div>
+            <!-- Currency Exchange -->
+            <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4">Currency Exchange</h3>
+                <p class="text-gray-600 mb-4">Get the best rates for currency exchange.</p>
+                <a href="#" class="text-[#1980e6] hover:underline">Check Rates →</a>
+            </div>
+            <!-- Weather Updates -->
+            <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 01.88-7.906 5.5 5.5 0 0110.44 0A4 4 0 1119 15H3z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4">Weather Updates</h3>
+                <p class="text-gray-600 mb-4">Stay informed with the latest weather forecasts.</p>
+                <a href="#" class="text-[#1980e6] hover:underline">View Weather →</a>
+            </div>
+            <!-- Travel Insurance -->
+            <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4">Travel Insurance</h3>
+                <p class="text-gray-600 mb-4">Protect your trip with comprehensive travel insurance.</p>
+                <a href="#" class="text-[#1980e6] hover:underline">Get Insured →</a>
+            </div>
+            <!-- Local Guides -->
+            <div class="p-8 border rounded-xl hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4">Local Guides</h3>
+                <p class="text-gray-600 mb-4">Explore destinations with expert local guides.</p>
+                <a href="#" class="text-[#1980e6] hover:underline">Find a Guide →</a>
+            </div>
         </div>
     </div>
 </section>
 
-<section id="destinations" class="min-h-screen bg-gray-100 py-16">
+<section id="destinations" class="bg-gray-100 py-8">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">Popular Destinations</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Destination 1 -->
-            <div class="relative h-64 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/destination1.jpg' %}');">
-                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-lg">
-                    <h3 class="text-xl font-semibold text-white">Paris, France</h3>
-                    <p class="text-gray-200">Experience the city of lights and romance.</p>
-                    <span class="text-white font-bold mt-2">$1,200</span>
+        <h2 class="text-3xl font-bold mb-8 text-center">Popular Destinations</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Popular Destinations -->
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/services/bali.png' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Bali, Indonesia</h3>
+                    <p class="text-gray-200 text-sm">Tropical paradise with stunning beaches.</p>
+                    <span class="text-white font-bold mt-1">$1,000</span>
                 </div>
             </div>
-            <!-- Destination 2 -->
-            <div class="relative h-64 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/destination2.jpg' %}');">
-                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-lg">
-                    <h3 class="text-xl font-semibold text-white">Tokyo, Japan</h3>
-                    <p class="text-gray-200">Discover the vibrant culture and technology.</p>
-                    <span class="text-white font-bold mt-2">$1,500</span>
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/services/mexico.png' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Cancun, Mexico</h3>
+                    <p class="text-gray-200 text-sm">Beautiful beaches and vibrant nightlife.</p>
+                    <span class="text-white font-bold mt-1">$1,200</span>
                 </div>
             </div>
-            <!-- Destination 3 -->
-            <div class="relative h-64 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/destination3.jpg' %}');">
-                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-lg">
-                    <h3 class="text-xl font-semibold text-white">New York, USA</h3>
-                    <p class="text-gray-200">Explore the city that never sleeps.</p>
-                    <span class="text-white font-bold mt-2">$1,800</span>
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/thailand.jpg' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Phuket, Thailand</h3>
+                    <p class="text-gray-200 text-sm">Exotic beaches and rich culture.</p>
+                    <span class="text-white font-bold mt-1">$1,300</span>
                 </div>
             </div>
-        </div>
-        <div class="text-center mt-12">
-            <a href="#" class="cta-button bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-full">View More Destinations</a>
         </div>
     </div>
 </section>
 
+<section id="winter-getaways" class="bg-white py-8">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-8 text-center">Winter Getaways</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Winter Getaways -->
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/winter1.jpg' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Aspen, USA</h3>
+                    <p class="text-gray-200 text-sm">Perfect winter getaway for skiing enthusiasts.</p>
+                    <span class="text-white font-bold mt-1">$1,500</span>
+                </div>
+            </div>
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/switzerland.jpg' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Zermatt, Switzerland</h3>
+                    <p class="text-gray-200 text-sm">Skiing and breathtaking mountain views.</p>
+                    <span class="text-white font-bold mt-1">$2,000</span>
+                </div>
+            </div>
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/canada.jpg' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Banff, Canada</h3>
+                    <p class="text-gray-200 text-sm">Winter wonderland with stunning landscapes.</p>
+                    <span class="text-white font-bold mt-1">$1,800</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
+<section id="adventures" class="bg-gray-100 py-8">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-8 text-center">Adventures</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Adventure Destinations -->
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/adventure1.jpg' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Amazon Rainforest, Brazil</h3>
+                    <p class="text-gray-200 text-sm">Explore the wild and diverse ecosystem.</p>
+                    <span class="text-white font-bold mt-1">$2,000</span>
+                </div>
+            </div>
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/nepal.jpg' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Himalayas, Nepal</h3>
+                    <p class="text-gray-200 text-sm">Trek the world's highest peaks.</p>
+                    <span class="text-white font-bold mt-1">$2,500</span>
+                </div>
+            </div>
+            <div class="relative h-48 bg-cover bg-center rounded-lg shadow-lg" style="background-image: url('{% static 'images/destinations/australia.jpg' %}');">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2 rounded-lg">
+                    <h3 class="text-lg font-semibold text-white">Great Barrier Reef, Australia</h3>
+                    <p class="text-gray-200 text-sm">Dive into the world's largest coral reef.</p>
+                    <span class="text-white font-bold mt-1">$3,000</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-8">
+            <a href="#" class="cta-button bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full">View More Destinations</a>
+        </div>
+    </div>
+</section>
+
+ <!-- Testimonials -->
+    {% include 'home/sections/testimonials.html' %}
+
+    <!-- FAQ Section -->
+    {% include 'home/sections/faq.html' %}
+
+    <!-- Newsletter + Contact -->
+    {% include 'home/sections/newsletter.html' %}
+
+    <!-- Desktop Footer -->
+    {% include 'home/sections/footer.html' %}
 
 {% endblock content %}
 {% block extra_scripts %}
@@ -141,4 +255,4 @@
             },
         }
     });
-    {% endblock content %}
+    {% endblock  %}
