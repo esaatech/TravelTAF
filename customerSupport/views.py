@@ -100,11 +100,29 @@ def whatsapp_webhook(request):
     if request.method == 'GET':
         # Handle WhatsApp verification
         verify_token = os.getenv('WHATSAPP_VERIFY_TOKEN')
+        mode = request.GET.get('hub.mode')
         token = request.GET.get('hub.verify_token')
+        challenge = request.GET.get('hub.challenge')
         
-        if token == verify_token:
-            return HttpResponse(request.GET.get('hub.challenge'))
-        return HttpResponse('Invalid verification token')
+        # Log verification attempt
+        logger.info(f"Webhook verification attempt - Mode: {mode}, Token: {token}, Challenge: {challenge}")
+        
+        if mode and token:
+            if mode == 'subscribe' and token == verify_token:
+                # Convert challenge to integer and return
+                try:
+                    challenge_int = int(challenge)
+                    logger.info(f"Webhook verified successfully with challenge: {challenge_int}")
+                    return HttpResponse(challenge_int)
+                except (ValueError, TypeError) as e:
+                    logger.error(f"Invalid challenge value: {challenge}. Error: {str(e)}")
+                    return HttpResponse('Invalid challenge value', status=400)
+            else:
+                logger.warning("Invalid verification token or mode")
+                return HttpResponse('Invalid verification token', status=403)
+        else:
+            logger.warning("Missing verification parameters")
+            return HttpResponse('Missing parameters', status=400)
         
     if request.method == 'POST':
         try:

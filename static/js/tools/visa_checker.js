@@ -383,17 +383,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Move the check requirements handler outside
     function handleCheckRequirements() {
-        console.log('Check Requirements clicked'); // Debug log
         const fromCountryValue = fromCountry.value;
         const toCountryValue = toCountry.value;
         
-        console.log('Form values:', {
-            fromCountry: fromCountryValue,
-            toCountry: toCountryValue,
-            visaFreeChecked: visaFreeCheck.checked,
-            etaChecked: etaCheck.checked
-        }); // Debug log
-
         if (!fromCountryValue) {
             alert('Please select your nationality');
             return;
@@ -437,10 +429,81 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            // Rest of your existing success handling code...
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('resultsContent').classList.remove('hidden');
+
+            if (data.error) {
+                // Handle error response
+                document.getElementById('resultsContent').innerHTML = `
+                    <div class="text-red-600 text-center p-4">
+                        ${data.error}
+                    </div>
+                `;
+                return;
+            }
+
+            if (data.searchType === 'specific') {
+                // Handle specific country search results
+                const statusColorClass = getStatusColorClass(data.status);
+                const html = `
+                    <div class="visa-status ${statusColorClass} p-4 rounded-lg text-center mb-6">
+                        <h2 class="text-2xl font-bold mb-2">${data.status}</h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <h3 class="font-semibold mb-2">Processing Details</h3>
+                                <p>Processing Time: ${data.details.processing_time}</p>
+                                <p>Validity: ${data.details.validity}</p>
+                                <p>Cost: ${data.details.cost}</p>
+                                <p>Maximum Stay: ${data.details.max_stay}</p>
+                                <p>Entry Type: ${data.details.entry_type}</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <h3 class="font-semibold mb-2">Required Documents</h3>
+                                <ul class="list-disc pl-4">
+                                    ${data.details.requirements.map(req => `<li>${req}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <h3 class="font-semibold mb-2">Additional Information</h3>
+                                <ul class="list-disc pl-4">
+                                    ${data.details.additional_info.map(info => `<li>${info}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('resultsContent').innerHTML = html;
+            } else {
+                // Handle visa-free/ETA country list
+                if (data.countries && data.countries.length > 0) {
+                    const html = `
+                        <h2 class="text-xl font-bold mb-4">
+                            ${visaFreeCheck.checked ? 'Visa-Free Countries' : 'ETA/eVisa Countries'}
+                        </h2>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            ${data.countries.map(country => `
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    <span class="font-medium">${country.name}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    document.getElementById('resultsContent').innerHTML = html;
+                } else {
+                    document.getElementById('resultsContent').innerHTML = `
+                        <div class="text-center text-gray-600">
+                            No countries found for the selected criteria.
+                        </div>
+                    `;
+                }
+            }
         })
         .catch(error => {
-            console.error('Error details:', error); // Detailed error logging
+            console.error('Error:', error);
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('resultsContent').innerHTML = `
                 <div class="text-red-600 text-center">
@@ -502,4 +565,17 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+function getStatusColorClass(status) {
+    switch(status.toLowerCase()) {
+        case 'visa required':
+            return 'bg-red-100 text-red-800';
+        case 'visa free':
+            return 'bg-green-100 text-green-800';
+        case 'eta':
+            return 'bg-blue-100 text-blue-800';
+        default:
+            return 'bg-gray-100 text-gray-800';
+    }
 }

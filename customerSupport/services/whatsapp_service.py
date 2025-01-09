@@ -20,3 +20,7 @@ class WhatsAppService:
             "text": {"body": message}
         }
         return requests.post(endpoint, json=payload, headers=headers)
+
+
+
+

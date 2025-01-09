@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from subscriptions.models import SubscriptionPlan
+from tools.models import Countries, VisaRelationship, VisaType
 
 from .cover_letter import (
     generate_cover_letter_from_fields,
@@ -33,77 +34,80 @@ from .cover_letter import (
 logger = logging.getLogger(__name__)
 @csrf_exempt  # Temporarily disable CSRF for testing
 def visa_checker(request):
-    # Debug prints
-   
     if request.method == 'POST':
-        from_country = request.POST.get('fromCountry')
+        from_country_code = request.POST.get('fromCountry')
         search_type = request.POST.get('searchType', 'specific')
-        
-        if not from_country:
+
+        if not from_country_code:
             return JsonResponse({
                 'error': 'Nationality is required'
             }, status=400)
 
-        # Handle different search types
+        from_country = Countries.objects.filter(iso_code_2=from_country_code).first()
+        if not from_country:
+            return JsonResponse({
+                'error': 'Invalid nationality'
+            }, status=400)
+
         if search_type == 'specific':
-            to_country = request.POST.get('toCountry')
-            if not to_country:
+            to_country_code = request.POST.get('toCountry')
+            if not to_country_code:
                 return JsonResponse({
                     'error': 'Destination country is required for specific search'
                 }, status=400)
 
-            # Your existing specific country logic
-            visa_statuses = ['visa_required', 'visa_free', 'visa_on_arrival', 'e_visa']
-            processing_times = ['5-7 business days', '10-15 business days', '3-4 weeks', '24-48 hours']
-            costs = ['$50', '$100', '$150', '$200', 'Free']
-            
-            response_data = {
-                'searchType': 'specific',
-                'status': random.choice(visa_statuses),
-                'details': {
-                    'processing_time': random.choice(processing_times),
-                    'validity': f"{random.randint(1, 12)} months",
-                    'cost': random.choice(costs),
-                    'max_stay': f"{random.randint(30, 180)} days",
-                    'entry_type': random.choice(['Single', 'Multiple']),
-                    'requirements': [
-                        'Valid passport',
-                        'Passport-size photos',
-                        'Bank statements',
-                        'Travel insurance',
-                        'Hotel bookings',
-                        'Return ticket'
-                    ],
-                    'additional_info': [
-                        'Passport must be valid for at least 6 months',
-                        'Must have at least 2 blank pages in passport',
-                        'Proof of sufficient funds may be required'
-                    ]
+            to_country = Countries.objects.filter(iso_code_2=to_country_code).first()
+            if not to_country:
+                return JsonResponse({
+                    'error': 'Invalid destination country'
+                }, status=400)
+
+            visa_relationship = VisaRelationship.objects.filter(
+                citizenship_country=from_country,
+                destination_country=to_country
+            ).select_related('visa_type').first()
+
+            if visa_relationship:
+                response_data = {
+                    'searchType': 'specific',
+                    'status': visa_relationship.visa_type.name,
+                    'details': {
+                        'processing_time': f"{visa_relationship.processing_time_days} days",
+                        'validity': f"{visa_relationship.max_stay_days} days",
+                        'cost': f"{visa_relationship.fee_amount} {visa_relationship.fee_currency}",
+                        'max_stay': f"{visa_relationship.max_stay_days} days",
+                        'entry_type': 'Multiple' if visa_relationship.multiple_entry else 'Single',
+                        'requirements': visa_relationship.documents_required.split(', '),
+                        'additional_info': visa_relationship.notes.split(', ')
+                    }
                 }
-            }
-        
+            else:
+                response_data = {
+                    'error': 'Visa information not available for the selected countries.'
+                }
         else:
             # Handle visa_free or eta searches
-            # For testing, return random countries
-            sample_countries = [
-                {'name': 'Canada', 'code': 'CA'},
-                {'name': 'Japan', 'code': 'JP'},
-                {'name': 'Singapore', 'code': 'SG'},
-                {'name': 'United Kingdom', 'code': 'GB'},
-                {'name': 'Australia', 'code': 'AU'},
-                {'name': 'New Zealand', 'code': 'NZ'}
-            ]
-            
-            # Randomly select 3-5 countries for demonstration
-            selected_countries = random.sample(sample_countries, random.randint(3, 5))
-            
-            response_data = {
-                'searchType': search_type,
-                'countries': selected_countries
-            }
+            visa_relationships = VisaRelationship.objects.filter(
+                citizenship_country=from_country,
+                visa_type__name__in=['Visa Free', 'ETA']
+            ).select_related('destination_country')
+
+            if visa_relationships.exists():
+                countries = [
+                    {'name': vr.destination_country.name, 'code': vr.destination_country.iso_code_2}
+                    for vr in visa_relationships
+                ]
+                response_data = {
+                    'searchType': search_type,
+                    'countries': countries
+                }
+            else:
+                response_data = {
+                    'error': 'No visa-free or ETA countries found for the selected nationality.'
+                }
 
         return JsonResponse(response_data)
-        
+
     return render(request, 'tools/visa_checker.html')
 
 def points_calculator(request):
