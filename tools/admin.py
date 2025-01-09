@@ -56,24 +56,6 @@ class SchoolAdmin(admin.ModelAdmin):
         )
     disable_all_features.short_description = "Disable all features for selected schools"
 
-@admin.register(Countries)
-class CountriesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'iso_code_2', 'iso_code_3', 'region', 'continent', 'created_at', 'updated_at')
-    search_fields = ('name', 'iso_code_2', 'iso_code_3')
-    list_filter = ('region', 'continent')
-
-@admin.register(VisaType)
-class VisaTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'created_at')
-    search_fields = ('name',)
-
-@admin.register(VisaRelationship)
-class VisaRelationshipAdmin(admin.ModelAdmin):
-    list_display = ('from_country', 'to_country', 'visa_type', 'max_stay_days', 'multiple_entry', 'is_active', 'created_at', 'updated_at')
-    search_fields = ('from_country__name', 'to_country__name', 'visa_type__name')
-    list_filter = ('visa_type', 'is_active', 'multiple_entry')
-    date_hierarchy = 'created_at'
-
 from django.contrib import admin
 from .models import StudyServicePlan, StudyPlanFeature, StudyPlanService
 
@@ -110,3 +92,21 @@ class StudyServicePlanAdmin(admin.ModelAdmin):
             'fields': ('is_active', 'order')
         })
     )
+
+@admin.register(Countries)
+class CountriesAdmin(admin.ModelAdmin):
+    list_display = ('name', 'iso_code_2', 'iso_code_3', 'region', 'continent', 'created_at', 'updated_at')
+    search_fields = ('name', 'iso_code_2', 'iso_code_3')
+    list_filter = ('region', 'continent')
+
+@admin.register(VisaType)
+class VisaTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'created_at')
+    search_fields = ('name',)
+
+@admin.register(VisaRelationship)
+class VisaRelationshipAdmin(admin.ModelAdmin):
+    list_display = ('citizenship_country', 'destination_country', 'visa_type', 'max_stay_days', 'multiple_entry', 'is_active', 'created_at', 'updated_at')
+    search_fields = ('citizenship_country__name', 'destination_country__name', 'visa_type__name')
+    list_filter = ('visa_type', 'is_active', 'multiple_entry')
+    date_hierarchy = 'created_at'

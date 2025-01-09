@@ -170,8 +170,7 @@ class StudyPlanService(models.Model):
     def __str__(self):
         return f"{self.plan.name} - {self.service}"
 
-
-
+from django.db import models
 
 class Countries(models.Model):
     name = models.CharField(max_length=100)
@@ -185,10 +184,6 @@ class Countries(models.Model):
     def __str__(self):
         return self.name
 
-
-
-
-
 class VisaType(models.Model):
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(null=True, blank=True)
@@ -198,15 +193,16 @@ class VisaType(models.Model):
         return self.name
 
 class VisaRelationship(models.Model):
-    from_country = models.ForeignKey(
-        Countries,  # Ensurethis matches the model name
+    citizenship_country = models.ForeignKey(
+        Countries,
         on_delete=models.CASCADE,
-        related_name='visa_from_relationships'
+        related_name='visa_citizenship_relationships',
+        default=1  # Assuming '1' is the ID of a default country
     )
-    to_country = models.ForeignKey(
-        Countries,  # Ensure this matches the model name
+    destination_country = models.ForeignKey(
+        Countries,
         on_delete=models.CASCADE,
-        related_name='visa_to_relationships'
+        related_name='visa_destination_relationships'
     )
     visa_type = models.ForeignKey(VisaType, on_delete=models.CASCADE)
     max_stay_days = models.IntegerField(null=True, blank=True)
@@ -224,8 +220,8 @@ class VisaRelationship(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('from_country', 'to_country')
+        unique_together = ('citizenship_country', 'destination_country')
 
     def __str__(self):
-        return f"{self.from_country} → {self.to_country}"
-     
+        return f"{self.citizenship_country} → {self.destination_country}"
+
