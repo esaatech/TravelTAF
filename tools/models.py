@@ -169,3 +169,63 @@ class StudyPlanService(models.Model):
 
     def __str__(self):
         return f"{self.plan.name} - {self.service}"
+
+
+
+
+class Countries(models.Model):
+    name = models.CharField(max_length=100)
+    iso_code_2 = models.CharField(max_length=2, unique=True)
+    iso_code_3 = models.CharField(max_length=3, unique=True)
+    region = models.CharField(max_length=50, blank=True, null=True)
+    continent = models.CharField(max_length=50, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+class VisaType(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    description = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+class VisaRelationship(models.Model):
+    from_country = models.ForeignKey(
+        Countries,  # Ensurethis matches the model name
+        on_delete=models.CASCADE,
+        related_name='visa_from_relationships'
+    )
+    to_country = models.ForeignKey(
+        Countries,  # Ensure this matches the model name
+        on_delete=models.CASCADE,
+        related_name='visa_to_relationships'
+    )
+    visa_type = models.ForeignKey(VisaType, on_delete=models.CASCADE)
+    max_stay_days = models.IntegerField(null=True, blank=True)
+    multiple_entry = models.BooleanField(default=False)
+    processing_time_days = models.IntegerField(null=True, blank=True)
+    fee_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    fee_currency = models.CharField(max_length=3, null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    documents_required = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    valid_from = models.DateField(null=True, blank=True)
+    valid_until = models.DateField(null=True, blank=True)
+    last_verified_date = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('from_country', 'to_country')
+
+    def __str__(self):
+        return f"{self.from_country} → {self.to_country}"
+     

@@ -139,6 +139,7 @@ INSTALLED_APPS = [
     'faqs',
     'testimonials',
     'service_offerings',
+    'shared_data_services.countries',
      
 
 
