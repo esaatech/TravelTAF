@@ -180,6 +180,8 @@ class Countries(models.Model):
     continent = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        ordering = ['name']  # Sort countries by name
 
     def __str__(self):
         return self.name
