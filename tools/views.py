@@ -43,10 +43,7 @@ def visa_checker(request):
         to_country = request.POST.get('toCountry')
         search_type = request.POST.get('searchType')
         
-        print(f"\nProcessing request for: {from_country}")
-        
         try:
-            # Base query for the citizenship country
             base_query = VisaRelationship.objects.select_related(
                 'visa_type', 
                 'citizenship_country', 
@@ -56,68 +53,47 @@ def visa_checker(request):
                 is_active=True
             )
 
-            if search_type == 'visa_free':
-                # Query for visa-free countries using boolean field
-                relationships = base_query.filter(visa_type__is_visa_free=True)
-                print(f"Found {relationships.count()} visa-free countries")
-                
-                countries_list = [{
-                    'name': rel.destination_country.name,
-                    'code': rel.destination_country.iso_code_2,
-                    'max_stay': rel.max_stay_days,
-                    'notes': rel.notes
-                } for rel in relationships]
-
-                response_data = {
-                    'success': True,
-                    'search_type': 'visa_free',
-                    'title': f'Visa-Free Countries for {relationships.first().citizenship_country.name} Citizens',
-                    'countries': countries_list
+            def format_visa_info(relationship):
+                return {
+                    'country_name': relationship.destination_country.name,
+                    'country_code': relationship.destination_country.iso_code_2,
+                    'visa_type': relationship.visa_type.name,
+                    'max_stay': relationship.max_stay_days,
+                    'multiple_entry': relationship.multiple_entry,
+                    'processing_time': relationship.processing_time_days,
+                    'fee': f"{relationship.fee_amount} {relationship.fee_currency}" if relationship.fee_amount else None,
+                    'documents': relationship.documents_required,
+                    'notes': relationship.notes,
+                    'last_verified': relationship.last_verified_date.strftime('%Y-%m-%d') if relationship.last_verified_date else None,
+                    'is_visa_free': relationship.is_visa_free,
+                    'is_eta': relationship.is_eta
                 }
 
-            elif search_type == 'eta':
-                # Query for ETA countries using boolean field
-                relationships = base_query.filter(visa_type__is_eta=True)
-                print(f"Found {relationships.count()} ETA/eVisa countries")
+            if search_type in ['visa_free', 'eta']:
+                filter_params = {'is_visa_free': True} if search_type == 'visa_free' else {'is_eta': True}
+                relationships = base_query.filter(**filter_params)
                 
-                countries_list = [{
-                    'name': rel.destination_country.name,
-                    'code': rel.destination_country.iso_code_2,
-                    'max_stay': rel.max_stay_days,
-                    'processing_time': rel.processing_time_days,
-                    'fee': f"{rel.fee_amount} {rel.fee_currency}" if rel.fee_amount else None,
-                    'notes': rel.notes
-                } for rel in relationships]
-
+                if not relationships.exists():
+                    raise VisaRelationship.DoesNotExist
+                
                 response_data = {
                     'success': True,
-                    'search_type': 'eta',
-                    'title': f'ETA/eVisa Countries for {relationships.first().citizenship_country.name} Citizens',
-                    'countries': countries_list
+                    'search_type': search_type,
+                    'title': f"{'Visa-Free' if search_type == 'visa_free' else 'ETA/eVisa'} Countries for {relationships.first().citizenship_country.name} Citizens",
+                    'results': [format_visa_info(rel) for rel in relationships]
                 }
-
             else:
-                # Specific country search remains the same
                 visa_info = base_query.get(destination_country__iso_code_2=to_country)
                 response_data = {
                     'success': True,
                     'search_type': 'specific',
-                    'data': {
-                        'visa_type': visa_info.visa_type.name,
-                        'max_stay': visa_info.max_stay_days,
-                        'multiple_entry': visa_info.multiple_entry,
-                        'processing_time': visa_info.processing_time_days,
-                        'fee': f"{visa_info.fee_amount} {visa_info.fee_currency}" if visa_info.fee_amount else None,
-                        'notes': visa_info.notes,
-                        'documents': visa_info.documents_required,
-                        'last_verified': visa_info.last_verified_date.strftime('%Y-%m-%d') if visa_info.last_verified_date else None
-                    }
+                    'title': f"Visa Requirements from {visa_info.citizenship_country.name} to {visa_info.destination_country.name}",
+                    'results': [format_visa_info(visa_info)]
                 }
             
             print("\nSending response:", response_data)
             
-        except (VisaRelationship.DoesNotExist, IndexError):
-            print(f"\nNo visa relationship found for {from_country}")
+        except VisaRelationship.DoesNotExist:
             response_data = {
                 'success': False,
                 'error': 'No visa information found for these countries'
