@@ -94,9 +94,6 @@ class School(models.Model):
             models.Index(fields=['tuition']),
         ]
 
-
-
-
 from django.db import models
 from django.core.validators import MinValueValidator
 
@@ -187,7 +184,8 @@ class Countries(models.Model):
         return self.name
 
 class VisaType(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -195,34 +193,22 @@ class VisaType(models.Model):
         return self.name
 
 class VisaRelationship(models.Model):
-    citizenship_country = models.ForeignKey(
-        Countries,
-        on_delete=models.CASCADE,
-        related_name='visa_citizenship_relationships',
-        default=1  # Assuming '1' is the ID of a default country
-    )
-    destination_country = models.ForeignKey(
-        Countries,
-        on_delete=models.CASCADE,
-        related_name='visa_destination_relationships'
-    )
+    citizenship_country = models.ForeignKey(Countries, on_delete=models.CASCADE, related_name='visa_from')
+    destination_country = models.ForeignKey(Countries, on_delete=models.CASCADE, related_name='visa_to')
     visa_type = models.ForeignKey(VisaType, on_delete=models.CASCADE)
+    is_visa_free = models.BooleanField(default=False, help_text="Check if this is a visa-free arrangement", verbose_name="Visa Free")
+    is_eta = models.BooleanField(default=False, help_text="Check if this requires ETA/eVisa", verbose_name="ETA/eVisa")
     max_stay_days = models.IntegerField(null=True, blank=True)
     multiple_entry = models.BooleanField(default=False)
     processing_time_days = models.IntegerField(null=True, blank=True)
     fee_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     fee_currency = models.CharField(max_length=3, null=True, blank=True)
-    notes = models.TextField(null=True, blank=True)
     documents_required = models.TextField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-    valid_from = models.DateField(null=True, blank=True)
-    valid_until = models.DateField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
     last_verified_date = models.DateField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ('citizenship_country', 'destination_country')
 
     def __str__(self):
         return f"{self.citizenship_country} → {self.destination_country}"

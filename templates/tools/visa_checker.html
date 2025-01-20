@@ -26,7 +26,7 @@
 <section class="bg-[#2B354E] py-12">
     <div class="max-w-4xl mx-auto px-4">
         <!-- Search Form -->
-        <form id="visa-search-form" class="space-y-8">
+        <form id="visa-search-form" method="POST" onsubmit="return false;" class="space-y-8">
             {% csrf_token %}
             <div class="grid md:grid-cols-3 gap-4">
                 <!-- From Country -->
@@ -148,38 +148,5 @@
 
 {% block extra_scripts %}
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Update the fetch URL to match your URL structure
-    fetch('/tools/api/countries/')  // Updated URL path
-        .then(response => response.json())
-        .then(countries => {
-            // Initialize Choices.js after populating options
-            const fromCountrySelect = document.getElementById('fromCountry');
-            const toCountrySelect = document.getElementById('toCountry');
-
-            // Populate options
-            countries.forEach(country => {
-                const option = new Option(country.name, country.code);
-                fromCountrySelect.add(option.cloneNode(true));
-                toCountrySelect.add(option);
-            });
-
-            // Initialize Choices.js
-            const selectElements = [fromCountrySelect, toCountrySelect];
-            selectElements.forEach(select => {
-                new Choices(select, {
-                    searchEnabled: true,
-                    itemSelectText: '',
-                    shouldSort: false,
-                    position: 'auto',
-                    placeholder: true,
-                    placeholderValue: select.getAttribute('placeholder') || 'Select an option'
-                });
-            });
-        })
-        .catch(error => console.error('Error fetching countries:', error));
-});
-</script>
 <script src="{% static 'js/tools/visa_checker.js' %}"></script>
 {% endblock %}

@@ -101,12 +101,29 @@ class CountriesAdmin(admin.ModelAdmin):
 
 @admin.register(VisaType)
 class VisaTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'created_at')
-    search_fields = ('name',)
+    list_display = ['name']
+    search_fields = ['name']
+    ordering = ['name']
 
 @admin.register(VisaRelationship)
 class VisaRelationshipAdmin(admin.ModelAdmin):
-    list_display = ('citizenship_country', 'destination_country', 'visa_type', 'max_stay_days', 'multiple_entry', 'is_active', 'created_at', 'updated_at')
-    search_fields = ('citizenship_country__name', 'destination_country__name', 'visa_type__name')
-    list_filter = ('visa_type', 'is_active', 'multiple_entry')
-    date_hierarchy = 'created_at'
+    list_display = [
+        'citizenship_country', 
+        'destination_country', 
+        'visa_type',
+        'is_visa_free',
+        'is_eta',
+        'is_active'
+    ]
+    list_filter = [
+        'is_visa_free',
+        'is_eta',
+        'is_active',
+        'citizenship_country',
+        'destination_country'
+    ]
+    search_fields = [
+        'citizenship_country__name',
+        'destination_country__name',
+        'visa_type__name'
+    ]

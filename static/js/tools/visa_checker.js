@@ -346,12 +346,17 @@ const countries = [
 countries.sort((a, b) => a.name.localeCompare(b.name));
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    const form = document.getElementById('visa-search-form');
     const fromCountry = document.getElementById('fromCountry');
     const toCountry = document.getElementById('toCountry');
     const visaFreeCheck = document.getElementById('visaFreeCheck');
     const etaCheck = document.getElementById('etaCheck');
     const checkRequirements = document.getElementById('checkRequirements');
-
+    const loadingState = document.getElementById('loadingState');
+    const resultsSection = document.getElementById('resultsSection');
+    const resultsContent = document.getElementById('resultsContent');
+    
     // Function to handle checkbox changes
     function handleCheckboxChange() {
         console.log('Checkbox change triggered'); // Debug log
@@ -381,25 +386,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }); // Debug log
     }
 
-    // Move the check requirements handler outside
-    function handleCheckRequirements() {
+    function handleCheckRequirements(e) {
+        e.preventDefault();
+        e.stopPropagation();  // Stop event bubbling
+        console.log('Handling check requirements - single call');
+        
         const fromCountryValue = fromCountry.value;
         const toCountryValue = toCountry.value;
         
         if (!fromCountryValue) {
             alert('Please select your nationality');
-            return;
+            return false;  // Prevent form submission
         }
 
         if (!toCountryValue && !visaFreeCheck.checked && !etaCheck.checked) {
             alert('Please select a destination country or search type');
-            return;
+            return false;  // Prevent form submission
         }
 
         // Show loading state
-        document.getElementById('resultsSection').classList.remove('hidden');
-        document.getElementById('loadingState').classList.remove('hidden');
-        document.getElementById('resultsContent').classList.add('hidden');
+        loadingState.classList.remove('hidden');
+        resultsSection.classList.remove('hidden');
+        resultsContent.classList.add('hidden');
 
         // Prepare form data
         const formData = new FormData();
@@ -422,102 +430,159 @@ document.addEventListener('DOMContentLoaded', function() {
                 'X-CSRFToken': getCookie('csrftoken')
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            document.getElementById('loadingState').classList.add('hidden');
-            document.getElementById('resultsContent').classList.remove('hidden');
-
-            if (data.error) {
-                // Handle error response
-                document.getElementById('resultsContent').innerHTML = `
-                    <div class="text-red-600 text-center p-4">
-                        ${data.error}
-                    </div>
-                `;
-                return;
-            }
-
-            if (data.searchType === 'specific') {
-                // Handle specific country search results
-                const statusColorClass = getStatusColorClass(data.status);
-                const html = `
-                    <div class="visa-status ${statusColorClass} p-4 rounded-lg text-center mb-6">
-                        <h2 class="text-2xl font-bold mb-2">${data.status}</h2>
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="space-y-4">
-                            <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold mb-2">Processing Details</h3>
-                                <p>Processing Time: ${data.details.processing_time}</p>
-                                <p>Validity: ${data.details.validity}</p>
-                                <p>Cost: ${data.details.cost}</p>
-                                <p>Maximum Stay: ${data.details.max_stay}</p>
-                                <p>Entry Type: ${data.details.entry_type}</p>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold mb-2">Required Documents</h3>
-                                <ul class="list-disc pl-4">
-                                    ${data.details.requirements.map(req => `<li>${req}</li>`).join('')}
-                                </ul>
-                            </div>
-                            <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold mb-2">Additional Information</h3>
-                                <ul class="list-disc pl-4">
-                                    ${data.details.additional_info.map(info => `<li>${info}</li>`).join('')}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                document.getElementById('resultsContent').innerHTML = html;
-            } else {
-                // Handle visa-free/ETA country list
-                if (data.countries && data.countries.length > 0) {
-                    const html = `
-                        <h2 class="text-xl font-bold mb-4">
-                            ${visaFreeCheck.checked ? 'Visa-Free Countries' : 'ETA/eVisa Countries'}
-                        </h2>
-                        <div class="grid md:grid-cols-3 gap-4">
-                            ${data.countries.map(country => `
-                                <div class="p-3 bg-gray-50 rounded-lg">
-                                    <span class="font-medium">${country.name}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                    document.getElementById('resultsContent').innerHTML = html;
-                } else {
-                    document.getElementById('resultsContent').innerHTML = `
-                        <div class="text-center text-gray-600">
-                            No countries found for the selected criteria.
-                        </div>
-                    `;
-                }
-            }
+            console.log('Response received:', data);
+            handleResponse(data);
         })
         .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('loadingState').classList.add('hidden');
-            document.getElementById('resultsContent').innerHTML = `
-                <div class="text-red-600 text-center">
-                    An error occurred while fetching visa requirements. Please try again.
-                </div>
-            `;
-            document.getElementById('resultsContent').classList.remove('hidden');
+            handleError(error);
+            return false;  // Prevent form submission on error
         });
+
+        return false;  // Prevent form submission in all cases
     }
 
-    // Add event listeners
+    function handleResponse(data) {
+        loadingState.classList.add('hidden');
+        resultsContent.classList.remove('hidden');
+
+        if (!data.success) {
+            resultsContent.innerHTML = `
+                <div class="text-red-600 text-center p-4">
+                    ${data.error || 'No visa information found'}
+                </div>
+            `;
+            return;
+        }
+
+        if (data.search_type === 'visa_free' || data.search_type === 'eta') {
+            // Handle list of countries
+            const html = `
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="visa-status ${getStatusColorClass(data.search_type)} p-3 rounded-lg text-center mb-3">
+                        <h2 class="text-xl font-bold">${data.title}</h2>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-4">
+                        ${data.countries.map(country => `
+                            <div class="bg-gray-50 p-3 rounded">
+                                <h3 class="font-semibold text-gray-700">${country.name}</h3>
+                                <div class="text-sm space-y-1 mt-2">
+                                    <p>Maximum Stay: ${country.max_stay} days</p>
+                                    ${data.search_type === 'eta' ? `
+                                        <p>Processing Time: ${country.processing_time} days</p>
+                                        ${country.fee ? `<p>Fee: ${country.fee}</p>` : ''}
+                                    ` : ''}
+                                    ${country.notes ? `
+                                        <p class="text-gray-600 mt-2">${country.notes}</p>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            resultsContent.innerHTML = html;
+        } else {
+            // Handle successful response
+            const visaInfo = data.data;
+            
+            const html = `
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-3">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                Need help with your visa application or cheap tickets? Call us at <a href="tel:+6132408100" class="font-medium underline">+613 240 8100</a> or email us at <a href="mailto:info@traveltaf.com" class="font-medium underline">info@traveltaf.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="visa-status ${getStatusColorClass(visaInfo.visa_type)} p-3 rounded-lg text-center mb-3">
+                        <h2 class="text-xl font-bold">Visa Requirements from ${fromCountry.options[fromCountry.selectedIndex].text} to ${toCountry.options[toCountry.selectedIndex].text}</h2>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <!-- Required Documents Section -->
+                        <div class="bg-gray-50 p-3 rounded">
+                            <h3 class="font-semibold text-gray-700 mb-2">Required Documents</h3>
+                            <div class="whitespace-pre-line text-sm">
+                                ${visaInfo.documents || 'No document requirements specified'}
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <!-- Processing Details Section -->
+                            <div class="bg-gray-50 p-3 rounded">
+                                <h3 class="font-semibold text-gray-700 mb-2">Processing Details</h3>
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    <div class="text-gray-600">Processing Time:</div>
+                                    <div>${visaInfo.processing_time} days</div>
+                                    
+                                    <div class="text-gray-600">Maximum Stay:</div>
+                                    <div>${visaInfo.max_stay} days</div>
+                                    
+                                    <div class="text-gray-600">Multiple Entry:</div>
+                                    <div>${visaInfo.multiple_entry ? 'Yes' : 'No'}</div>
+                                    
+                                    <div class="text-gray-600">Fee:</div>
+                                    <div>${visaInfo.fee || 'Not specified'}</div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Notes Section -->
+                            ${visaInfo.notes ? `
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <h3 class="font-semibold text-gray-700 mb-2">Additional Notes</h3>
+                                    <div class="whitespace-pre-line text-sm">
+                                        ${visaInfo.notes}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-xs text-gray-500 text-right">
+                        Last verified: ${visaInfo.last_verified || 'Not specified'}
+                    </div>
+                </div>
+            `;
+            
+            resultsContent.innerHTML = html;
+        }
+    }
+
+    function handleError(error) {
+        console.error('Error:', error);
+        loadingState.classList.add('hidden');
+        resultsContent.innerHTML = `
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                An error occurred while processing your request.
+            </div>
+        `;
+        resultsContent.classList.remove('hidden');
+    }
+
+    // Prevent traditional form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
+
+    // Single click handler for the check requirements button
+    checkRequirements?.addEventListener('click', handleCheckRequirements);
+
     visaFreeCheck?.addEventListener('change', function() {
         if (this.checked) {
             etaCheck.checked = false;
+            toCountry.disabled = true;
         }
         handleCheckboxChange();
     });
@@ -525,12 +590,10 @@ document.addEventListener('DOMContentLoaded', function() {
     etaCheck?.addEventListener('change', function() {
         if (this.checked) {
             visaFreeCheck.checked = false;
+            toCountry.disabled = true;
         }
         handleCheckboxChange();
     });
-
-    // Attach check requirements handler
-    checkRequirements.addEventListener('click', handleCheckRequirements);
 
     // Initialize dropdowns
     populateCountryDropdowns();
@@ -568,12 +631,13 @@ function getCookie(name) {
 }
 
 function getStatusColorClass(status) {
-    switch(status.toLowerCase()) {
+    switch(status?.toLowerCase()) {
         case 'visa required':
             return 'bg-red-100 text-red-800';
         case 'visa free':
             return 'bg-green-100 text-green-800';
         case 'eta':
+        case 'evisa':
             return 'bg-blue-100 text-blue-800';
         default:
             return 'bg-gray-100 text-gray-800';
