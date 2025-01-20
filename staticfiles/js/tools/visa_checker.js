@@ -447,115 +447,113 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingState.classList.add('hidden');
         resultsContent.classList.remove('hidden');
 
+        // Extract help banner to be reused
+        const helpBanner = `
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-3">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            Need help with your visa application or cheap tickets? Call us at <a href="tel:+6132408100" class="font-medium underline">+613 240 8100</a> or email us at <a href="mailto:info@traveltaf.com" class="font-medium underline">info@traveltaf.com</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+
         if (!data.success) {
             resultsContent.innerHTML = `
-                <div class="text-red-600 text-center p-4">
-                    ${data.error || 'No visa information found'}
+                ${helpBanner}
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-3">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">
+                                Visa information unavailable at the moment. Let our experts assist you with your visa application.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             `;
             return;
         }
 
-        if (data.search_type === 'visa_free' || data.search_type === 'eta') {
-            // Handle list of countries
-            const html = `
-                <div class="bg-white rounded-lg shadow-md p-4">
-                    <div class="visa-status ${getStatusColorClass(data.search_type)} p-3 rounded-lg text-center mb-3">
-                        <h2 class="text-xl font-bold">${data.title}</h2>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-3 gap-4">
-                        ${data.countries.map(country => `
-                            <div class="bg-gray-50 p-3 rounded">
-                                <h3 class="font-semibold text-gray-700">${country.name}</h3>
-                                <div class="text-sm space-y-1 mt-2">
-                                    <p>Maximum Stay: ${country.max_stay} days</p>
-                                    ${data.search_type === 'eta' ? `
-                                        <p>Processing Time: ${country.processing_time} days</p>
-                                        ${country.fee ? `<p>Fee: ${country.fee}</p>` : ''}
-                                    ` : ''}
-                                    ${country.notes ? `
-                                        <p class="text-gray-600 mt-2">${country.notes}</p>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
+        const resultsHtml = data.results.map(result => `
+            <div class="bg-white rounded-lg shadow-md p-3 mb-2">
+                <div class="visa-status ${getStatusColorClass(result.visa_type)} p-2 rounded-lg text-center mb-2">
+                    <h2 class="text-xl font-bold">${result.country_name}</h2>
+                    <p class="text-sm mt-1">${result.visa_type}</p>
                 </div>
-            `;
-            resultsContent.innerHTML = html;
-        } else {
-            // Handle successful response
-            const visaInfo = data.data;
-            
-            const html = `
-                <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-3">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-blue-700">
-                                Need help with your visa application or cheap tickets? Call us at <a href="tel:+6132408100" class="font-medium underline">+613 240 8100</a> or email us at <a href="mailto:info@traveltaf.com" class="font-medium underline">info@traveltaf.com</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md p-4">
-                    <div class="visa-status ${getStatusColorClass(visaInfo.visa_type)} p-3 rounded-lg text-center mb-3">
-                        <h2 class="text-xl font-bold">Visa Requirements from ${fromCountry.options[fromCountry.selectedIndex].text} to ${toCountry.options[toCountry.selectedIndex].text}</h2>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <!-- Required Documents Section -->
-                        <div class="bg-gray-50 p-3 rounded">
-                            <h3 class="font-semibold text-gray-700 mb-2">Required Documents</h3>
-                            <div class="whitespace-pre-line text-sm">
-                                ${visaInfo.documents || 'No document requirements specified'}
-                            </div>
-                        </div>
-
-                        <div class="space-y-3">
-                            <!-- Processing Details Section -->
-                            <div class="bg-gray-50 p-3 rounded">
-                                <h3 class="font-semibold text-gray-700 mb-2">Processing Details</h3>
-                                <div class="grid grid-cols-2 gap-2 text-sm">
-                                    <div class="text-gray-600">Processing Time:</div>
-                                    <div>${visaInfo.processing_time} days</div>
-                                    
-                                    <div class="text-gray-600">Maximum Stay:</div>
-                                    <div>${visaInfo.max_stay} days</div>
-                                    
-                                    <div class="text-gray-600">Multiple Entry:</div>
-                                    <div>${visaInfo.multiple_entry ? 'Yes' : 'No'}</div>
-                                    
-                                    <div class="text-gray-600">Fee:</div>
-                                    <div>${visaInfo.fee || 'Not specified'}</div>
-                                </div>
-                            </div>
-
-                            <!-- Additional Notes Section -->
-                            ${visaInfo.notes ? `
-                                <div class="bg-gray-50 p-3 rounded">
-                                    <h3 class="font-semibold text-gray-700 mb-2">Additional Notes</h3>
-                                    <div class="whitespace-pre-line text-sm">
-                                        ${visaInfo.notes}
-                                    </div>
-                                </div>
+                
+                <div class="grid md:grid-cols-2 gap-3">
+                    <!-- Processing Details Section -->
+                    <div class="bg-gray-50 p-2 rounded">
+                        <h3 class="font-semibold text-gray-700 mb-1">Processing Details</h3>
+                        <div class="grid grid-cols-2 gap-1 text-sm">
+                            ${result.processing_time ? `
+                                <div class="text-gray-600">Processing Time:</div>
+                                <div>${result.processing_time} days</div>
+                            ` : ''}
+                            
+                            ${result.max_stay ? `
+                                <div class="text-gray-600">Maximum Stay:</div>
+                                <div>${result.max_stay} days</div>
+                            ` : ''}
+                            
+                            <div class="text-gray-600">Multiple Entry:</div>
+                            <div>${result.multiple_entry ? 'Yes' : 'No'}</div>
+                            
+                            ${result.fee ? `
+                                <div class="text-gray-600">Fee:</div>
+                                <div>${result.fee}</div>
                             ` : ''}
                         </div>
                     </div>
 
-                    <div class="mt-3 text-xs text-gray-500 text-right">
-                        Last verified: ${visaInfo.last_verified || 'Not specified'}
-                    </div>
+                    <!-- Required Documents Section -->
+                    ${result.documents ? `
+                        <div class="bg-gray-50 p-2 rounded">
+                            <h3 class="font-semibold text-gray-700 mb-1">Required Documents</h3>
+                            <div class="whitespace-pre-line text-sm">
+                                ${result.documents}
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
-            `;
-            
-            resultsContent.innerHTML = html;
-        }
+
+                <!-- Additional Notes Section -->
+                ${result.notes ? `
+                    <div class="mt-2 bg-gray-50 p-2 rounded">
+                        <h3 class="font-semibold text-gray-700 mb-1">Additional Notes</h3>
+                        <div class="whitespace-pre-line text-sm">
+                            ${result.notes}
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${result.last_verified ? `
+                    <div class="mt-2 text-xs text-gray-500 text-right">
+                        Last verified: ${result.last_verified}
+                    </div>
+                ` : ''}
+            </div>
+        `).join('');
+
+        resultsContent.innerHTML = `
+            ${helpBanner}
+            <div class="mb-2 text-center">
+                <h1 class="text-2xl font-bold text-gray-800">${data.title}</h1>
+            </div>
+            ${resultsHtml}
+        `;
     }
 
     function handleError(error) {
@@ -601,17 +599,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Populate dropdowns function
 function populateCountryDropdowns() {
-    const defaultOption = '<option value="">Select country</option>';
-    const countryOptions = countries.map(country => 
-        `<option value="${country.code}">${country.name}</option>`
-    ).join('');
+    // Create options HTML for fromCountry (Nigeria only)
+    const fromCountryHtml = `
+        <option value="">Select country</option>
+        <option value="NG">Nigeria</option>
+    `;
     
-    fromCountry.innerHTML = defaultOption + countryOptions;
+    // Create options HTML for destination countries (all countries)
+    let toCountryHtml = '<option value="">Select country</option>';
+    countries.sort((a, b) => a.name.localeCompare(b.name))
+        .forEach(country => {
+            toCountryHtml += `<option value="${country.code}">${country.name}</option>`;
+        });
     
-    // Only repopulate toCountry if it's not disabled
-    if (!toCountry.disabled) {
-        toCountry.innerHTML = defaultOption + countryOptions;
-    }
+    // Set the options for both dropdowns
+    fromCountry.innerHTML = fromCountryHtml;
+    toCountry.innerHTML = toCountryHtml;
 }
 
 // Helper function to get CSRF token
