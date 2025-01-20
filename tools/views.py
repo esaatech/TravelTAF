@@ -34,6 +34,12 @@ from .cover_letter import (
 logger = logging.getLogger(__name__)
 @csrf_exempt  # Temporarily disable CSRF for testing
 def visa_checker(request):
+    print("=== Visa Checker Request ===")
+  
+    print(f"POST params: {request.POST}")
+    #print(f"Headers: {request.headers}")
+    print("========================")
+    
     if request.method == 'POST':
         from_country_code = request.POST.get('fromCountry')
         search_type = request.POST.get('searchType', 'specific')
@@ -666,3 +672,4 @@ def study_abroad_success(request):
 def study_program_success(request):
     """Handle successful Study Program subscription."""
     return render(request, 'tools/study_program_success.html')    
+

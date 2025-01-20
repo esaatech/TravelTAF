@@ -150,8 +150,8 @@
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // First, fetch and populate the countries
-    fetch('/api/countries/')  // Adjust this URL to match your API endpoint
+    // Update the fetch URL to match your URL structure
+    fetch('/tools/api/countries/')  // Updated URL path
         .then(response => response.json())
         .then(countries => {
             // Initialize Choices.js after populating options
