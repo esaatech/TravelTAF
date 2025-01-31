@@ -140,6 +140,7 @@ INSTALLED_APPS = [
     'testimonials',
     'service_offerings',
     'shared_data_services.countries',
+    'immigrationprograms',
      
 
 

@@ -34,6 +34,43 @@
                     <span>Travel News</span>
                 </a>
 
+                <!-- Immigration Programs Dropdown -->
+
+               
+                <div class="flex items-center">
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-[#22C55E] transition-colors">
+                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[#22C55E] w-5 h-5">
+    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+    <path d="M9 12L12 15L15 12" />
+    <path d="M12 9V15" />
+    <path d="M10 5L12 3L14 5" />
+    <path d="M14 19L12 21L10 19" />
+</svg>
+                                <span>Programs</span>
+                            
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:rotate-180 transition-transform text-[#22C55E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="p-4"
+                                 hx-get="{% url 'immigration:nav_programs' %}"
+                                 hx-trigger="revealed"
+                                 hx-swap="innerHTML"
+                                 hx-indicator="#loading-indicator">
+                                <div id="loading-indicator" class="animate-pulse">
+                                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Services Dropdown -->
                 <div class="flex items-center">
                     <div class="relative group">
@@ -307,6 +344,47 @@
                     
                 </div>
             </div>
+
+     <div>           
+                <div class="flex items-center">
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-[#22C55E] transition-colors">
+                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[#22C55E] w-5 h-5">
+    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+    <path d="M9 12L12 15L15 12" />
+    <path d="M12 9V15" />
+    <path d="M10 5L12 3L14 5" />
+    <path d="M14 19L12 21L10 19" />
+</svg>
+                                <span>Programs</span>
+                            
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:rotate-180 transition-transform text-[#22C55E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="p-4"
+                                 hx-get="{% url 'immigration:nav_programs' %}"
+                                 hx-trigger="revealed"
+                                 hx-swap="innerHTML"
+                                 hx-indicator="#loading-indicator">
+                                <div id="loading-indicator" class="animate-pulse">
+                                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
             <div class="block px-3 py-2 text-gray-700 hover:bg-blue-50 rounded-lg">
                 <button id="mobileToolsButton" class="flex items-center justify-between w-full text-left hover:bg-blue-50 p-2 rounded-lg">
                     <div class="flex items-center space-x-2">
@@ -418,3 +496,4 @@
         </div>
     </div>
 </nav>
+

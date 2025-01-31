@@ -18,6 +18,7 @@ from subscriptions.models import SubscriptionPlan
 from django.contrib.auth.mixins import LoginRequiredMixin
 from testimonials.models import Testimonial  # Add this import
 from faqs.models import Category, FAQ  # Add this import
+from immigrationprograms.views import get_featured_immigration_data
 
 def home(request):
     # Query the latest 3 news articles that are both published and approved
@@ -36,6 +37,9 @@ def home(request):
         is_active=True,
         category__is_active=True
     ).select_related('category').order_by('?')[:5]  # Random 5 FAQs
+
+    # Get immigration data for featured countries
+    immigration_data = get_featured_immigration_data()
 
     context = {
         'title': 'Welcome to TravelTAF',
@@ -60,6 +64,7 @@ def home(request):
         'latest_news': latest_news,
         'testimonials': testimonials,
         'featured_faqs': featured_faqs,  # Add FAQs to context
+        'immigration_data': immigration_data,  # Add immigration data to context
     }
     return render(request, 'home/home.html', context)
 
