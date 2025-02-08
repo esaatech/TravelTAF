@@ -12,7 +12,7 @@ class ImmigrationProgram(models.Model):
     ]
 
     name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
     country = models.ForeignKey(
         Countries, 
         on_delete=models.CASCADE,

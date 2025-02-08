@@ -342,8 +342,67 @@ CORS_ALLOW_CREDENTIALS = True
 # Add CKEditor5 configuration
 CKEDITOR_5_CONFIGS = {
     'default': {
-        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
-                   'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
+        'toolbar': [
+            'heading', '|',
+            'fontSize', 'bold', 'italic', 'underline', 'strikethrough', '|',
+            'fontColor', 'fontBackgroundColor', '|',
+            'bulletedList', 'numberedList', '|',
+            'link', 'imageUpload', '|',
+            'undo', 'redo'
+        ],
+        'heading': {
+            'options': [
+                {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
+                {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2'},
+                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3'},
+            ]
+        },
+        'fontSize': {
+            'options': [
+                {'title': '8', 'model': '8px'},
+                {'title': '10', 'model': '10px'},
+                {'title': '12', 'model': '12px'},
+                {'title': '14', 'model': '14px'},
+                {'title': 'Default', 'model': 'default'},
+                {'title': '18', 'model': '18px'},
+                {'title': '20', 'model': '20px'},
+                {'title': '22', 'model': '22px'},
+                {'title': '24', 'model': '24px'},
+                {'title': '26', 'model': '26px'},
+                {'title': '28', 'model': '28px'},
+                {'title': '36', 'model': '36px'},
+                {'title': '48', 'model': '48px'}
+            ]
+        },
+        'fontColor': {
+            'colors': [
+                {'color': '#000000', 'label': 'Black'},
+                {'color': '#4D4D4D', 'label': 'Dark Gray'},
+                {'color': '#999999', 'label': 'Gray'},
+                {'color': '#E6E6E6', 'label': 'Light Gray'},
+                {'color': '#FFFFFF', 'label': 'White'},
+                {'color': '#22C55E', 'label': 'Primary Green'},
+                {'color': '#FF0000', 'label': 'Red'},
+                {'color': '#0000FF', 'label': 'Blue'},
+                {'color': '#FFFF00', 'label': 'Yellow'},
+                {'color': '#00FF00', 'label': 'Green'},
+            ]
+        },
+        'fontBackgroundColor': {
+            'colors': [
+                {'color': '#000000', 'label': 'Black'},
+                {'color': '#4D4D4D', 'label': 'Dark Gray'},
+                {'color': '#999999', 'label': 'Gray'},
+                {'color': '#E6E6E6', 'label': 'Light Gray'},
+                {'color': '#FFFFFF', 'label': 'White'},
+                {'color': '#22C55E', 'label': 'Primary Green'},
+                {'color': '#FF0000', 'label': 'Red'},
+                {'color': '#0000FF', 'label': 'Blue'},
+                {'color': '#FFFF00', 'label': 'Yellow'},
+                {'color': '#00FF00', 'label': 'Green'},
+            ]
+        }
     }
 }
 

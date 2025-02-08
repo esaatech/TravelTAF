@@ -13,11 +13,16 @@ class ImmigrationProgramAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('name', 'slug', 'country', 'description')
+            'fields': ('name', 'slug', 'country'),
+            'classes': ('wide',)
+        }),
+        ('Content', {
+            'fields': ('description', 'eligibility_criteria', 'benefits', 'application_process'),
+            'classes': ('wide', 'extrapretty')
         }),
         ('Program Details', {
-            'fields': ('eligibility_criteria', 'benefits', 'application_process', 
-                      'deadline', 'official_link')
+            'fields': ('deadline', 'official_link'),
+            'classes': ('wide',)
         }),
         ('Media', {
             'fields': ('featured_image',)

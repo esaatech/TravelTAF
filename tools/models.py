@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from storages.backends.gcloud import GoogleCloudStorage
 import uuid
+from django_ckeditor_5.fields import CKEditor5Field
 
 gcs_storage = GoogleCloudStorage()
 
@@ -203,8 +204,8 @@ class VisaRelationship(models.Model):
     processing_time_days = models.IntegerField(null=True, blank=True)
     fee_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     fee_currency = models.CharField(max_length=3, null=True, blank=True)
-    documents_required = models.TextField(null=True, blank=True)
-    notes = models.TextField(null=True, blank=True)
+    documents_required = CKEditor5Field('Documents Required', config_name='default', null=True, blank=True)
+    notes = CKEditor5Field('Notes', config_name='default', null=True, blank=True)
     last_verified_date = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
