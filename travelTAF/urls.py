@@ -40,6 +40,7 @@ urlpatterns = [
     path('testimonials/', include('testimonials.urls')),
     path('service_offerings/', include('service_offerings.urls')),
     path('immigrationprograms/', include('immigrationprograms.urls')),
+    path('blog/', include('blog.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

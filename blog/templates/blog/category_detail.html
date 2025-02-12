@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - TravelTAF Blog{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Category Header -->
+    <div class="mb-8">
+        <div class="flex items-center space-x-3 mb-4">
+            {{ category.icon|safe }}
+            <h1 class="text-3xl font-bold text-gray-900">{{ category.name }}</h1>
+        </div>
+        {% if category.description %}
+            <p class="text-gray-600 text-lg">{{ category.description }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Posts Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for post in posts %}
+            <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" 
+                         alt="{{ post.title }}" 
+                         class="w-full h-48 object-cover">
+                {% endif %}
+                
+                <div class="p-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
+                        <a href="{% url 'blog:post_detail' post.slug %}" 
+                           class="hover:text-[#22C55E] transition-colors">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+                    
+                    {% if post.excerpt %}
+                        <p class="text-gray-600 mb-4">{{ post.excerpt }}</p>
+                    {% endif %}
+                    
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>{{ post.created_at|date:"M d, Y" }}</span>
+                        <a href="{% url 'blog:post_detail' post.slug %}" 
+                           class="text-[#22C55E] hover:text-[#16A34A] font-medium">
+                            Read more →
+                        </a>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <div class="col-span-full text-center py-12">
+                <p class="text-gray-500 text-lg">No posts found in this category yet.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

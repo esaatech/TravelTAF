@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog - TravelTAF{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="max-w-4xl mx-auto mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
+        <p class="text-xl text-gray-600">Explore our articles about studying abroad, immigration pathways, and global opportunities.</p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="max-w-4xl mx-auto mb-8">
+        <div class="flex flex-wrap gap-3">
+            <a href="{% url 'blog:post_list' %}" 
+               class="px-4 py-2 rounded-full {% if not current_category %}bg-[#22C55E] text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} transition-colors">
+                All Posts
+            </a>
+            {% for category in categories %}
+            <a href="{% url 'blog:category' category.slug %}" 
+               class="flex items-center space-x-2 px-4 py-2 rounded-full {% if current_category.slug == category.slug %}bg-[#22C55E] text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} transition-colors">
+                {{ category.icon|safe }}
+                <span>{{ category.name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for post in posts %}
+        <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            {% if post.featured_image %}
+            <div class="aspect-w-16 aspect-h-9">
+                <img src="{{ post.featured_image.url }}" 
+                     alt="{{ post.title }}" 
+                     class="w-full h-full object-cover">
+            </div>
+            {% endif %}
+            
+            <div class="p-6">
+                <!-- Category -->
+                <a href="{% url 'blog:category' post.category.slug %}" 
+                   class="inline-flex items-center space-x-2 text-sm text-[#22C55E] hover:text-[#16A34A] mb-3">
+                    {{ post.category.icon|safe }}
+                    <span>{{ post.category.name }}</span>
+                </a>
+                
+                <!-- Title -->
+                <h2 class="text-xl font-semibold text-gray-900 mb-3">
+                    <a href="{% url 'blog:post_detail' post.slug %}" 
+                       class="hover:text-[#22C55E] transition-colors">
+                        {{ post.title }}
+                    </a>
+                </h2>
+                
+                <!-- Excerpt -->
+                {% if post.excerpt %}
+                <p class="text-gray-600 mb-4">
+                    {{ post.excerpt|truncatewords:30 }}
+                </p>
+                {% endif %}
+                
+                <!-- Metadata -->
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <time datetime="{{ post.published_at|date:'Y-m-d' }}">
+                                {{ post.published_at|date:"M d, Y" }}
+                            </time>
+                        </div>
+                        <span>·</span>
+                        <span>{{ post.author.get_full_name|default:post.author.username }}</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <p class="text-gray-500 text-lg">No posts found.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination (if needed) -->
+    {% if is_paginated %}
+    <div class="max-w-4xl mx-auto mt-8 flex justify-center">
+        <nav class="flex items-center space-x-2">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" 
+               class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                Previous
+            </a>
+            {% endif %}
+            
+            <span class="px-4 py-2 text-sm text-gray-700">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" 
+               class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                Next
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

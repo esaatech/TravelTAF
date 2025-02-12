@@ -141,6 +141,7 @@ INSTALLED_APPS = [
     'service_offerings',
     'shared_data_services.countries',
     'immigrationprograms',
+    'blog',
      
 
 

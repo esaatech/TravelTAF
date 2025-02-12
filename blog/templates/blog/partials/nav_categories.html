@@ -1,0 +1,21 @@
+{% for category in categories %}
+<div class="mb-4">
+    <a href="{% url 'blog:category' category.slug %}" class="flex items-center justify-between p-2 text-gray-700 hover:text-[#22C55E] hover:bg-gray-50 rounded-lg transition-colors">
+        <div class="flex items-center space-x-2">
+            {{ category.icon|safe }}
+            <span>{{ category.name }}</span>
+        </div>
+        <span class="text-sm text-gray-500">{{ category.post_count }}</span>
+    </a>
+</div>
+{% endfor %}
+
+<!-- View All Posts -->
+<div class="pt-2 mt-2 border-t">
+    <a href="{% url 'blog:post_list' %}" class="flex items-center justify-between p-2 text-[#22C55E] hover:bg-gray-50 rounded-lg transition-colors">
+        <span class="font-medium">View All Posts</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+</div> 
