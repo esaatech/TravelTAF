@@ -2,6 +2,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6596RHEXCT"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-6596RHEXCT');
+    </script>
+    <!-- End Google tag -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TravelTAF - Immigration & Travel</title>
@@ -106,6 +117,36 @@
     </style>
     {% block extra_css %}
     {% endblock %}
+
+    <script>
+        // Track form submissions
+        function trackFormSubmission(formName) {
+            gtag('event', 'form_submission', {
+                'form_name': formName
+            });
+        }
+
+        // Track chat interactions
+        function trackChatInteraction(action) {
+            gtag('event', 'chat_interaction', {
+                'action': action
+            });
+        }
+
+        // Track document downloads
+        function trackDownload(documentName) {
+            gtag('event', 'document_download', {
+                'document_name': documentName
+            });
+        }
+
+        // Track navigation clicks
+        function trackNavClick(linkName) {
+            gtag('event', 'navigation_click', {
+                'link_name': linkName
+            });
+        }
+    </script>
 </head>
 <body class="bg-white min-h-screen flex flex-col">
     <!-- Navigation -->
