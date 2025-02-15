@@ -62,4 +62,30 @@ document.addEventListener('DOMContentLoaded', function() {
     mobileMenu.addEventListener('click', function(e) {
         e.stopPropagation();
     });
+
+// Add this to your existing nav.js file
+
+    // Existing mobile menu code...
+    
+    // Blog dropdown toggle
+    const mobileBlogButton = document.getElementById('mobileBlogButton');
+    const mobileBlogMenu = document.getElementById('mobileBlogMenu');
+    
+    if (mobileBlogButton && mobileBlogMenu) {
+        mobileBlogButton.addEventListener('click', function() {
+            mobileBlogMenu.classList.toggle('hidden');
+            const arrow = this.querySelector('svg:last-child');
+            arrow.classList.toggle('rotate-180');
+        });
+    }
+
+
+
+
+
+
+
+
+
+
 }); 
