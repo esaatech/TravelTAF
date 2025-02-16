@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 from .models import BlogCategory, BlogPost
 
 @admin.register(BlogCategory)
@@ -18,6 +20,7 @@ class BlogPostAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content', 'excerpt')
     prepopulated_fields = {'slug': ('title',)}
     date_hierarchy = 'created_at'
+    change_list_template = 'admin/blog/blogpost/change_list.html'
     
     fieldsets = (
         ('Content', {
@@ -32,3 +35,8 @@ class BlogPostAdmin(admin.ModelAdmin):
         if not obj.author:
             obj.author = request.user
         super().save_model(request, obj, form, change)
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['ai_writer_url'] = reverse('blog:ai_writer_dashboard')
+        return super().changelist_view(request, extra_context=extra_context)

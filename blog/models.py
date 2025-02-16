@@ -31,7 +31,7 @@ class BlogPost(models.Model):
     ]
     
     title = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=200)
     category = models.ForeignKey(BlogCategory, on_delete=models.PROTECT, related_name='posts')
     content = CKEditor5Field('Content', config_name='default')
     excerpt = models.TextField(help_text="A short description for previews", blank=True)

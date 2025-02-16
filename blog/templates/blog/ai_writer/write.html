@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-8">Generate New Blog Post</h1>
+        
+        <form method="POST" action="{% url 'blog:ai_write_post' %}" class="space-y-6" id="generateForm">
+            {% csrf_token %}
+            
+            <!-- Topic Input -->
+            <div>
+                <label for="topic" class="block text-sm font-medium text-gray-700 mb-2">
+                    What would you like to write about?
+                </label>
+                <input type="text" 
+                       id="topic" 
+                       name="topic" 
+                       required
+                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+                       placeholder="e.g., Top 10 Tourist Destinations in Canada">
+            </div>
+
+            <!-- Category Selection -->
+            <div>
+                <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                    Category
+                </label>
+                <select id="category" 
+                        name="category" 
+                        required
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#22C55E] focus:border-transparent">
+                    <option value="">Select a category</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Tone Selection -->
+            <div>
+                <label for="tone" class="block text-sm font-medium text-gray-700 mb-2">
+                    Writing Tone
+                </label>
+                <select id="tone" 
+                        name="tone" 
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#22C55E] focus:border-transparent">
+                    <option value="informative">Informative</option>
+                    <option value="casual">Casual</option>
+                    <option value="professional">Professional</option>
+                    <option value="friendly">Friendly</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit" 
+                        id="generateButton"
+                        class="bg-[#22C55E] text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2">
+                    <span>Generate Post</span>
+                    <svg id="loadingSpinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </div>
+        </form>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-[9999]">
+            <div class="bg-white p-8 rounded-lg shadow-xl text-center">
+                <svg class="animate-spin h-12 w-12 text-[#22C55E] mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="text-lg font-medium text-gray-900">Generating your blog post...</p>
+                <p class="text-sm text-gray-500 mt-2">This may take a few moments</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('generateForm');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const generateButton = document.getElementById('generateButton');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent immediate form submission
+        
+        console.log('Form submitted, showing overlay'); // Debug log
+        
+        // Show loading states
+        loadingOverlay.style.display = 'flex';
+        loadingOverlay.classList.remove('hidden');
+        loadingSpinner.classList.remove('hidden');
+        generateButton.disabled = true;
+        
+        // Submit the form after showing loading state
+        setTimeout(() => {
+            console.log('Submitting form'); // Debug log
+            this.submit();
+        }, 100);
+    });
+});
+</script>
+{% endblock %} 
