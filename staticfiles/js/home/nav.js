@@ -4,8 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileServicesButton = document.getElementById('mobileServicesButton');
     const mobileToolsButton = document.getElementById('mobileToolsButton');
+    const mobileProgramsButton = document.getElementById('mobileProgramsButton');
+    const mobileBlogButton = document.getElementById('mobileBlogButton');
     const mobileServicesMenu = document.getElementById('mobileServicesMenu');
     const mobileToolsMenu = document.getElementById('mobileToolsMenu');
+    const mobileProgramsMenu = document.getElementById('mobileProgramsMenu');
+    const mobileBlogMenu = document.getElementById('mobileBlogMenu');
 
     if (mobileMenuButton && mobileMenu) {
         mobileMenuButton.addEventListener('click', function(e) {
@@ -19,11 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileServicesButton.addEventListener('click', function(e) {
             e.stopPropagation();
             mobileServicesMenu.classList.toggle('hidden');
-            this.querySelector('svg').classList.toggle('rotate-180');
-            // Close tools menu when opening services
+            this.querySelector('svg:last-child').classList.toggle('rotate-180');
+            // Close other menus
             if (mobileToolsMenu && !mobileToolsMenu.classList.contains('hidden')) {
                 mobileToolsMenu.classList.add('hidden');
-                mobileToolsButton.querySelector('svg').classList.remove('rotate-180');
+                mobileToolsButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileProgramsMenu && !mobileProgramsMenu.classList.contains('hidden')) {
+                mobileProgramsMenu.classList.add('hidden');
+                mobileProgramsButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileBlogMenu && !mobileBlogMenu.classList.contains('hidden')) {
+                mobileBlogMenu.classList.add('hidden');
+                mobileBlogButton.querySelector('svg:last-child').classList.remove('rotate-180');
             }
         });
     }
@@ -33,11 +45,63 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileToolsButton.addEventListener('click', function(e) {
             e.stopPropagation();
             mobileToolsMenu.classList.toggle('hidden');
-            this.querySelector('svg').classList.toggle('rotate-180');
-            // Close services menu when opening tools
+            this.querySelector('svg:last-child').classList.toggle('rotate-180');
+            // Close other menus
             if (mobileServicesMenu && !mobileServicesMenu.classList.contains('hidden')) {
                 mobileServicesMenu.classList.add('hidden');
-                mobileServicesButton.querySelector('svg').classList.remove('rotate-180');
+                mobileServicesButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileProgramsMenu && !mobileProgramsMenu.classList.contains('hidden')) {
+                mobileProgramsMenu.classList.add('hidden');
+                mobileProgramsButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileBlogMenu && !mobileBlogMenu.classList.contains('hidden')) {
+                mobileBlogMenu.classList.add('hidden');
+                mobileBlogButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+        });
+    }
+
+    // Programs dropdown toggle
+    if (mobileProgramsButton && mobileProgramsMenu) {
+        mobileProgramsButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mobileProgramsMenu.classList.toggle('hidden');
+            this.querySelector('svg:last-child').classList.toggle('rotate-180');
+            // Close other menus
+            if (mobileServicesMenu && !mobileServicesMenu.classList.contains('hidden')) {
+                mobileServicesMenu.classList.add('hidden');
+                mobileServicesButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileToolsMenu && !mobileToolsMenu.classList.contains('hidden')) {
+                mobileToolsMenu.classList.add('hidden');
+                mobileToolsButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileBlogMenu && !mobileBlogMenu.classList.contains('hidden')) {
+                mobileBlogMenu.classList.add('hidden');
+                mobileBlogButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+        });
+    }
+
+    // Blog dropdown toggle
+    if (mobileBlogButton && mobileBlogMenu) {
+        mobileBlogButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mobileBlogMenu.classList.toggle('hidden');
+            this.querySelector('svg:last-child').classList.toggle('rotate-180');
+            // Close other menus
+            if (mobileServicesMenu && !mobileServicesMenu.classList.contains('hidden')) {
+                mobileServicesMenu.classList.add('hidden');
+                mobileServicesButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileToolsMenu && !mobileToolsMenu.classList.contains('hidden')) {
+                mobileToolsMenu.classList.add('hidden');
+                mobileToolsButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileProgramsMenu && !mobileProgramsMenu.classList.contains('hidden')) {
+                mobileProgramsMenu.classList.add('hidden');
+                mobileProgramsButton.querySelector('svg:last-child').classList.remove('rotate-180');
             }
         });
     }
@@ -49,11 +113,19 @@ document.addEventListener('DOMContentLoaded', function() {
             // Reset all dropdowns when closing menu
             if (mobileServicesMenu) {
                 mobileServicesMenu.classList.add('hidden');
-                mobileServicesButton.querySelector('svg').classList.remove('rotate-180');
+                mobileServicesButton.querySelector('svg:last-child').classList.remove('rotate-180');
             }
             if (mobileToolsMenu) {
                 mobileToolsMenu.classList.add('hidden');
-                mobileToolsButton.querySelector('svg').classList.remove('rotate-180');
+                mobileToolsButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileProgramsMenu) {
+                mobileProgramsMenu.classList.add('hidden');
+                mobileProgramsButton.querySelector('svg:last-child').classList.remove('rotate-180');
+            }
+            if (mobileBlogMenu) {
+                mobileBlogMenu.classList.add('hidden');
+                mobileBlogButton.querySelector('svg:last-child').classList.remove('rotate-180');
             }
         }
     });
