@@ -116,6 +116,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
+
     'main',
    #   # Updated: use this instead
     'rest_framework',
@@ -146,6 +148,11 @@ INSTALLED_APPS = [
 
 
 ]
+
+# Sitemap settings
+SITE_ID = 1
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
