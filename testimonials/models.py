@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.urls import reverse
 
 class Testimonial(models.Model):
     SERVICE_CHOICES = [
@@ -46,3 +47,6 @@ class Testimonial(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.testimonial_type}"
+
+    def get_absolute_url(self):
+        return reverse('testimonials:testimonial_list')

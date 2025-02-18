@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator
 from storages.backends.gcloud import GoogleCloudStorage
 import uuid
 from django_ckeditor_5.fields import CKEditor5Field
+from django.urls import reverse
 
 gcs_storage = GoogleCloudStorage()
 
@@ -94,6 +95,9 @@ class School(models.Model):
         indexes = [
             models.Index(fields=['tuition']),
         ]
+
+    def get_absolute_url(self):
+        return reverse('tools:school_detail', kwargs={'pk': self.pk})
 
 from django.db import models
 from django.core.validators import MinValueValidator
@@ -213,4 +217,10 @@ class VisaRelationship(models.Model):
 
     def __str__(self):
         return f"{self.citizenship_country} → {self.destination_country}"
+
+    def get_absolute_url(self):
+        return reverse('tools:visa_detail', kwargs={
+            'citizenship': self.citizenship_country.code,
+            'destination': self.destination_country.code
+        })
 

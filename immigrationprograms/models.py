@@ -3,6 +3,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.text import slugify
 from django.conf import settings
 from tools.models import Countries  # Import Country model from tools app
+from django.urls import reverse
 
 class ImmigrationProgram(models.Model):
     STATUS_CHOICES = [
@@ -66,3 +67,9 @@ class ImmigrationProgram(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('immigration:program_detail', kwargs={
+            'country_slug': self.country.iso_code_2.lower(),
+            'program_slug': self.slug
+        })
