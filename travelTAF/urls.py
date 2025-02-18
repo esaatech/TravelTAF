@@ -14,6 +14,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.http import HttpResponse
+from django.views.decorators.http import require_GET
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -28,6 +30,7 @@ from core.sitemaps import (
     StaticViewSitemap
 )
 
+
 # Define the sitemaps dictionary
 sitemaps = {
     'blog': BlogSitemap,
@@ -37,6 +40,25 @@ sitemaps = {
     'testimonials': TestimonialsSitemap,
     'static': StaticViewSitemap,
 }
+
+@require_GET
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /dashboard/",
+        "Disallow: /payments/",
+        "Disallow: /credits/",
+        "Disallow: /authentication/",
+        "Disallow: /social-auth/",
+        "Disallow: /ckeditor5/",
+        "Allow: /",
+        "",
+        "Sitemap: https://www.traveltaf.com/sitemap.xml"
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -60,9 +82,13 @@ urlpatterns = [
     path('service_offerings/', include('service_offerings.urls')),
     path('immigrationprograms/', include('immigrationprograms.urls')),
     path('blog/', include('blog.urls')),
+    path('robots.txt', robots_txt, name='robots_txt'),
+
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
