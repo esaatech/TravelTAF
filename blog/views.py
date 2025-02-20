@@ -8,10 +8,9 @@ from .services.ai_writer import AIBlogWriter
 from django.utils import timezone
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django import forms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib import admin
-# Create your views here.
 
 def blog_list(request):
     posts = BlogPost.objects.filter(status='PUBLISHED').order_by('-published_at')
@@ -88,23 +87,29 @@ def ai_write_post(request):
         topic = request.POST.get('topic')
         category_id = request.POST.get('category')
         tone = request.POST.get('tone', 'informative')
+        context = request.POST.get('context')
         
         try:
             # Add logging to debug
-            print(f"Received request - Topic: {topic}, Category: {category_id}, Tone: {tone}")
+            print(f"Received request - Topic: {topic}, Category: {category_id}, Tone: {tone}, Context Length: {len(context) if context else 0}")
             
             category = BlogCategory.objects.get(id=category_id)
             ai_writer = AIBlogWriter()
-            
             # Add more detailed error catching
+           # Add more detailed error catching
             try:
-                generated_content = ai_writer.generate_post(topic, category.name, tone)
+                generated_content = ai_writer.generate_post(
+                    topic=topic, 
+                    category=category.name, 
+                    tone=tone,
+                    context=context if context else None  # Pass context if provided
+                )
             except Exception as e:
                 print(f"AI Generation Error: {str(e)}")
                 messages.error(request, f'Error in AI generation: {str(e)}')
                 return redirect('blog:ai_write_post')
             
-            # Verify generated content - now only checking for title and content
+            # Verify generated content
             if not generated_content or not all(key in generated_content for key in ['title', 'content']):
                 print("Invalid generated content structure")
                 messages.error(request, 'Invalid content generated')
@@ -119,14 +124,17 @@ def ai_write_post(request):
                 status='DRAFT'
             )
             
+            # Check if it's an HTMX request
+            if request.headers.get('HX-Request'):
+                response = HttpResponse()
+                # Add the HX-Redirect header
+                response['HX-Redirect'] = f'/admin/blog/blogpost/{post.id}/change/'
+                return response
+            
+            # Regular redirect for non-HTMX requests
             messages.success(request, 'Blog post generated successfully!')
-            # Redirect to admin change page for the new post
             return redirect(f'/admin/blog/blogpost/{post.id}/change/')
             
-        except BlogCategory.DoesNotExist:
-            print(f"Category not found: {category_id}")
-            messages.error(request, 'Selected category not found')
-            return redirect('blog:ai_write_post')
         except Exception as e:
             messages.error(request, f'Error generating post: {str(e)}')
             return redirect('blog:ai_write_post')
