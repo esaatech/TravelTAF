@@ -115,9 +115,9 @@ def get_featured_immigration_data():
 
 def immigration_nav_programs(request):
     immigration_data = get_featured_immigration_data()
-    is_mobile = request.user_agent.is_mobile
+    is_mobile = 'mobile' in request.GET
     
-    print("User Agent:", request.user_agent.browser)  # Debug info
+    print("Request GET params:", request.GET)  # Debug info
     print("Is mobile?", is_mobile)
     
     template_name = (

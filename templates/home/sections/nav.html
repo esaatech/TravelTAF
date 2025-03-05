@@ -97,10 +97,10 @@
                         <!-- Dropdown Menu -->
                         <div class="absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                             <div class="p-4"
-                                 hx-get="{% url 'immigration:nav_programs' %}"
+                                 hx-get="{% url 'immigration:nav_programs' %}?mobile={{ request.GET.mobile }}"
                                  hx-trigger="revealed"
                                  hx-swap="innerHTML"
-                                 hx-cache="true"
+                                 hx-cache="false"
                                  onclick="trackNavClick('program_category')"
                                  hx-indicator="#loading-indicator">
                                 <div id="loading-indicator" class="animate-pulse">
@@ -419,10 +419,10 @@
                 </button>
                 <div id="mobileProgramsMenu" class="hidden pl-8 mt-2">
                     <div class="space-y-3"
-                         hx-get="{% url 'immigration:nav_programs' %}"
+                         hx-get="{% url 'immigration:nav_programs' %}?mobile={{ request.GET.mobile }}"
                          hx-trigger="revealed"
                          hx-swap="innerHTML"
-                         hx-cache="true"
+                         hx-cache="false"
                          onclick="trackNavClick('mobile_program_category')"
                          hx-indicator="#mobile-programs-loading-indicator">
                         <div id="mobile-programs-loading-indicator" class="animate-pulse">
@@ -530,4 +530,22 @@
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function checkMobile() {
+            const isMobile = window.innerWidth < 1024; // Tailwind's lg breakpoint
+            const programsDiv = document.querySelector('[hx-get*="nav_programs"]');
+            if (programsDiv) {
+                const currentUrl = new URL(programsDiv.getAttribute('hx-get'), window.location.origin);
+                currentUrl.searchParams.set('mobile', isMobile);
+                programsDiv.setAttribute('hx-get', currentUrl.pathname + currentUrl.search);
+            }
+        }
+
+        // Check on load and window resize
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+    });
+</script>
 
