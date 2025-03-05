@@ -8,11 +8,11 @@
                  class="h-4 w-4 transform transition-transform"
                  :class="{ 'rotate-180': showPrograms }"
                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
         </button>
 
-        <!-- Programs List -->
+        <!-- Programs List - Modified to ensure vertical dropdown -->
         <div x-show="showPrograms"
              x-transition:enter="transition ease-out duration-100"
              x-transition:enter-start="transform opacity-0 scale-95"
@@ -20,13 +20,20 @@
              x-transition:leave="transition ease-in duration-75"
              x-transition:leave-start="transform opacity-100 scale-100"
              x-transition:leave-end="transform opacity-0 scale-95"
-             class="pl-4 mt-2 space-y-2">
+             class="mt-2 pl-4 space-y-2 relative w-full">  <!-- Added relative and w-full -->
             {% for program in data.programs %}
                 <a href="{% url 'immigration:program_detail' data.country_info.slug program.slug %}"
                    class="block p-2 text-gray-600 hover:text-[#22C55E] transition-colors">
                     {{ program.name }}
                 </a>
             {% endfor %}
+
+            {% if data.has_more %}
+                <a href="{% url 'immigration:country_programs' data.country_info.slug %}"
+                   class="block p-2 text-[#22C55E] hover:text-green-600 border-t mt-2">
+                    See all programs ({{ data.remaining_count }} more)
+                </a>
+            {% endif %}
         </div>
     </div>
 {% endfor %}

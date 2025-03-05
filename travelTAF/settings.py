@@ -145,7 +145,7 @@ INSTALLED_APPS = [
     'immigrationprograms',
     'blog',
     'adminsortable2',
-     
+    'django_user_agents',     
 
 
 ]
@@ -175,7 +175,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
    # "django_browser_reload.middleware.BrowserReloadMiddleware",
-
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'travelTAF.urls'
@@ -497,3 +497,6 @@ PAYMENT_VARIANTS = {
 # Amadeus API settings
 AMADEUS_CLIENT_ID = os.getenv('AMADEUS_CLIENT_ID')
 AMADEUS_CLIENT_SECRET = os.getenv('AMADEUS_CLIENT_SECRET')
+
+# Optional: Cache the results
+USER_AGENTS_CACHE = 'default'

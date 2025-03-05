@@ -77,10 +77,11 @@ def get_countries_with_programs(request):
 
 def get_featured_immigration_data():
     """
-    Fetch immigration data for featured countries
+    Fetch immigration data for featured countries with program limits
     Returns a dictionary with country data and their approved programs
     """
-    # Get active featured countries
+    PROGRAMS_LIMIT = 5  # Show only 5 programs in dropdown
+    
     featured_countries = FeaturedCountry.objects.filter(
         is_active=True
     ).select_related('country')
@@ -88,28 +89,43 @@ def get_featured_immigration_data():
     immigration_data = {}
     for featured in featured_countries:
         country = featured.country
-        programs = ImmigrationProgram.objects.filter(
+        
+        # Get all approved programs for this country
+        all_programs = ImmigrationProgram.objects.filter(
             country=country,
             status='APPROVED'
-        ).values('name', 'slug')
+        )
+        
+        # Calculate totals and limits
+        total_programs = all_programs.count()
+        limited_programs = all_programs.values('name', 'slug')[:PROGRAMS_LIMIT]
         
         immigration_data[country.iso_code_2] = {
             'country_info': {
                 'name': country.name,
                 'slug': country.iso_code_2.lower(),
             },
-            'programs': list(programs)
+            'programs': list(limited_programs),  # Only first 5 programs
+            'total_programs': total_programs,    # Total count
+            'has_more': total_programs > PROGRAMS_LIMIT,  # True if more than 5
+            'remaining_count': max(0, total_programs - PROGRAMS_LIMIT)  # How many more
         }
     
     return immigration_data
 
 def immigration_nav_programs(request):
     immigration_data = get_featured_immigration_data()
-    is_mobile = 'mobile' in request.GET
+    is_mobile = request.user_agent.is_mobile
+    
+    print("User Agent:", request.user_agent.browser)  # Debug info
+    print("Is mobile?", is_mobile)
+    
     template_name = (
         "immigrationprograms/partials/nav_programs_mobile.html" if is_mobile
         else "immigrationprograms/partials/nav_programs.html"
     )
+    print("Using template:", template_name)
+    
     return render(request, template_name, {
         "immigration_data": immigration_data
     })
