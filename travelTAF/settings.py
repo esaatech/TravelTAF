@@ -144,6 +144,7 @@ INSTALLED_APPS = [
     'shared_data_services.countries',
     'immigrationprograms',
     'blog',
+    'adminsortable2',
      
 
 

@@ -73,3 +73,21 @@ class ImmigrationProgram(models.Model):
             'country_slug': self.country.iso_code_2.lower(),
             'program_slug': self.slug
         })
+
+class FeaturedCountry(models.Model):
+    country = models.ForeignKey(
+        Countries,  # Use the imported Countries model
+        on_delete=models.CASCADE
+    )
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Featured Country'
+        verbose_name_plural = 'Featured Countries'
+
+    def __str__(self):
+        return f"{self.country.name}"

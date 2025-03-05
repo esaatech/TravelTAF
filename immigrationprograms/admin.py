@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
-from .models import ImmigrationProgram
+from .models import ImmigrationProgram, FeaturedCountry
+from adminsortable2.admin import SortableAdminMixin
 
 @admin.register(ImmigrationProgram)
 class ImmigrationProgramAdmin(admin.ModelAdmin):
@@ -51,3 +52,9 @@ class ImmigrationProgramAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('country', 'approved_by')
+
+@admin.register(FeaturedCountry)
+class FeaturedCountryAdmin(SortableAdminMixin, admin.ModelAdmin):
+    list_display = ['country', 'order', 'is_active']
+    list_editable = ['is_active']
+    ordering = ['order']

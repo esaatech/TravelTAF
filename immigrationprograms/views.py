@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Prefetch
 from tools.models import Country
-from .models import ImmigrationProgram
+from .models import ImmigrationProgram, FeaturedCountry
 from django.http import JsonResponse
 from tools.models import Countries
 
@@ -77,28 +77,26 @@ def get_countries_with_programs(request):
 
 def get_featured_immigration_data():
     """
-    Fetch immigration data for specific countries (UK, Canada, New Zealand)
+    Fetch immigration data for featured countries
     Returns a dictionary with country data and their approved programs
     """
-    FEATURED_COUNTRIES = ['UK', 'CA', 'NZ']
+    # Get active featured countries
+    featured_countries = FeaturedCountry.objects.filter(
+        is_active=True
+    ).select_related('country')
     
-    # Get the countries
-    countries = Countries.objects.filter(
-        iso_code_2__in=FEATURED_COUNTRIES
-    ).values('name', 'iso_code_2')
-
-    # Create a structured response with programs for each country
     immigration_data = {}
-    for country in countries:
+    for featured in featured_countries:
+        country = featured.country
         programs = ImmigrationProgram.objects.filter(
-            country__iso_code_2=country['iso_code_2'],
+            country=country,
             status='APPROVED'
         ).values('name', 'slug')
         
-        immigration_data[country['iso_code_2']] = {
+        immigration_data[country.iso_code_2] = {
             'country_info': {
-                'name': country['name'],
-                'slug': country['iso_code_2'].lower(),
+                'name': country.name,
+                'slug': country.iso_code_2.lower(),
             },
             'programs': list(programs)
         }
