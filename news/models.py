@@ -43,6 +43,10 @@ class News(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     is_featured = models.BooleanField(default=False)
     is_published = models.BooleanField(default=True)
+    send_as_newsletter = models.BooleanField(
+        default=False,
+        help_text="If checked, this article will be included in the next newsletter"
+    )
     
     featured_image = models.ImageField(
         upload_to='news_images/',

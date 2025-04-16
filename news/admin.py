@@ -49,7 +49,7 @@ class NewsAdmin(admin.ModelAdmin):
             'fields': ('summary', 'content')
         }),
         ('Publishing', {
-            'fields': ('is_featured', 'is_published')
+            'fields': ('is_featured', 'is_published', 'send_as_newsletter')
         }),
         ('Source', {
             'fields': ('source_name', 'source_url'),
