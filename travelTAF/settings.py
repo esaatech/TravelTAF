@@ -500,3 +500,10 @@ AMADEUS_CLIENT_SECRET = os.getenv('AMADEUS_CLIENT_SECRET')
 
 # Optional: Cache the results
 USER_AGENTS_CACHE = 'default'
+
+# Google Cloud Platform Settings
+GCP_PROJECT_ID = os.getenv('GCP_PROJECT_ID')
+NEWSLETTER_TOPIC_ID = os.getenv('NEWSLETTER_TOPIC_ID', 'news-newsletter')
+
+# Ensure GCP credentials are properly configured
+GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')

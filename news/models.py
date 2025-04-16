@@ -5,7 +5,9 @@ from django.db.models import JSONField
 from django_ckeditor_5.fields import CKEditor5Field
 from django.core.files.storage import default_storage
 from storages.backends.gcloud import GoogleCloudStorage
+from .services.pubsub import NewsletterPublisher
 import logging
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -95,22 +97,44 @@ class News(models.Model):
                 raise
 
     def save(self, *args, **kwargs):
-        if self.pk:  # If this is an update
+        # Store the old instance if this is an update
+        if self.pk:
             try:
-                # Get the old instance from the database
                 old_instance = News.objects.get(pk=self.pk)
-                # If the image has changed or been cleared
+                old_send_as_newsletter = old_instance.send_as_newsletter
+                
+                # Handle image changes
                 if old_instance.featured_image and (not self.featured_image or 
                    old_instance.featured_image != self.featured_image):
-                    # Delete the old image
                     old_instance.delete_image()
                     logger.info("Old image deleted successfully")
             except News.DoesNotExist:
-                pass  # This is a new instance
+                old_send_as_newsletter = False
             except Exception as e:
                 logger.error(f"Error handling old image: {str(e)}")
+                old_send_as_newsletter = False
+        else:
+            old_send_as_newsletter = False
 
+        # Save the model first
         super().save(*args, **kwargs)
+
+        # Handle newsletter publishing if the flag is newly set to True
+        try:
+            if self.send_as_newsletter and not old_send_as_newsletter:
+                publisher = NewsletterPublisher()
+                # Since Django doesn't support async out of the box, we'll run this synchronously
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                try:
+                    loop.run_until_complete(publisher.publish_newsletter(self))
+                finally:
+                    loop.close()
+                logger.info(f"Successfully queued news article {self.id} for newsletter")
+        except Exception as e:
+            logger.error(f"Failed to publish newsletter for news article {self.id}: {str(e)}")
+            # Note: We're not raising the exception here to prevent save failure
+            # but you might want to handle this differently based on your requirements
 
     def delete(self, *args, **kwargs):
         """Override delete to clean up files"""
