@@ -27,18 +27,16 @@ def program_list(request):
         )[:5]  # Limit featured programs
     })
 
-def country_programs(request, country_slug):
-    """Display all programs for a specific country"""
-    country = get_object_or_404(Country, slug=country_slug)
-    
+def country_programs(request, country_code):  # Must match URL pattern
+    country = get_object_or_404(Countries, iso_code_2__iexact=country_code)
     programs = ImmigrationProgram.objects.filter(
         country=country,
         status='APPROVED'
-    ).select_related('country').order_by('-featured', '-created_at')
-
-    return render(request, "programs/country_detail.html", {
-        "country": country,
-        "programs": programs,
+    ).order_by('name')
+    
+    return render(request, 'immigrationprograms/programs/country_detail.html', {
+        'country': country,
+        'programs': programs,
     })
 
 def program_detail(request, country_slug, program_slug):
@@ -117,7 +115,7 @@ def immigration_nav_programs(request):
     immigration_data = get_featured_immigration_data()
     is_mobile = 'mobile' in request.GET
     
-    print("Request GET params:", request.GET)  # Debug info
+    print("Request GET params:", request.GET)
     print("Is mobile?", is_mobile)
     
     template_name = (

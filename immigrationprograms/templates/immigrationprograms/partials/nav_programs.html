@@ -19,7 +19,8 @@
                 {% endfor %}
 
                 {% if data.has_more %}
-                    <a href="{% url 'immigration:country_programs' data.country_info.slug %}" 
+                    <a href="
+                    {% url 'immigration:country_programs' country_code %}"
                        class="block p-2 mt-2 text-[#22C55E] hover:bg-gray-50 rounded-lg transition-colors border-t">
                         See all programs ({{ data.remaining_count }} more)
                     </a>

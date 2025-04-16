@@ -100,7 +100,7 @@
                                  hx-get="{% url 'immigration:nav_programs' %}?mobile={{ request.GET.mobile }}"
                                  hx-trigger="revealed"
                                  hx-swap="innerHTML"
-                                 hx-cache="false"
+                                 hx-cache="true"
                                  onclick="trackNavClick('program_category')"
                                  hx-indicator="#loading-indicator">
                                 <div id="loading-indicator" class="animate-pulse">

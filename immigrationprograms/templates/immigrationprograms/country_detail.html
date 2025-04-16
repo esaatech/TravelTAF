@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Country Header -->
+    <div class="mb-8">
+        <div class="flex items-center space-x-4 mb-4">
+            {% if country.flag_url %}
+                <img src="{{ country.flag_url }}" alt="{{ country.name }} flag" class="w-8 h-8 rounded-full object-cover">
+            {% endif %}
+            <h1 class="text-3xl font-bold text-gray-900">{{ country.name }} Immigration Programs</h1>
+        </div>
+        {% if country.description %}
+            <p class="text-gray-600 max-w-3xl">{{ country.description }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Programs Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for program in programs %}
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                        <a href="{% url 'immigration:program_detail' country.iso_code_2|lower program.slug %}" 
+                           class="hover:text-[#22C55E] transition-colors">
+                            {{ program.name }}
+                        </a>
+                    </h3>
+                    
+                    {% if program.short_description %}
+                        <p class="text-gray-600 text-sm mb-4">{{ program.short_description|truncatewords:30 }}</p>
+                    {% endif %}
+                    
+                    <a href="{% url 'immigration:program_detail' country.iso_code_2|lower program.slug %}" 
+                       class="inline-flex items-center text-[#22C55E] hover:text-green-600 text-sm font-medium">
+                        Learn More
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                             class="h-4 w-4 ml-1" 
+                             fill="none" 
+                             viewBox="0 0 24 24" 
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-span-full text-center py-12 text-gray-500">
+                No immigration programs available for {{ country.name }} at this time.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

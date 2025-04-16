@@ -17,4 +17,6 @@ urlpatterns = [
     path("programs/<slug:country_slug>/<slug:program_slug>/", program_detail, name="program_detail"),
 
     path('nav-programs/', views.immigration_nav_programs, name='nav_programs'),
+
+    path('programs/<str:country_code>/', views.country_programs, name='country_programs'),
 ]
