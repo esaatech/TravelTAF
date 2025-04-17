@@ -502,8 +502,9 @@ AMADEUS_CLIENT_SECRET = os.getenv('AMADEUS_CLIENT_SECRET')
 USER_AGENTS_CACHE = 'default'
 
 # Google Cloud Platform Settings
-GCP_PROJECT_ID = os.getenv('GCP_PROJECT_ID')
+GCP_PROJECT_ID = os.getenv('GCP_PROJECT_ID', 'esaasolution')
 NEWSLETTER_TOPIC_ID = os.getenv('NEWSLETTER_TOPIC_ID', 'news-newsletter')
+SITE_URL = os.getenv('SITE_URL', 'https://traveltaf.com')
 
 # Ensure GCP credentials are properly configured
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')

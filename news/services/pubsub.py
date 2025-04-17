@@ -4,6 +4,9 @@ import json
 import logging
 from typing import Dict, Any
 from datetime import datetime
+from subscribers.models import Subscriber
+from asgiref.sync import sync_to_async
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -31,22 +34,34 @@ class NewsletterPublisher:
         Returns:
             Dict containing the message data
         """
+        # Get active subscribers who want news updates
+        subscribers = Subscriber.objects.filter(
+            subscription_type='news',
+            is_active=True
+        ).values_list('email', flat=True)
+
+        # Get the full URL including domain
+        site_url = settings.SITE_URL.rstrip('/')  # Remove trailing slash if present
+        article_url = news_article.get_absolute_url().lstrip('/')  # Remove leading slash if present
+        full_url = f"{site_url}/{article_url}"
+
         return {
             "news_id": news_article.id,
             "title": news_article.title,
-            "summary": news_article.summary,
-            "content": news_article.content,
-            "author": news_article.author,
+            "summary": news_article.summary or "",  # Ensure we don't send None
+            "content": news_article.content or "",
+            "author": news_article.author or "TravelTAF Team",
             "published_date": self._serialize_datetime(news_article.published_date),
-            "category": news_article.category.name,
-            "url": news_article.get_absolute_url(),
-            "source_name": news_article.source_name,
-            "source_url": news_article.source_url
+            "category": news_article.category.name if news_article.category else "Uncategorized",
+            "url": full_url,
+            "source_name": news_article.source_name or "TravelTAF",
+            "source_url": news_article.source_url or "",
+            "subscribers": list(subscribers)  # Convert QuerySet to list for serialization
         }
 
-    async def publish_newsletter(self, news_article) -> str:
+    def publish_newsletter_sync(self, news_article) -> str:
         """
-        Publish a news article to the newsletter topic.
+        Synchronously publish a news article to the newsletter topic.
         
         Args:
             news_article: News model instance
@@ -79,6 +94,31 @@ class NewsletterPublisher:
             
             return message_id
             
+        except Exception as e:
+            logger.error(
+                f"Failed to publish newsletter for news ID {news_article.id}: {str(e)}"
+            )
+            raise
+
+    async def publish_newsletter(self, news_article) -> str:
+        """
+        Asynchronously publish a news article to the newsletter topic.
+        This method can be called from both sync and async contexts.
+        
+        Args:
+            news_article: News model instance
+            
+        Returns:
+            The published message ID
+            
+        Raises:
+            Exception: If publishing fails
+        """
+        try:
+            # Run the sync version in a thread to avoid blocking
+            loop = asyncio.get_event_loop()
+            message_id = await loop.run_in_executor(None, self.publish_newsletter_sync, news_article)
+            return message_id
         except Exception as e:
             logger.error(
                 f"Failed to publish newsletter for news ID {news_article.id}: {str(e)}"

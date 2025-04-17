@@ -123,13 +123,7 @@ class News(models.Model):
         try:
             if self.send_as_newsletter and not old_send_as_newsletter:
                 publisher = NewsletterPublisher()
-                # Since Django doesn't support async out of the box, we'll run this synchronously
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                try:
-                    loop.run_until_complete(publisher.publish_newsletter(self))
-                finally:
-                    loop.close()
+                publisher.publish_newsletter_sync(self)
                 logger.info(f"Successfully queued news article {self.id} for newsletter")
         except Exception as e:
             logger.error(f"Failed to publish newsletter for news article {self.id}: {str(e)}")
