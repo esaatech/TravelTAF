@@ -3,91 +3,38 @@
     <div class="max-w-7xl mx-auto px-4">
         <h2 class="text-3xl font-bold mb-12 text-center">Popular Travel Destinations 2024</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Canada -->
+            {% for destination in featured_destinations %}
             <a href="#" class="block bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
-                <img src="{% static 'images/Flag_of_Canada_(Pantone).svg.png' %}" alt="Canada" class="w-full rounded-lg mb-4 object-cover h-48">
-                <h3 class="text-xl font-semibold mb-4">Canada</h3>
+                <img src="{{ destination.flag.url }}" alt="{{ destination.name }}" class="w-full rounded-lg mb-4 object-cover h-48">
+                <h3 class="text-xl font-semibold mb-4">{{ destination.name }}</h3>
                 <ul class="space-y-3 mb-6">
                     <li class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path d="{{ destination.feature1_icon }}" />
                         </svg>
-                        Banff National Park
+                        {{ destination.feature1_text }}
                     </li>
                     <li class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            <path d="{{ destination.feature2_icon }}" />
                         </svg>
-                        Study Permits
+                        {{ destination.feature2_text }}
                     </li>
                     <li class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            <path d="{{ destination.feature3_icon }}" />
                         </svg>
-                        Work Permits
+                        {{ destination.feature3_text }}
                     </li>
                 </ul>
-                <span class="text-[#1980e6] hover:underline">Explore Canada →</span>
+                <span class="text-[#1980e6] hover:underline">Explore {{ destination.name }} →</span>
             </a>
- 
-            <!-- Australia -->
-            <a href="#" class="block bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
-                <img src="{% static 'images/Flag_of_Australia_(converted).png' %}" alt="Australia" class="w-full rounded-lg mb-4 object-cover h-48">
-                <h3 class="text-xl font-semibold mb-4">Australia</h3>
-                <ul class="space-y-3 mb-6">
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Great Barrier Reef
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                        Student Visas
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        Business Visas
-                    </li>
-                </ul>
-                <span class="text-[#1980e6] hover:underline">Explore Australia →</span>
-            </a>
- 
-            <!-- UK -->
-            <a href="#" class="block bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
-                <img src="{% static 'images/Flag_of_the_United_Kingdom.svg.png' %}" alt="United Kingdom" class="w-full rounded-lg mb-4 object-cover h-48">
-                <h3 class="text-xl font-semibold mb-4">United Kingdom</h3>
-                <ul class="space-y-3 mb-6">
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        London Eye
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                        Student Route
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-[#1980e6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        Innovator Visa
-                    </li>
-                </ul>
-                <span class="text-[#1980e6] hover:underline">Explore UK →</span>
-            </a>
+            {% endfor %}
         </div>
           
         <div class="text-center mt-12">
             <a href="{% url 'main:compare_countries' %}" class="px-8 py-4 bg-[#1980e6] text-white rounded-full hover:bg-blue-700 transition-colors inline-block">
-                Compare Countries
+                Compare Destinations
             </a>
         </div>
     </div>
