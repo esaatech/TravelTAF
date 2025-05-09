@@ -5,6 +5,8 @@ from .models import Interaction
 from .serializers import MessageSerializer, ChatHistorySerializer
 from .services.document_service import DocumentService
 from .services.key_manager import KeyManager
+import requests
+import uuid
 
 class ChatViewSet(viewsets.ModelViewSet):
     queryset = Interaction.objects.filter(type='chat')
@@ -35,47 +37,57 @@ class ChatViewSet(viewsets.ModelViewSet):
 
     def process_message(self, message):
         """
-        Process the incoming message by querying the uploaded documents.
+        Process the incoming message by sending it to n8n webhook.
         """
         try:
-            # Get all document keys
-            documents = KeyManager.list_all()
+            # n8n webhook URL
+            n8n_webhook_url = "https://bf55-147-194-133-23.ngrok-free.app/webhook/9d50356f-f1b4-469f-adc6-64a8a84102ad"
             
-            if not documents:
-                return "No documents are available to process your query. Please upload documents first."
+            # Get session ID from request
+            session_id = self.request.session.get('chat_session_id')
+            if not session_id:
+                session_id = f"user-{uuid.uuid4().hex[:8]}"
+                self.request.session['chat_session_id'] = session_id
             
-            # Prepare the responses from all documents
-            responses = []
+            # Prepare the payload
+            payload = {
+                "chatInput": message,
+                "sessionId": session_id
+            }
             
-            for filename, data in documents.items():
-                try:
-                    # Query each document using its key
-                    doc_response = DocumentService.query_document(
-                        key=data['key'],
-                        query=message,
-                        config=data.get('prompt_config', {})
-                    )
-                    
-                    if doc_response and doc_response.get('response'):
-                        if doc_response['response'] != "No relevant information found for your query.":
-                            responses.append({
-                                'filename': filename,
-                                'response': doc_response['response'],
-                                'confidence': doc_response.get('confidence', 1.0)
-                            })
-                except Exception as e:
-                    print(f"Error querying document {filename}: {str(e)}")
-                    continue
+            print(f"Sending to n8n: {payload}")  # Debug log
             
-            if not responses:
-                return "I couldn't find relevant information in the available documents. Please try rephrasing your question."
+            # Make request to n8n webhook
+            response = requests.post(
+                n8n_webhook_url,
+                json=payload,
+                headers={
+                    "Content-Type": "application/json"
+                }
+            )
             
-            # Sort responses by confidence if available
-            responses.sort(key=lambda x: x.get('confidence', 0), reverse=True)
+            print(f"N8N Status Code: {response.status_code}")  # Debug log
+            print(f"N8N Response: {response.text}")  # Debug log
             
-            # Format the response
-            return self._format_responses(responses)
-            
+            if response.status_code == 200:
+                response_data = response.json()
+                print(f"Parsed N8N Response: {response_data}")
+                
+                # Check for either 'response' or 'output' key
+                if isinstance(response_data, dict):
+                    if 'response' in response_data:
+                        return response_data['response']
+                    elif 'output' in response_data:
+                        return response_data['output']
+                    else:
+                        print(f"Unexpected response format: {response_data}")
+                        return "Received response from server but in unexpected format"
+                else:
+                    return str(response_data)
+            else:
+                print(f"Error from n8n: {response.status_code} - {response.text}")
+                return "Error processing your request. Please try again later."
+                
         except Exception as e:
             print(f"Error processing message: {str(e)}")
             return "I apologize, but I encountered an error processing your request. Please try again later."
