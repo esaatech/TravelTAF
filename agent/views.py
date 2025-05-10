@@ -7,6 +7,7 @@ from .services.document_service import DocumentService
 from .services.key_manager import KeyManager
 import requests
 import uuid
+import json
 
 class ChatViewSet(viewsets.ModelViewSet):
     queryset = Interaction.objects.filter(type='chat')
@@ -30,8 +31,8 @@ class ChatViewSet(viewsets.ModelViewSet):
         # Process the message and generate response
         response = self.process_message(interaction.message)
         
-        # Update the interaction with the response
-        interaction.response = response
+        # Store as JSON string
+        interaction.response = json.dumps(response)
         interaction.status = 'processed'
         interaction.save()
 
@@ -45,6 +46,7 @@ class ChatViewSet(viewsets.ModelViewSet):
             
             # Get session ID from request
             session_id = self.request.session.get('chat_session_id')
+            
             if not session_id:
                 session_id = f"user-{uuid.uuid4().hex[:8]}"
                 self.request.session['chat_session_id'] = session_id
@@ -55,8 +57,6 @@ class ChatViewSet(viewsets.ModelViewSet):
                 "sessionId": session_id
             }
             
-            print(f"Sending to n8n: {payload}")  # Debug log
-            
             # Make request to n8n webhook
             response = requests.post(
                 n8n_webhook_url,
@@ -66,31 +66,36 @@ class ChatViewSet(viewsets.ModelViewSet):
                 }
             )
             
-            print(f"N8N Status Code: {response.status_code}")  # Debug log
-            print(f"N8N Response: {response.text}")  # Debug log
-            
             if response.status_code == 200:
                 response_data = response.json()
-                print(f"Parsed N8N Response: {response_data}")
-                
-                # Check for either 'response' or 'output' key
-                if isinstance(response_data, dict):
-                    if 'response' in response_data:
-                        return response_data['response']
-                    elif 'output' in response_data:
-                        return response_data['output']
-                    else:
-                        print(f"Unexpected response format: {response_data}")
-                        return "Received response from server but in unexpected format"
-                else:
-                    return str(response_data)
+                if isinstance(response_data, dict) and 'output' in response_data:
+                    # Parse the nested JSON string
+                    try:
+                        parsed_output = json.loads(response_data['output'])
+                        return {
+                            'message': parsed_output['output'],
+                            'show_button': parsed_output['button'] == 'yes'
+                        }
+                    except json.JSONDecodeError:
+                        return {
+                            'message': response_data['output'],
+                            'show_button': False
+                        }
+                return {
+                    'message': "Received response from server but in unexpected format",
+                    'show_button': False
+                }
             else:
-                print(f"Error from n8n: {response.status_code} - {response.text}")
-                return "Error processing your request. Please try again later."
+                return {
+                    'message': "Error processing your request. Please try again later.",
+                    'show_button': False
+                }
                 
         except Exception as e:
-            print(f"Error processing message: {str(e)}")
-            return "I apologize, but I encountered an error processing your request. Please try again later."
+            return {
+                'message': "I apologize, but I encountered an error processing your request. Please try again later.",
+                'show_button': False
+            }
 
     def _format_responses(self, responses):
         """
@@ -119,11 +124,17 @@ class ChatViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        # Get the updated instance with the response
         instance = self.queryset.get(id=serializer.instance.id)
-        response_serializer = self.get_serializer(instance)
-        
-        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        import json
+        response_data = json.loads(instance.response)
+        return Response({
+            "id": instance.id,
+            "message": instance.message,
+            "status": instance.status,
+            "created_at": instance.created_at,
+            "message": response_data.get("message", ""),
+            "show_button": response_data.get("show_button", False)
+        }, status=status.HTTP_201_CREATED)
 
 
 # Create your views here.
