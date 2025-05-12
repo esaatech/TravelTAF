@@ -376,7 +376,15 @@ const ChatModule = {
                 this.hideTypingIndicator();
                 
                 if (response.ok) {
-                    this.addMessage(data.message, false, data.show_button);
+                    // Use data.message and data.show_button
+                    const sanitizedResponse = data.message
+                        ? data.message
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                        : '';
+                    console.log('Sanitized Response:', sanitizedResponse);
+                    this.addMessage(sanitizedResponse, false, data.show_button);
                 } else {
                     throw new Error(data.message || 'An error occurred');
                 }
