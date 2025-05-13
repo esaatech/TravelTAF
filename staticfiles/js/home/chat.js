@@ -177,7 +177,7 @@ const ChatModule = {
     },
 
     // Updated addMessage method with debugging
-    addMessage(message, isUser = false) {
+    addMessage(message, isUser = false, showButton = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `flex gap-4 max-w-2xl mb-4 ${isUser ? 'ml-auto' : ''}`;
         
@@ -213,6 +213,11 @@ const ChatModule = {
                 </div>
                 <div class="flex-1">
                     <div class="bg-gray-100 p-4 rounded-lg markdown-content">${processedMessage}</div>
+                    ${showButton ? `
+                        <button class="mt-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                            Speak to an Agent
+                        </button>
+                    ` : ''}
                 </div>
             `;
         }
@@ -371,13 +376,15 @@ const ChatModule = {
                 this.hideTypingIndicator();
                 
                 if (response.ok) {
-                    // Ensure response is properly escaped
-                    const sanitizedResponse = data.response
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;');
+                    // Use data.message and data.show_button
+                    const sanitizedResponse = data.message
+                        ? data.message
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                        : '';
                     console.log('Sanitized Response:', sanitizedResponse);
-                    this.addMessage(sanitizedResponse);
+                    this.addMessage(sanitizedResponse, false, data.show_button);
                 } else {
                     throw new Error(data.message || 'An error occurred');
                 }
