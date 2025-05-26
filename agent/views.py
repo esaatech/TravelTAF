@@ -42,7 +42,8 @@ class ChatViewSet(viewsets.ModelViewSet):
         """
         try:
             # n8n webhook URL
-            n8n_webhook_url = "https://bf55-147-194-133-23.ngrok-free.app/webhook/9d50356f-f1b4-469f-adc6-64a8a84102ad"
+            base_url = "https://38d1-147-194-133-23.ngrok-free.app"
+            n8n_webhook_url = f"{base_url}/webhook/9d50356f-f1b4-469f-adc6-64a8a84102ad"
             
             # Get session ID from request
             session_id = self.request.session.get('chat_session_id')
